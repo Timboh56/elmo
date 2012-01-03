@@ -27,7 +27,7 @@ div.loader { background: rl('/images/loader.gif') no-repeat; padding-left: 20px;
 /* forms and index tables */
 div.form, table.form { border-top: 1px solid #ddd; margin-bottom: 10px; }
 div.form > div, table.form td { padding: 5px; border-bottom: 1px solid #ddd; }
-div.form div.details, table.form td.details { width: 250px; }
+div.form div.details, table.form td.details { width: 250px; background-color: #eee; }
 div.reqd_sym { display: inline; font-weight: bold; color: #d02000; font-size: 125%; line-height: 5px; vertical-align: middle; }
 div.dummy, span.dummy { font-weight: bold; }
 div.dummy_checkbox { float: left; width: 15px; font-weight: bold; }
@@ -75,7 +75,7 @@ form.new_place td.value { min-width: 400px; }
 /* response edit */
 .responses_edit input.qtype_integer, .responses_new input.qtype_integer { width: 100px; }
 .responses_edit input.qtype_decimal, .responses_new input.qtype_decimal { width: 100px; }
-.responses_edit textarea.qtype_long_text, .responses_new textarea.qtype_long_text { width: 400px; height: 100px; }
+.responses_edit textarea.qtype_long_text, .responses_new textarea.qtype_long_text { width: 400px; height: 30px; }
 .responses_edit table.answers td.name, .responses_new table.answers td.name, .responses_show table.answers td.name { width: 300px; }
 
 /* question show/edit */
@@ -85,6 +85,11 @@ form.new_place td.value { min-width: 400px; }
 .questionings_show td.value, .questions_show td.value { width: 300px; }
 .questionings_edit #questioning_condition_value_box, .questionings_new #questioning_condition_value_box { width: 150px; }
 .questionings_show tr#condition_row td.value .dummy { display: inline; }
+div.tag_row { margin: 5px 0 0 0; clear: both; }
+div.tag_label { float: left; margin-top: 4px; }
+a.tag_add_link { display: block; float: right; font-size: 7pt; color: #666;
+	text-decoration: none; padding: 1px; margin: 0 0 0 2px; }
+div.tag { color: #d99400; font-weight: bold; float: left; margin: 0 0 0 5px; }
 
 /* question index/choose */
 .questions_index .name_col, .questions_choose .name_col { width: 400px; }

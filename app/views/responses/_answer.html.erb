@@ -4,21 +4,47 @@
     <%= reqd_sym(answer.required?) %>
   </td>
   <td class="value">
-    <%= fields_for('response[all_answers][]', answer) do |f| %>
-      <% f.mode = controller.action_name.to_sym %>
-      <%= render("layouts/object_errors", :object => answer, :compact => true) %>
-      <%= f.hidden_field(:response_id, :index => answer_counter) %>
-      <%= f.hidden_field(:questioning_id, :index => answer_counter) %>
-      <% case type = answer.question_type_name %>
-      <% when "location", "address", "text", "integer", "decimal" %>
-        <%= f.text_field(:value, :class => "qtype_#{type}", :index => answer_counter) %>
-      <% when "long_text" %>
-        <%= f.text_area(:value, :class => "qtype_#{type}", :index => answer_counter) %>
-      <% when "select_one" %>
-        <%= f.select(:option_id, answer.select_options, {:include_blank => true}, :index => answer_counter) %>
-      <% when "select_multiple" %>
-        <%= render(:partial => "choice", :locals => {:answer_counter => answer_counter}, :collection => answer.all_choices) %>
+    <div style="float: left">
+      <%= fields_for('response[all_answers][]', answer) do |f| %>
+        <% f.mode = controller.action_name.to_sym %>
+        <%= render("layouts/object_errors", :object => answer, :compact => true) %>
+        <%= f.hidden_field(:response_id, :index => answer_counter) %>
+        <%= f.hidden_field(:questioning_id, :index => answer_counter) %>
+        <% case type = answer.question_type_name %>
+        <% when "location", "address", "text", "integer", "decimal" %>
+          <%= f.text_field(:value, :class => "qtype_#{type}", :index => answer_counter) %>
+        <% when "long_text" %>
+          <%= f.text_area(:value, :class => "qtype_#{type}", :index => answer_counter) %>
+        <% when "select_one" %>
+          <%= f.select(:option_id, answer.select_options, {:include_blank => true}, :index => answer_counter) %>
+        <% when "select_multiple" %>
+          <%= render(:partial => "choice", :locals => {:answer_counter => answer_counter}, :collection => answer.all_choices) %>
+        <% end %>
       <% end %>
+    </div>
+    <%= link_to("+Tag", "#", :class => "tag_add_link") %>
+    <% if answer.questioning_id == 155 %>
+      <div class="tag_row">
+        <div class="tag_label">Tags:</div>
+        <div class="tag">close to hotel<sup>x</sup></div>
+      </div>
+    <% elsif answer.questioning_id == 163 %>
+      <div class="tag_row">
+        <div class="tag_label">Tags:</div>
+        <div class="tag">lots of ECC<sup>x</sup></div>
+      </div>
+    <% elsif answer.questioning_id == 162 %>
+      <div class="tag_row">
+        <div class="tag_label">Tags:</div>
+        <div class="tag">happiness<sup>x</sup></div>
+        <div class="tag">irregularities<sup>x</sup></div>
+        <div class="tag">fitness<sup>x</sup></div>
+      </div>
+    <% elsif answer.questioning_id == 241 %>
+      <div class="tag_row">
+        <div class="tag_label">Tags:</div>
+        <div class="tag">brevity<sup>x</sup></div>
+      </div>
     <% end %>
   </td>
   <td class="details"><%= answer.question_hint %></div>
