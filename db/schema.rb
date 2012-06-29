@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120521221511) do
+ActiveRecord::Schema.define(:version => 20120629210925) do
 
   create_table "answers", :force => true do |t|
     t.integer  "response_id"
@@ -74,6 +74,13 @@ ActiveRecord::Schema.define(:version => 20120521221511) do
     t.integer  "downloads"
   end
 
+  create_table "icons", :force => true do |t|
+    t.string   "name"
+    t.text     "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "languages", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -131,6 +138,7 @@ ActiveRecord::Schema.define(:version => 20120521221511) do
     t.integer  "locality_id"
     t.integer  "state_id"
     t.integer  "country_id"
+    t.text     "region"
   end
 
   create_table "question_types", :force => true do |t|
@@ -158,6 +166,10 @@ ActiveRecord::Schema.define(:version => 20120521221511) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "question_type_id"
+    t.integer  "minimum"
+    t.integer  "maximum"
+    t.boolean  "maxstrictly"
+    t.boolean  "minstrictly"
   end
 
   create_table "report_aggregations", :force => true do |t|
