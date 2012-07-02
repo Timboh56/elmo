@@ -33,22 +33,22 @@
   </tr>
   <tr>
     <td>Minimum</td>
-    <td> 
-      <%= f.text_field(:minimum,:size => 5)  %>
+    <td>
       Strictly greater than <%= f.check_box(:minstrictly) %>
+      <%= f.text_field(:minimum)  %> 
     </td>
     <td>
-      The minimum value accepted for the response.
+      The minimum value accepted for the response.Check the checkbox to include the minimum as an acceptable value.
     </td>
   </tr>
   <tr>
     <td>Maximum</td>
     <td>
-      <%= f.text_field(:maximum,:size => 5)  %>
       Strictly less than <%= f.check_box(:maxstrictly) %>
+      <%= f.text_field(:maximum)  %>
     </td>
     <td>
-      The maximum value accepted for the response.
+      The maximum value accepted for the response. Check the checkbox to include the maximum as an acceptable value.
     </td>
   </tr>
 
