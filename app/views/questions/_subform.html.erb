@@ -34,8 +34,8 @@
   <tr>
     <td>Minimum</td>
     <td> 
-      <%= text_field(:question,:minimum,:size => 5)  %>
-      Strictly greater than <%= f.check_box('minstrictly') %>
+      <%= f.text_field(:minimum,:size => 5)  %>
+      Strictly greater than <%= f.check_box(:minstrictly) %>
     </td>
     <td>
       The minimum value accepted for the response.
@@ -44,8 +44,8 @@
   <tr>
     <td>Maximum</td>
     <td>
-      <%= text_field(:question,:maximum,:size => 5)  %>
-      Strictly less than <%= f.check_box('maxstrictly') %>
+      <%= f.text_field(:maximum,:size => 5)  %>
+      Strictly less than <%= f.check_box(:maxstrictly) %>
     </td>
     <td>
       The maximum value accepted for the response.
