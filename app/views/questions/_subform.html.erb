@@ -31,6 +31,30 @@
       The set of options the user will be able to choose from.
     </td>
   </tr>
+  <tr>
+    <td>Minimum</td>
+    <td> 
+      <%= f.select(:question_type_id, QuestionType.select_options, {:include_blank => true},
+        :onchange => "show_hide_option_set(this.options[this.selectedIndex].text)") %>
+      Strictly Less than <%= check_box_tag 'accept' %>
+
+    </td>
+    <td>
+      Enter a minimum value for the range of the response, or nothing if no minimum is specified
+    </td>
+  </tr>
+  <tr>
+    <td>Maximum</td>
+    <td>
+      <%= f.select(:question_type_id, QuestionType.select_options, {:include_blank => true},
+        :onchange => "show_hide_option_set(this.options[this.selectedIndex].text)") %>
+      Strictly Greater <%= check_box_tag 'accept' %>
+    </td>
+    <td>
+      Enter a maximum value for the range of the response, or enter nothing if no maximum value is pecified.
+    </td>
+  </tr>
+
   <% Language.active.each do |lang| %>
     <tr class="rowbg<%= rowbg = 1 - rowbg %>">
       <td colspan="3">
