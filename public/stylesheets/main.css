@@ -114,6 +114,8 @@ form.new_place td.value { min-width: 400px; }
 .questionings_show td.value, .questions_show td.value { width: 300px; }
 .questionings_edit #questioning_condition_value_box, .questionings_new #questioning_condition_value_box { width: 150px; }
 .questionings_show tr#condition_row td.value .dummy { display: inline; }
+input#questioning_question_minimum{ width: 100px; }
+input#questioning_question_maximum{ width: 100px; }
 
 /* question index/choose */
 .questions_index .name_col, .questions_choose .name_col { width: 400px; }
@@ -151,10 +153,6 @@ textarea#broadcast_body { width: 400px; height: 200px; }
 
 /* report index */
 .report_reports_index .title_col { min-width: 200px; }
-
-/* question form */
-input#questioning_question_minimum{ width: 100px; }
-input#questioning_question_maximum{ width: 100px; }
 
 /* report form */
 td#report_form { position: relative; z-index: 2; padding-right: 10px; }
