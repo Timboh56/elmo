@@ -58,3 +58,20 @@ function add_option(select, text, value, selected) {
   try {select.add(opt, null);} // standards compliant; doesn't work in IE
   catch(ex) {select.add(opt);} // IE only
 }
+// UTILITIES
+(function (Questioning, undefined) {
+  Questioning.show_or_hide_max_min = function() {
+    var sel = $('tr#type_row option:selected').text(); 
+    if(sel == "Decimal" || sel == "Integer") 
+      $('tr#max, tr#min').show();
+    else
+      $('tr#max, tr#min').hide();
+  }
+  Questioning.init = function() {       
+    // hookup type change event
+    $('tr#type_row select').change(Questioning.show_or_hide_max_min);
+    Questioning.show_or_hide_max_min();
+  }
+}(Questioning = {}));
+
+$(document).ready(Questioning.init);
