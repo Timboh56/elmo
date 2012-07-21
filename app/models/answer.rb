@@ -1,6 +1,4 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
+# ELMO - Secure, robust, and versatile data collection.  # Copyright 2011 The Carter Center #
 # ELMO is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -23,10 +21,10 @@ class Answer < ActiveRecord::Base
   before_validation(:clean_locations)
   before_save(:round_ints)
   before_save(:blanks_to_nulls)
-  
   validates(:value, :numericality => true, :if => Proc.new{|a| a.numeric? && !a.value.blank?})
+  validate(:min_max)
   validate(:required)
-  
+
   def self.new_from_str(params)
     str = params.delete(:str)
     ans = new(params)
@@ -115,6 +113,40 @@ class Answer < ActiveRecord::Base
       self.value = nil if value.blank?
       return true
     end
+    def min_max
+        compare_max_values(question.maxstrictly,question.maximum)
+        compare_min_values(question.minstrictly,question.minimum)
+    end             
+    def compare_max_values(b,max)
+      if !max.nil?
+        v = value.to_f
+        
+        # handle cases when strictly more than was checked, and value is > max.
+        if b && v > max
+            errors.add(:base, "The answer is more than the maximum value accepted.")
+            
+        # handle cases when strictly less than was not checked, and value is less than or equal to min.
+        else if !b && (v > max || v == max)
+            errors.add(:base, "The answer is more than the maximum value accepted.")
+          end
+        end
+      end
+    end
+    def compare_min_values(b,min)
+      if !min.nil?
+        v = value.to_f
+        
+        # handle cases when strictly less than was checked, and value is < min.
+        if b && v < min
+            errors.add(:base, "The answer is less than the minimum value accepted.")
+            
+        # handle cases when strictly less than was not checked, and value is less than or equal to min.
+        else if !b && (v < min || v == min)
+            errors.add(:base, "The answer is less than the value accepted.")
+          end
+        end
+      end
+    end     
     def clean_locations
       if location?
         if value.match(/^(-?\d+(\.\d+)?)\s*[,;:\s]\s*(-?\d+(\.\d+)?)/)
