@@ -114,10 +114,12 @@ class Answer < ActiveRecord::Base
       return true
     end
     def min_max
-      (value.to_f <= question.minimum.to_f) && !question.minstrictly && !question.minimum.nil? ? errors.add(:base, "The answer is less than the minimum value accepted") : nil
-      (value.to_f >= question.maximum.to_f) && !question.maxstrictly && !question.maximum.nil? ? errors.add(:base, "The answer is greater than the maximum value accepted") : nil
-      (value.to_f < question.minimum.to_f) && question.minstrictly && !question.minimum.nil? ? errors.add(:base, "The answer is less than the minimum value accepted") : nil
-      (value.to_f > question.maximum.to_f) && question.maxstrictly && !question.maximum.nil? ? errors.add(:base, "The answer is greater than the maximum value accepted") : nil
+      val_f = value.to_f
+      if question.maximum && (val_f > question.maximum || question.maxstrictly && val_f == question.maximum)
+        errors.add("This answer must be less than #{!question.maxstrictly && 'or equal to'} #{question.maximum}.")
+      elsif question.minimum && (val_f > question.minimum || question.minstrictly && val_f == question.minimum)
+        errors.add("This answer must be greater than #{!question.minstrictly && 'or equal to'} #{question.minimum}.")
+      end
     end                 
     def clean_locations
       if location?
