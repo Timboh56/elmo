@@ -41,8 +41,8 @@ div.form_field div.form_field_control input.radio { width: 15px; }
 div.form_field div.form_field_details { float: right; width: 300px; position: relative; font-size: 90%; }
 div.form_field div.form_field_details span.translation_missing { display: none; }
 div.form_field div.space_line { clear: both; margin: 0; padding: 0; width: auto; }
-div.dummy, span.dummy { font-weight: bold; }
-div.dummy_checkbox { float: left; width: 15px; font-weight: bold; }
+div.dummy, span.dummy { font-weight: bold; display: inline; }
+div.dummy_checkbox { height: 12px; width: 12px; text-align: center; font-weight: bold; border: 1px solid #888; display: inline; }
 input.submit { float: left; font-weight: bold; font-size: 120%; padding: 5px 15px; margin: 0 5px 0 0; }
 
 /* index tables */

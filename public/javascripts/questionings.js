@@ -61,7 +61,7 @@ function add_option(select, text, value, selected) {
 
 (function (Questioning, undefined) {
   Questioning.show_or_hide_max_min = function() {
-    var sel = $('tr#type_row option:selected').text(); 
+    var sel = $('tr#type_row option:selected, tr#type_row td.value div.dummy').text(); 
     if(sel == "Decimal" || sel == "Integer")
       $('tr#max, tr#min').show();
     else
