@@ -89,14 +89,13 @@ module ApplicationHelper
     end
   end
   
-  # renders a place field in a form
-  def place_field(form)
-    render("places/place_field", :form => form)
-  end
-  
   # renders the standard 'required' symbol, which is an asterisk
   def reqd_sym(condition = true)
     (condition ? '<div class="reqd_sym">*</div>' : '').html_safe
+  end
+  
+  def action_icon(action)
+    image_tag("action-icons/#{action}.png")
   end
   
   # assembles links for the basic actions in an index table (show edit and destroy)
@@ -106,7 +105,7 @@ module ApplicationHelper
     links = %w(show edit destroy).collect do |action|
       options[:exclude] = [options[:exclude]] unless options[:exclude].is_a?(Array)
       next if options[:exclude] && options[:exclude].include?(action.to_sym)
-      img = image_tag("#{action}.png")
+      img = action_icon(action)
       key = "#{obj.class.table_name}##{action}"
       case action
       when "show"
@@ -164,9 +163,10 @@ module ApplicationHelper
     )
   end
   
-  def index_table_loading_indicator(id)
-    content_tag("div", :class => "index_table_loading_indicator") do
-      image_tag("load-ind-small.gif", :style => "display: none", :id => "index_table_loading_indicator_#{id}")
+  def loading_indicator(options = {})
+    content_tag("div", :class => "loading_indicator#{options[:floating] ? '_floating' : '_inline'}") do
+      image_tag("load-ind-small.gif", :style => "display: none", :id => "loading_indicator" + 
+        (options[:id] ? "_#{options[:id]}" : ""))
     end
   end
 end

@@ -18,12 +18,7 @@
       :value => f.select(:role_id, Role.select_options, :include_blank => true)
     },{
       :col => :email,
-      :required => true,
       :value => f.text_field(:email)
-    },{
-      :col => :device,
-      :value => f.text_field(:device),
-      :details => "The ID number of the handheld device (if any) carried by this user. Example: TCC023"
     },{
       :col => :phone,
       :label => "Main Phone",
@@ -81,3 +76,4 @@
   spec
 end
 %>
+<br/>

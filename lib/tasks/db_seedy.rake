@@ -4,16 +4,14 @@ namespace :db do
     ActiveRecord::Base.transaction do
 
       # generate all permanent, mandatory seeds
-      to_seed = [Language, Role, Settable, FormType, QuestionType, PlaceType, Report::ResponseAttribute, Report::Aggregation]
+      to_seed = [Language, Role, Settable, FormType, QuestionType, Report::ResponseAttribute, Report::Aggregation]
       to_seed.each{|c| c.generate}
       
-      # generate initial superuser
-      unless User.find_by_role_id(Role.highest.id)
-        User.ignore_blank_passwords = true
-        User.seed(:login, :login => "super", :name => "Super User", :login => "super",
-          :email => "webmaster@cceom.org", :role => Role.highest, :active => true, 
-          :language => Language.english, :password => "changeme", :password_confirmation => "changeme")
-        User.ignore_blank_passwords = false
+      # check for mysql timezone info
+      zone_test = ActiveRecord::Base.connection.execute("SELECT CONVERT_TZ('2012-01-01 12:00:00', 'UTC', 'America/New_York')")
+      if zone_test.fetch_row[0].nil?
+        puts "WARNING: MySQL timezone tables have not been populated. Some date functionality will not work without these. " +
+          "See the MySQL manual for instructions on populating them."
       end
     end
   end

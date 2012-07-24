@@ -51,8 +51,9 @@ table.index_table th, table.form th { text-align: left; color: #444; background-
 table.index_table td { border-bottom: 1px solid #ddd; padding: 6px 10px 6px 3px; }
 table.index_table td.actions_col img { margin-right: 5px; }
 td.actions_col { white-space: nowrap; }
-td.actions_col img { border: none; min-width: 11px; min-height: 11px; float: left; }
-div.index_table_loading_indicator { width: 16px; float: left; }
+td.actions_col img { border: none; min-width: 11px; min-height: 11px; float: left; margin: -2px 0 -2px 0; }
+div.loading_indicator_inline { width: 16px; display: inline; }
+div.loading_indicator_floating { width: 16px; float: left; }
 
 /* pagination */
 div.pagination * { float: left; display: block; background-color: #eee; padding: 1px; 
@@ -88,16 +89,10 @@ form.new_search_search #search_search_str, form.edit_search_search #search_searc
 /* language listing */
 #languages_index table td.name_col { width: 150px; }
 
-/* place form */
-input#place_lookup_query { width: 300px; }
-div#place_lookup_results .place_type { font-size: 75%; color: #666; }
-form.new_place td.value { min-width: 400px; }
-
 /* place map */
 #map_canvas { width: 600px; height: 400px; }
 
 /* response index */
-.responses_index td.place_col div { width: 250px; overflow: hidden; white-space: normal; }
 .responses_index form#form_chooser { display: inline; }
 
 /* response edit */
@@ -110,7 +105,7 @@ form.new_place td.value { min-width: 400px; }
 /* question show/edit */
 .questionings_edit textarea.name_hint, .questionings_new textarea.name_hint,
 .questions_edit textarea.name_hint, .questions_new textarea.name_hint 
-  { width: 450px; height: 60px; }
+  { width: 450px; height: 30px; }
 .questionings_show td.value, .questions_show td.value { width: 300px; }
 .questionings_edit #questioning_condition_value_box, .questionings_new #questioning_condition_value_box { width: 150px; }
 .questionings_show tr#condition_row td.value .dummy { display: inline; }
@@ -172,6 +167,7 @@ td#report_form div.submit_row { clear: left; }
 td#report_form #fields div.form_field_control a { font-size: 90%; }
 
 /* report table */
+div#report_body div#row_count { margin-bottom: 5px; }
 div#report_body table { }
 div#report_body table td, div#report_body table th { padding: 2px; border: 1px solid #ddd; }
 div#report_body table td.string { text-align: left; }

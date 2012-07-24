@@ -1,12 +1,12 @@
 (function (report, undefined) {
   // === PRIVATE ===
-  var RERUN_FIELDS = ["aggregation", "fields", "filter", "unreviewed", "pri_grouping", "sec_grouping"];
+  var RERUN_FIELDS = ["aggregation", "fields", "filter", "unreviewed", "unique_rows", "pri_grouping", "sec_grouping"];
   var ROW_COL_PERCENT_TYPE_OPTIONS = ["Percentage By Row", "Percentage By Column"];
   var FIELD_SELECTS_SELECTOR = "#report_form #fields #field_dropdowns"
   var ALLOWED_DATA_TYPES_PER_AGGREGATION = {
     "Average": ["integer", "decimal"],
-    "Minimum": ["integer", "decimal", "text"],
-    "Maximum": ["integer", "decimal", "text"],
+    "Minimum": ["integer", "decimal", "text", "datetime", "date", "time"],
+    "Maximum": ["integer", "decimal", "text", "datetime", "date", "time"],
     "Sum": ["integer", "decimal"]
   }
   var HELP_WIDTH = 200;
@@ -100,7 +100,7 @@
   function remove_field(e) {
     var existing = $(FIELD_SELECTS_SELECTOR + " select");
     // don't remove the last field
-	if (existing.length == 1)
+    if (existing.length == 1)
       existing.val("");
     else
       $(e.target).parent().remove();
@@ -109,7 +109,9 @@
   
   // ensures the appropriate events are hooked up for all field dropdowns
   function hookup_field_events() {
+    $(FIELD_SELECTS_SELECTOR + ' a.remove_field').unbind('click');
     $(FIELD_SELECTS_SELECTOR + ' a.remove_field').click(function(e) {remove_field(e); return false;});
+    $(FIELD_SELECTS_SELECTOR + ' select').unbind('change');
     $(FIELD_SELECTS_SELECTOR + ' select').change(function(){form_changed("fields");})
   }
   
@@ -131,7 +133,7 @@
     
     if (src == "aggregation" || src == "fields" || src == "_all") {
       
-      // remove other boxes if not an list and first box is attrib or qtype
+      // remove other boxes if not a list and first box is attrib or qtype
       var not_list_and_first_is_attrib_or_qtype = agg != "List" && $(FIELD_SELECTS_SELECTOR + " select").val().match(/^(attrib|qtype)_/)
       if (not_list_and_first_is_attrib_or_qtype)
         $(FIELD_SELECTS_SELECTOR + " div").each(function (i, div){if (i != 0) $(div).remove()});
@@ -147,6 +149,10 @@
       // show bar chart display type if 1) agg is not list or blank 2) fields are numeric
       show_hide_display_type_option("Bar Chart", (agg != "" && agg != "List") && fields_are_numeric());
     }
+    
+    // unique row checkbox only visible if list
+    if (src == "aggregation" || src == "_all")
+      show_or_hide_and_clear_checkbox_field("div#unique_rows", agg == "List")
     
     // percent field only visible if tally && table
     if (src == "display_type" || src == "aggregation" || src == "_all")
@@ -178,9 +184,16 @@
       $('div#bar_style')[report.form.display_type == "Bar Chart" && report.form.sec_grouping ? "show" : "hide"]();
   }
   
+  // shows/hides a select box and clears its value if hiding
   function show_or_hide_and_clear_select_field(selector, show_or_hide) {
     $(selector)[show_or_hide ? "show" : "hide"]();
     if (!show_or_hide) $(selector + " select").val("");
+  }
+
+  // shows/hides a checkbox and clears its value if hiding
+  function show_or_hide_and_clear_checkbox_field(selector, show_or_hide) {
+    $(selector)[show_or_hide ? "show" : "hide"]();
+    if (!show_or_hide) $(selector + " input").removeAttr("checked");
   }
   
   // checks if there is only one effective field (one field that is not a question type)
@@ -538,7 +551,15 @@
 
       tbl.append(trow);
     }
-    $('#report_body').empty().append(tbl);
+    
+    // clear any old stuff
+    $('#report_body').empty()
+    
+    // add a row count
+    $('#report_body').append($("<div>").attr("id", "row_count").text("Total Rows: " + report.obj.data.length));
+    
+    // add the table
+    $('#report_body').append(tbl);
   }
   
   // checks whether total rows should be shown for a table report
@@ -568,6 +589,7 @@
       name: "name",
       filter: "filter_attributes_str",
       unreviewed: "unreviewed",
+      unique_rows: "unique_rows",
       pri_grouping: "pri_grouping_attributes_form_choice",
       sec_grouping: "sec_grouping_attributes_form_choice",
       display_type: "display_type",

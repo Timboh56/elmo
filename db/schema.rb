@@ -10,7 +10,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120521221511) do
+ActiveRecord::Schema.define(:version => 20120717182055) do
+
+  create_table "#Tableau_sid_00485CC8_4_none_form_name_nk", :id => false, :force => true do |t|
+    t.string  "none_form_name_nk"
+    t.integer "_Tableau_join_flag", :limit => 8, :default => 0, :null => false
+  end
 
   create_table "answers", :force => true do |t|
     t.integer  "response_id"
@@ -19,6 +24,9 @@ ActiveRecord::Schema.define(:version => 20120521221511) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "questioning_id"
+    t.time     "time_value"
+    t.date     "date_value"
+    t.datetime "datetime_value"
   end
 
   add_index "answers", ["questioning_id"], :name => "index_answers_on_questioning_id"
@@ -101,38 +109,6 @@ ActiveRecord::Schema.define(:version => 20120521221511) do
     t.datetime "updated_at"
   end
 
-  create_table "place_creators", :force => true do |t|
-    t.integer  "place_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "place_types", :force => true do |t|
-    t.string   "name"
-    t.integer  "level"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "short_name"
-  end
-
-  create_table "places", :force => true do |t|
-    t.string   "long_name"
-    t.string   "short_name"
-    t.string   "full_name"
-    t.integer  "place_type_id"
-    t.integer  "container_id"
-    t.decimal  "latitude",      :precision => 20, :scale => 15
-    t.decimal  "longitude",     :precision => 20, :scale => 15
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "temporary",                                     :default => false
-    t.integer  "point_id"
-    t.integer  "address_id"
-    t.integer  "locality_id"
-    t.integer  "state_id"
-    t.integer  "country_id"
-  end
-
   create_table "question_types", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -209,6 +185,7 @@ ActiveRecord::Schema.define(:version => 20120521221511) do
     t.string   "bar_style",       :default => "Side By Side"
     t.boolean  "unreviewed",      :default => false
     t.string   "percent_type"
+    t.boolean  "unique_rows"
   end
 
   create_table "report_response_attributes", :force => true do |t|
@@ -224,11 +201,9 @@ ActiveRecord::Schema.define(:version => 20120521221511) do
   create_table "responses", :force => true do |t|
     t.integer  "form_id"
     t.integer  "user_id"
-    t.integer  "place_id"
-    t.datetime "observed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "reviewed",    :default => false
+    t.boolean  "reviewed",   :default => false
     t.string   "source"
   end
 
@@ -308,7 +283,6 @@ ActiveRecord::Schema.define(:version => 20120521221511) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "login_count",         :default => 0
-    t.string   "device"
     t.text     "notes"
     t.datetime "last_request_at"
     t.string   "name"

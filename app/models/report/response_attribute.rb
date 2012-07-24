@@ -10,30 +10,38 @@ class Report::ResponseAttribute < ActiveRecord::Base
       :data_type => "text", :groupable => true)
     seed(:name, :name => "Form Type", :code => "form_types.name", :join_tables => "form_types", 
       :data_type => "text", :groupable => true)
-    seed(:name, :name => "State", :code => "states.long_name", :join_tables => "states", 
-      :data_type => "text", :groupable => true)
-    seed(:name, :name => "Country", :code => "countries.long_name", :join_tables => "countries", 
-      :data_type => "text", :groupable => true)
     seed(:name, :name => "Submitter", :code => "users.name", :join_tables => "users", 
       :data_type => "text", :groupable => true)
     seed(:name, :name => "Source", :code => "responses.source", 
       :data_type => "text", :groupable => true)
-    seed(:name, :name => "Locality", :code => "localities.long_name", 
-      :data_type => "text", :join_tables => "localities", :groupable => true)
-    seed(:name, :name => "Time Observed", :code => "responses.observed_at",
+    seed(:name, :name => "Time Submitted", :code => "responses.created_at",
       :data_type => "datetime")
-    seed(:name, :name => "Date Observed", :code => "DATE(responses.observed_at)", 
-      :data_type => "date", :groupable => true)
-    seed(:name, :name => "Date Submitted", :code => "DATE(responses.created_at)", 
+    seed(:name, :name => "Date Submitted", :code => "DATE(CONVERT_TZ(responses.created_at, 'UTC', '%CURRENT_TIMEZONE%'))", 
       :data_type => "date", :groupable => true)
     seed(:name, :name => "Reviewed", :code => "if(responses.reviewed, 'Yes', 'No')", 
       :data_type => "text", :groupable => true)
+
+    unseed(:name, "Date Observed")
+    unseed(:name, "Time Observed")
+    
+    # these are no longer special fields
+    unseed(:name, "Locality")
+    unseed(:name, "State")
+    unseed(:name, "Country")
   end
   
   # returns the sql fragment for the select clause
   def to_sql
-    # apply timezone adjustment to dates
-    code.gsub(/(\.\w+_at\b)/){"#{$1} + INTERVAL #{Time.zone.utc_offset} SECOND"}
+    # we must convert the timezone before using the DATE function
+    code.gsub("%CURRENT_TIMEZONE%", Time.zone.mysql_name)
+  end
+  
+  def has_timezone?
+    data_type == "datetime"
+  end
+  
+  def temporal?
+    %w(datetime date time).include?(data_type)
   end
   
   def apply(rel, options = {})
