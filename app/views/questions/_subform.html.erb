@@ -1,6 +1,6 @@
 <% rowbg = 0 %>
 <div class="tip"><%= reqd_sym %> Indicates a required field</div>
-<table class="form">>
+<table class="form">
   <tr class="rowbg<%= rowbg = 1 - rowbg %>">
     <td class="name">Code <%= reqd_sym %></td>
     <td class="value"><%= f.text_field(:code, :maxlength => 20) %></td>
