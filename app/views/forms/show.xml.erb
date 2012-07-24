@@ -37,7 +37,7 @@
             'required' => q.required? ? "true()" : nil,
             'relevant' => q.has_condition? ? q.condition.to_odk : nil,
             'constraint' => q.odk_constraint,
-            'jr:constraintMsg' => q.odk_constraint_msg,
+            'jr:constraintMsg' => q.question.min_max_error_msg,
            }.reject{|k,v| v.nil?}).gsub(/"required"/, '"true()"').html_safe %>
       <% end %>
     </model>

@@ -74,13 +74,6 @@ ActiveRecord::Schema.define(:version => 20120629210925) do
     t.integer  "downloads"
   end
 
-  create_table "icons", :force => true do |t|
-    t.string   "name"
-    t.text     "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "languages", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -138,7 +131,6 @@ ActiveRecord::Schema.define(:version => 20120629210925) do
     t.integer  "locality_id"
     t.integer  "state_id"
     t.integer  "country_id"
-    t.text     "region"
   end
 
   create_table "question_types", :force => true do |t|

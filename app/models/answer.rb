@@ -1,4 +1,6 @@
-# ELMO - Secure, robust, and versatile data collection.  # Copyright 2011 The Carter Center #
+# ELMO - Secure, robust, and versatile data collection.
+# Copyright 2011 The Carter Center
+#
 # ELMO is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -21,6 +23,7 @@ class Answer < ActiveRecord::Base
   before_validation(:clean_locations)
   before_save(:round_ints)
   before_save(:blanks_to_nulls)
+  
   validates(:value, :numericality => true, :if => Proc.new{|a| a.numeric? && !a.value.blank?})
   validate(:min_max)
   validate(:required)

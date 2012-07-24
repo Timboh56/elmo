@@ -1,5 +1,5 @@
-	function show_hide_option_set(question_type) {
-		show = question_type.match(/^Select/)
+function show_hide_option_set(question_type) {
+  show = question_type.match(/^Select/)
   $('#option_set')[show ? 'show' : 'hide']()
   $('#option_set_not_applicable')[!show ? 'show' : 'hide']()
   if (!show) $('#option_set')[0].selectedIndex = 0
@@ -9,13 +9,13 @@ function condition_update_choices() {
   // get the op dropdown and clear it out
   var op_field = $('#questioning_condition_op')[0]
   clear_select(op_field);
-
+  
   // get the chosen question id and type
   var question_field = $('#questioning_condition_ref_qing_id')[0];
   var chosen_id = question_field.options[question_field.selectedIndex].value;
   if (chosen_id == "") return;
   var chosen_type = condition_q_types[chosen_id];
-
+  
   // for each op in the ops list, if the question type is in its 'types' list, add it to the op dropdown
   for (var op_name in condition_ops)
     if (condition_ops[op_name]["types"].indexOf(chosen_type) != -1)
