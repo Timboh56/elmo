@@ -47,7 +47,7 @@ class Answer < ActiveRecord::Base
   def choice_for(option)
     choice_hash[option]
   end
-    
+  
   def choice_hash(options = {})
     if !@choice_hash || options[:rebuild]
       @choice_hash = {}; choices.each{|c| @choice_hash[c.option] = c}
@@ -114,39 +114,11 @@ class Answer < ActiveRecord::Base
       return true
     end
     def min_max
-        compare_max_values(question.maxstrictly,question.maximum)
-        compare_min_values(question.minstrictly,question.minimum)
-    end             
-    def compare_max_values(b,max)
-      if !max.nil?
-        v = value.to_f
-        
-        # handle cases when strictly more than was checked, and value is > max.
-        if b && v > max
-            errors.add(:base, "The answer is more than the maximum value accepted.")
-            
-        # handle cases when strictly less than was not checked, and value is less than or equal to min.
-        else if !b && (v > max || v == max)
-            errors.add(:base, "The answer is more than the maximum value accepted.")
-          end
-        end
-      end
-    end
-    def compare_min_values(b,min)
-      if !min.nil?
-        v = value.to_f
-        
-        # handle cases when strictly less than was checked, and value is < min.
-        if b && v < min
-            errors.add(:base, "The answer is less than the minimum value accepted.")
-            
-        # handle cases when strictly less than was not checked, and value is less than or equal to min.
-        else if !b && (v < min || v == min)
-            errors.add(:base, "The answer is less than the value accepted.")
-          end
-        end
-      end
-    end     
+      (value.to_f <= question.minimum.to_f) && !question.minstrictly && !question.minimum.nil? ? errors.add(:base, "The answer is less than the minimum value accepted") : nil
+      (value.to_f >= question.maximum.to_f) && !question.maxstrictly && !question.maximum.nil? ? errors.add(:base, "The answer is greater than the maximum value accepted") : nil
+      (value.to_f < question.minimum.to_f) && question.minstrictly && !question.minimum.nil? ? errors.add(:base, "The answer is less than the minimum value accepted") : nil
+      (value.to_f > question.maximum.to_f) && question.maxstrictly && !question.maximum.nil? ? errors.add(:base, "The answer is greater than the maximum value accepted") : nil
+    end                 
     def clean_locations
       if location?
         if value.match(/^(-?\d+(\.\d+)?)\s*[,;:\s]\s*(-?\d+(\.\d+)?)/)

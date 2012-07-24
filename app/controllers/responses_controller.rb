@@ -1,4 +1,4 @@
-#ELMO - Secure, robust, and versatile data collection.
+# ELMO - Secure, robust, and versatile data collection.
 # Copyright 2011 The Carter Center
 #
 # ELMO is free software: you can redistribute it and/or modify
