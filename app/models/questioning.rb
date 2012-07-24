@@ -106,10 +106,13 @@ class Questioning < ActiveRecord::Base
   
   def odk_constraint
     exps = []
-    lhs = "/data/#{question.odk_code}"
-    exps << "#{lhs} #{question.minstrictly ? '>' : '>='} #{question.minimum}" if question.minimum
-    exps << "#{lhs} #{question.maxstrictly ? '<' : '<='} #{question.maximum}" if question.maximum
-    exps.join(" and ")
+    exps << ". #{question.minstrictly ? '>' : '>='} #{question.minimum}" if question.minimum
+    exps << ". #{question.maxstrictly ? '<' : '<='} #{question.maximum}" if question.maximum
+    "(" + exps.join(" and ") + ")"
+  end
+  
+  def odk_constraint_msg
+    question.min_max_error_msg
   end
   
   def get_or_init_condition

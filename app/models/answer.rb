@@ -115,10 +115,9 @@ class Answer < ActiveRecord::Base
     end
     def min_max
       val_f = value.to_f
-      if question.maximum && (val_f > question.maximum || question.maxstrictly && val_f == question.maximum)
-        errors.add(:base,"This answer must be less than #{!question.maxstrictly ? 'or equal to' : ''} #{question.maximum}.")
-      elsif question.minimum && (val_f < question.minimum || question.minstrictly && val_f == question.minimum)
-        errors.add(:base,"This answer must be greater than #{!question.minstrictly ? 'or equal to' : ''} #{question.minimum}.")
+      if question.maximum && (val_f > question.maximum || question.maxstrictly && val_f == question.maximum) ||
+         question.minimum && (val_f < question.minimum || question.minstrictly && val_f == question.minimum)
+           errors.add(:base, question.min_max_error_msg)
       end
     end                 
     def clean_locations
