@@ -28,4 +28,14 @@ class IntelliSmsAdapter
     errors = result.split("\n").reject{|l| !l.match(/ERR:/)}.join("\n")
     raise errors unless errors.blank?
   end
+  def self.balance()
+    uri = "http://www.intellisoftware.co.uk/smsgateway/getbalance.aspx?" +  
+      "username=#{configatron.intellisms_username}" +
+      "&password=#{configatron.intellisms_password}"
+    result = open(uri){|f| f.read}
+    errors = result.split("\n").reject{|l| !l.match(/ERR:/)}.join("\n")
+    raise errors unless errors.blank? 
+    return result
+  end 
+
 end

@@ -28,4 +28,12 @@ class Smser
     # deliver
     adapter.deliver(numbers, msg)
   end
+  
+  def self.check_balance()
+    
+    # get adapter from settings
+    adapter = configatron.outgoing_sms_adapter
+    
+    return adapter.balance()
+  end
 end
