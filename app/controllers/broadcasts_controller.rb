@@ -37,13 +37,17 @@ class BroadcastsController < ApplicationController
     # create a new Broadcast
     @broadcast = Broadcast.new(:recipients => users)
     
-    begin 
-            
+    begin
+    
       # get credit balance
       @balance = Smser.check_balance
     
     rescue Timeout::Error => e
       @error = e
+      
+      # set @balance to null if timed out
+      @balance = nil
+      
       render :action => "Smser timed out."
     end
     
