@@ -17,25 +17,28 @@
 class IntelliSmsAdapter
   require 'open-uri'
   require 'uri'
+  $username = "#{configatron.intellisms_username}"
+  $password = "#{configatron.intellisms_password}" 
+   
   
   def self.deliver(numbers, msg)
     raise "No numbers given" if numbers.empty?
-    uri = "http://www.intellisoftware.co.uk/smsgateway/sendmsg.aspx?" + 
-      "username=#{configatron.intellisms_username}" + 
-      "&password=#{configatron.intellisms_password}" + 
+    uri = "http://www.intellisoftware.co.uk/smsgateway/sendmsg.aspx?" +
+       "username=" + $username +  
+      "&password=" + $password +
       "&to=#{numbers.join(',')}&text=#{URI.encode(msg)}"
     result = open(uri){|f| f.read}
     errors = result.split("\n").reject{|l| !l.match(/ERR:/)}.join("\n")
     raise errors unless errors.blank?
-  end
-  def self.balance()
-    uri = "http://www.intellisoftware.co.uk/smsgateway/getbalance.aspx?" +  
-      "username=#{configatron.intellisms_username}" +
-      "&password=#{configatron.intellisms_password}"
-    result = open(uri){|f| f.read}
-    errors = result.split("\n").reject{|l| !l.match(/ERR:/)}.join("\n")
-    raise errors unless errors.blank? 
-    return result
   end 
+  
+  # check_balance returns the balance string
+  def self.check_balance()
+    uri = "http://www.intellisoftware.co.uk/smsgateway/getbalance.aspx?" +
+      "username=" + $username + 
+      "&password=" + $password
+    result = open(uri){|f| f.read}
+    return result
+  end
 
 end

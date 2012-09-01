@@ -41,14 +41,16 @@ class BroadcastsController < ApplicationController
     
       # get credit balance
       @balance = Smser.check_balance
+      @balance = @balance.split(":").second
     
-    rescue Timeout::Error => e
-      @error = e
+    rescue
+      
+      #log all errors
+      logger.error($!)
       
       # set @balance to null if timed out
       @balance = nil
       
-      render :action => "Smser timed out."
     end
     
     # render new action
@@ -56,7 +58,7 @@ class BroadcastsController < ApplicationController
   end
   
   def show
-    @broadcast = Broadcast.find(params[:id])
+    @broadcast = Broadcast.find(params[:id]) 
   end
   
   def create
@@ -76,6 +78,6 @@ class BroadcastsController < ApplicationController
   private
     def render_new
       @title = "Send Broadcast"
-      render(:action => :new)
+      render(:new)
     end
 end

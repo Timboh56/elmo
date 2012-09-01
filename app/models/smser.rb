@@ -34,6 +34,6 @@ class Smser
     # get adapter from settings
     adapter = configatron.outgoing_sms_adapter
     
-    return adapter.balance()
+    return adapter.check_balance()
   end
 end
