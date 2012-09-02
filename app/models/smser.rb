@@ -29,6 +29,7 @@ class Smser
     adapter.deliver(numbers, msg)
   end
   
+  # check_balance uses the Intellisms adapter to retrieve the SMS balance
   def self.check_balance()
     
     # get adapter from settings

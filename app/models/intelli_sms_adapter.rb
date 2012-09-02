@@ -27,7 +27,7 @@ class IntelliSmsAdapter
        "username=" + $username +  
       "&password=" + $password +
       "&to=#{numbers.join(',')}&text=#{URI.encode(msg)}"
-    result = open(uri){|f| f.read}
+    result = open_uri(uri)
     errors = result.split("\n").reject{|l| !l.match(/ERR:/)}.join("\n")
     raise errors unless errors.blank?
   end 
@@ -37,8 +37,15 @@ class IntelliSmsAdapter
     uri = "http://www.intellisoftware.co.uk/smsgateway/getbalance.aspx?" +
       "username=" + $username + 
       "&password=" + $password
-    result = open(uri){|f| f.read}
+    result = open_uri(uri)
     return result
   end
+  
+  # opens specified uri and reads it
+  def open_uri(uri){
+    result = open(uri){|f| f.read}
+    return result
+  }
+  
 
 end

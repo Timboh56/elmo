@@ -30,7 +30,7 @@ class BroadcastsController < ApplicationController
   def new_with_users
     # load the user objects
     users = params[:selected].keys.collect{|id| User.find_by_id(id)}.compact
-
+        
     # raise error if no valid users (this should be impossible)
     raise "No valid users given." if users.empty?
     
@@ -41,7 +41,12 @@ class BroadcastsController < ApplicationController
     
       # get credit balance
       @balance = Smser.check_balance
-      @balance = @balance.split(":").second
+      @balance = Integer(@balance.split(":").second)
+      
+      # if there are more recipients than there are sms credits, return error. 
+      if users.length > @balance
+        @balance = "You have more SMS recipients than credits available: " + @balance
+      end
     
     rescue
       
