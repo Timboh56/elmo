@@ -15,9 +15,11 @@
 # along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
 # 
 class Smser
+  
+  # get adapter from settings
+  $adapter = configatron.outgoing_sms_adapter
+  
   def self.deliver(recips, which_phone, msg)
-    # get adapter from settings
-    adapter = configatron.outgoing_sms_adapter
     
     # get numbers
     numbers = []
@@ -26,17 +28,11 @@ class Smser
     numbers.compact!
     
     # deliver
-    adapter.deliver(numbers, msg)
+    $adapter.deliver(numbers, msg)
   end
   
   # check_balance uses the Intellisms adapter to retrieve the SMS balance
   def self.check_balance()
-    begin 
-      # get adapter from settings
-      adapter = configatron.outgoing_sms_adapter
-    rescue
-      log.error($!)
-    end
-    return adapter.check_balance()
+    return $adapter.check_balance()
   end
 end

@@ -37,16 +37,17 @@ class IntelliSmsAdapter
     uri = "http://www.intellisoftware.co.uk/smsgateway/getbalance.aspx?" +
       "username=" + $username + 
       "&password=" + $password
-    result = open(uri)
+    result = open_uri(uri)
     
     return result
   end
   
-  # opens specified uri and reads it
-  def open_uri(uri) 
-    result = open(uri){|f| f.read}
-    return result
-  end
+  private
   
+    # opens specified uri and reads it
+    def self.open_uri(uri) 
+      result = open(uri){|f| f.read}
+      return result
+    end
 
 end
