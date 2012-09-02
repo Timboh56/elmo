@@ -31,10 +31,12 @@ class Smser
   
   # check_balance uses the Intellisms adapter to retrieve the SMS balance
   def self.check_balance()
-    
-    # get adapter from settings
-    adapter = configatron.outgoing_sms_adapter
-    
+    begin 
+      # get adapter from settings
+      adapter = configatron.outgoing_sms_adapter
+    rescue
+      log.error($!)
+    end
     return adapter.check_balance()
   end
 end
