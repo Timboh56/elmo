@@ -1,7 +1,7 @@
 <% content_for(:per_page_js){javascript_include_tag("broadcasts")} %>
-
-<h3 id="sms_balance">SMS Balance: <%= @balance %></h3>
-
+<h3 id='sms_balance'>
+  SMS Balance: <%= @balance %> 
+</h3>
 <%= basic_form(broadcast) do |f|
   spec = {
     :fields => [{
