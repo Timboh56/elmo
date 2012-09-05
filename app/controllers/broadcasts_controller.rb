@@ -38,18 +38,14 @@ class BroadcastsController < ApplicationController
     @broadcast = Broadcast.new(:recipients => users)
     
     begin
-    
       # get credit balance
-       @balance = Integer(Smser.check_balance.split(":").second)      
-    
+      @balance = Integer(Smser.check_balance.split(":").second)      
     rescue
+      # log all errors
+      logger.error("SMS balance request error: #{$!}")
       
-      #log all errors
-      logger.error($!)
-      
-      # set @balance to null if timed out
+      # set @balance to null if error
       @balance = nil
-      
     end
     
     # render new action

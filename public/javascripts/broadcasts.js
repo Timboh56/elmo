@@ -1,6 +1,6 @@
 function broadcast_medium_changed() { 
   var select = $('#broadcast_medium')[0];
-  var selected = select.options[select.selectedIndex].value
+  var selected = select.options[select.selectedIndex].value;
   var sms_possible = selected != "email_only" && selected != "";
 
   // hide/show char limit and subject
@@ -8,8 +8,8 @@ function broadcast_medium_changed() {
     $('#char_limit').show();
     $('#which_phone_row').show();
     broadcast_update_char_limit();
-    $('#subject_row').hide();  
-    $('#sms_balance').show(); 
+    $('#subject_row').hide();
+    $('#sms_balance').show();
   } else {
     $('#which_phone_row').hide();
     $('#char_limit').hide();
@@ -17,9 +17,6 @@ function broadcast_medium_changed() {
     $('#subject_row').show();
   }
 }
-
-
-
 
 function broadcast_update_char_limit() {
   if ($('#char_limit').is(":visible")) {
@@ -29,7 +26,4 @@ function broadcast_update_char_limit() {
   }
 }
 
-
-$.ready(broadcast_medium_changed);       
-
-                                                                                 
+$.ready(broadcast_medium_changed);

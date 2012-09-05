@@ -16,9 +16,6 @@
 # 
 class Smser
   
-  # get adapter from settings
-  $adapter = configatron.outgoing_sms_adapter
-  
   def self.deliver(recips, which_phone, msg)
     
     # get numbers
@@ -28,11 +25,11 @@ class Smser
     numbers.compact!
     
     # deliver
-    $adapter.deliver(numbers, msg)
+    configatron.outgoing_sms_adapter.deliver(numbers, msg)
   end
   
   # check_balance uses the Intellisms adapter to retrieve the SMS balance
   def self.check_balance()
-    return $adapter.check_balance()
+    configatron.outgoing_sms_adapter.check_balance()
   end
 end
