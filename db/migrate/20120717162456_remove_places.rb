@@ -2,8 +2,8 @@ class RemovePlaces < ActiveRecord::Migration
   def up
     transaction do
       # create locality, state, country, and full address questions
-      short_txt_type = QuestionType.find_by_name("text")
-      long_txt_type = QuestionType.find_by_name("long_text")
+      short_txt_type = QuestionType.find_by_name("text").id
+      long_txt_type = QuestionType.find_by_name("long_text").id
       loc = Question.create!(:code => "oldLocality", :question_type_id => short_txt_type,
         :name_eng => "Old Locality", :hint_eng => "Locality from the old place object.")
       sta = Question.create!(:code => "oldState", :question_type_id => short_txt_type,
