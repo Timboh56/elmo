@@ -40,12 +40,7 @@ class BroadcastsController < ApplicationController
     begin
     
       # get credit balance
-      @balance = Integer(Smser.check_balance.split(":").second)
-      
-      # if there are more recipients than there are sms credits, return error. 
-      if users.length > @balance
-        @balance = "You picked more SMS recipients than credits available: " + @balance
-      end
+       @balance = Integer(Smser.check_balance.split(":").second)      
     
     rescue
       
