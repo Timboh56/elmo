@@ -18,7 +18,8 @@
       </tr>
       <tr>
         <% if flash[:captcha] %>
-          <td> <%= show_simple_captcha :label => "Please enter the symbols below" %> </td>
+          <td><%= flash[:captcha] %></td>
+          <td><%= show_simple_captcha :label => "Please enter the symbols above." %></td>
         <% end %>
       </tr>
     </table>

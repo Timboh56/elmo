@@ -26,14 +26,16 @@ class UserSessionsController < ApplicationController
   
   def create
     
+    # if the captcha is valid, reset the login attempts number
     if simple_captcha_valid?
       session[:attempts] = 0
     end
     
     @user_session = UserSession.new(params[:user_session])
-    if (session[:attempts] < 3) && @user_session.save
+    
+    # if session attempts is nil (which means it hasn't been set) or is less than three, and user info validates.. 
+    if (!session[:attempts] || session[:attempts] < 3) && @user_session.save
       reset_session
-      
       
       # reset the perishable token for security's sake
       @user_session.user.reset_perishable_token!
@@ -46,7 +48,7 @@ class UserSessionsController < ApplicationController
         session[:attempts] = 0
       else
         session[:attempts] = session[:attempts] + 1
-        session[:attempts] > 3 ? flash[:captcha] = "Please enter all symbols in the captcha to continue." : nil
+        session[:attempts] > 3 ? flash[:captcha] = "Captcha: " : nil
       end
       flash[:error] = @user_session.errors.full_messages.join(",")
       redirect_to(:action => :new)
