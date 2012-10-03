@@ -17,6 +17,7 @@
 class ApplicationController < ActionController::Base
   require 'authlogic'
   include ActionView::Helpers::AssetTagHelper
+  include SimpleCaptcha::ControllerHelpers
   
   protect_from_forgery
   rescue_from(Exception, :with => :notify_error)
@@ -172,6 +173,14 @@ class ApplicationController < ActionController::Base
       obj = controller_name.gsub("_", " ").ucwords
       obj = obj.singularize unless action_name == "index"
       @title = action + obj
+    end
+    
+    def cookies_enabled?
+      if cookies["_session_id"]
+        return true
+      else
+        return false
+      end
     end
     
     def store_location  

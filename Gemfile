@@ -12,3 +12,4 @@ gem 'yard'
 gem 'rdiscount'
 gem 'jquery-rails'
 gem 'rmagick'
+gem "galetahub-simple_captcha", :require => "simple_captcha"

@@ -17,19 +17,37 @@
 class UserSessionsController < ApplicationController
   
   def new
-    @title = "Login"
-    @user_session = UserSession.new
+    if !cookies_enabled?
+      flash[:cookies] = "Cookies are disabled by your browser. Please enable them."
+    end
+      @title = "Login"
+      @user_session = UserSession.new
   end
   
   def create
-    reset_session
+    
+    if simple_captcha_valid?
+      session[:attempts] = 0
+    end
+    
     @user_session = UserSession.new(params[:user_session])
-    if @user_session.save
+    if (session[:attempts] < 3) && @user_session.save
+      reset_session
+      
+      
       # reset the perishable token for security's sake
       @user_session.user.reset_perishable_token!
       flash[:success] = "Login successful"
       redirect_back_or_default(root_path)
     else
+      
+      # increment login attempts in session
+      if !session[:attempts]
+        session[:attempts] = 0
+      else
+        session[:attempts] = session[:attempts] + 1
+        session[:attempts] > 3 ? flash[:captcha] = "Please enter all symbols in the captcha to continue." : nil
+      end
       flash[:error] = @user_session.errors.full_messages.join(",")
       redirect_to(:action => :new)
     end
