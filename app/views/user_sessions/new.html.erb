@@ -1,7 +1,6 @@
 <% rowbg = 0 %>
-
-<% if flash[:cookies] %>
-  <%= flash[:cookies] %>
+<% if @cookies_disabled %>
+  <%= @cookies_disabled %>
 <% else %>             
   <%= form_for @user_session, :url => user_session_path do |f| %>
     <%= flash_and_form_errors(@user_session) %>

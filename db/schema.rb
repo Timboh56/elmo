@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,12 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120717182055) do
-
-  create_table "#Tableau_sid_00485CC8_4_none_form_name_nk", :id => false, :force => true do |t|
-    t.string  "none_form_name_nk"
-    t.integer "_Tableau_join_flag", :limit => 8, :default => 0, :null => false
-  end
+ActiveRecord::Schema.define(:version => 20121005192932) do
 
   create_table "answers", :force => true do |t|
     t.integer  "response_id"
@@ -82,6 +78,20 @@ ActiveRecord::Schema.define(:version => 20120717182055) do
     t.integer  "downloads"
   end
 
+  create_table "icons", :force => true do |t|
+    t.string   "name"
+    t.text     "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ip_logins", :force => true do |t|
+    t.string   "ip_address"
+    t.integer  "login_attempts"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "languages", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -134,6 +144,10 @@ ActiveRecord::Schema.define(:version => 20120717182055) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "question_type_id"
+    t.integer  "minimum"
+    t.integer  "maximum"
+    t.boolean  "maxstrictly"
+    t.boolean  "minstrictly"
   end
 
   create_table "report_aggregations", :force => true do |t|
@@ -249,6 +263,15 @@ ActiveRecord::Schema.define(:version => 20120717182055) do
     t.datetime "updated_at"
   end
 
+  create_table "simple_captcha_data", :force => true do |t|
+    t.string   "key",        :limit => 40
+    t.string   "value",      :limit => 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "simple_captcha_data", ["key"], :name => "idx_key"
+
   create_table "translations", :force => true do |t|
     t.integer  "language_id"
     t.text     "str"
@@ -287,6 +310,7 @@ ActiveRecord::Schema.define(:version => 20120717182055) do
     t.datetime "last_request_at"
     t.string   "name"
     t.string   "phone2"
+    t.integer  "failed_logins"
   end
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
