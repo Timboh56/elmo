@@ -27,7 +27,7 @@ class IntelliSmsAdapter
   
   # check_balance returns the balance string
   def self.check_balance
-    make_request("getbalance")
+    make_request("getbalance").split(":").second
   end
   
   private

@@ -39,7 +39,7 @@ class BroadcastsController < ApplicationController
     
     begin
       # get credit balance
-      @balance = Integer(Smser.check_balance.split(":").second)      
+      @balance = Smser.check_balance      
     rescue
       # log all errors
       logger.error("SMS balance request error: #{$!}")
