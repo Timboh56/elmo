@@ -22,7 +22,7 @@ class UserSessionsController < ApplicationController
   end
   
   def create
-    
+    @captcha = false
     # if IP has not been logged yet, or this is the first attempt to login from the user..
     if (@user_ip =  IpLogin.find_by_ip_address(request.env['REMOTE_ADDR'].to_s)).nil?
       @user_ip = IpLogin.create(:ip_address =>  request.env['REMOTE_ADDR'].to_s, :login_attempts => 0 )
@@ -39,18 +39,16 @@ class UserSessionsController < ApplicationController
         # reset the perishable token for security's sake
         @user_session.user.reset_perishable_token!
         flash[:success] = "Login successful"
-        redirect_back_or_default(root_path)
       else
         flash[:error] = @user_session.errors.full_messages.join(",")
       end
     else
-
-      # "lock" the account if there are 4 login attempts with the current time. 
-      @user_ip.login_attempts == 4 ? @user_ip.time_locked = Time.now : nil
-
+      
       # if current time is more than 30 minutes since the IP was locked for the captcha, reset number of login attempts
       # this prevents entire pool of IP's from being "locked" out
       Time.now > @user_ip.time_locked + 30.minutes ? @user_ip.login_attempts = 0 : nil
+
+      @user_ip.time_locked = Time.now
       
       # if simple captcha is valid, then check to see if credentials are also valid
       if simple_captcha_valid?
@@ -65,7 +63,7 @@ class UserSessionsController < ApplicationController
           
       else       
         # else show the captcha
-        flash[:captcha] = "Captcha"
+        @captcha = true
         
         # only show the wrong captcha error if the user just entered the wrong captcha
         # this only occurs when the user has more than 3 attempts
@@ -75,7 +73,7 @@ class UserSessionsController < ApplicationController
     
     @user_ip.increment(:login_attempts)
     @user_ip.save    
-    redirect_to(:action => :new)
+    redirect_to(:action => :new, :captcha => @captcha)
   end
   
   def destroy

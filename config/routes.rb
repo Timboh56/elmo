@@ -1,6 +1,4 @@
 CommandCenter::Application.routes.draw do
-  resources :ip_logins
-
   resources(:broadcasts){collection{post 'new_with_users'}}
   resources(:forms){member{post 'add_questions', 'remove_questions', 'update_ranks'; get 'publish', 'clone'}}
   resources(:form_types)
