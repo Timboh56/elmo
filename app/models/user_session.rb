@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
 # 
-class UserSession < Authlogic::Session::Base
+class UserSession < Authlogic::Session::Base  
   # only session related configuration goes here, see documentation for sub modules of Authlogic::Session
   # other config goes in acts_as block
   logout_on_timeout(true)
+  generalize_credentials_error_messages true
+  
   def to_key
     new_record? ? nil : [ self.send(self.class.primary_key) ]
   end

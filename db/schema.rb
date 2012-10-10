@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121005192932) do
+ActiveRecord::Schema.define(:version => 20121010025019) do
 
   create_table "answers", :force => true do |t|
     t.integer  "response_id"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(:version => 20121005192932) do
     t.integer  "login_attempts"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "time_locked"
   end
 
   create_table "languages", :force => true do |t|

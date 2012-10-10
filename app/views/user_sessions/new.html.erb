@@ -1,28 +1,24 @@
-<% rowbg = 0 %>
-<% if @cookies_disabled %>
-  <%= @cookies_disabled %>
-<% else %>             
-  <%= form_for @user_session, :url => user_session_path do |f| %>
-    <%= flash_and_form_errors(@user_session) %>
-    <table class="form">
-      <tr class="rowbg<%= rowbg = 1 - rowbg %>">
-        <td class="name"><%= f.label :login %><%= reqd_sym %></td>
-        <td class="value"><%= f.text_field :login %></td>
-        <td class="details"></td>
-      </tr>
-      <tr class="rowbg<%= rowbg = 1 - rowbg %>">
-        <td class="name"><%= f.label :password %><%= reqd_sym %></td>
-        <td class="value"><%= f.password_field :password %></td>
-        <td class="details"></td>
-      </tr>
-      <tr>
-        <% if flash[:captcha] %>
-          <td><%= flash[:captcha] %></td>
-          <td><%= show_simple_captcha :label => "Please enter the symbols above." %></td>
-        <% end %>
-      </tr>
-    </table>
-    <%= f.submit "Login" %>
-    <%= link_to("Forgot Password?", new_password_reset_path) %>
-    <% end %>
+<% rowbg = 0 %>         
+<%= form_for @user_session, :url => user_session_path do |f| %>
+  <%= flash_and_form_errors(@user_session) %>
+  <table class="form">
+    <tr class="rowbg<%= rowbg = 1 - rowbg %>">
+      <td class="name"><%= f.label :login %><%= reqd_sym %></td>
+      <td class="value"><%= f.text_field :login %></td>
+      <td class="details"></td>
+    </tr>
+    <tr class="rowbg<%= rowbg = 1 - rowbg %>">
+      <td class="name"><%= f.label :password %><%= reqd_sym %></td>
+      <td class="value"><%= f.password_field :password %></td>
+      <td class="details"></td>
+    </tr>
+    <tr>
+      <% if flash[:captcha] %>
+        <td><%= flash[:captcha] %></td>
+        <td><%= show_simple_captcha :label => "Please enter the symbols above." %></td>
+      <% end %>
+    </tr>
+  </table>
+  <%= f.submit "Login" %>
+  <%= link_to("Forgot Password?", new_password_reset_path) %>
 <% end %>

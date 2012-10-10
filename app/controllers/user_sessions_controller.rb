@@ -17,9 +17,6 @@
 class UserSessionsController < ApplicationController
   
   def new
-    if !cookies_enabled?
-      @cookies_disabled = "Cookies are disabled by your browser. Please enable them."
-    end
       @title = "Login"
       @user_session = UserSession.new
   end
@@ -31,30 +28,54 @@ class UserSessionsController < ApplicationController
       @user_ip = IpLogin.create(:ip_address =>  request.env['REMOTE_ADDR'].to_s, :login_attempts => 0 )
     end
     
-    # if the captcha is valid, reset the login attempts number
-    if simple_captcha_valid?
-      @user_ip.login_attempts = 0
-      @user_ip.save
-    end
-    
     @user_session = UserSession.new(params[:user_session])
     
-    # if session attempts is nil (which means it hasn't been set) or is less than three, and user info validates.. 
-    if (@user_ip.login_attempts < 3) && @user_session.save
-      reset_session
-      
-      # reset the perishable token for security's sake
-      @user_session.user.reset_perishable_token!
-      flash[:success] = "Login successful"
-      redirect_back_or_default(root_path)
+    
+    # if session attempts is nil (which means it hasn't been set) or is less than three..  
+    if  @user_ip.login_attempts < 3
+      if @user_session.save
+        reset_session
+
+        # reset the perishable token for security's sake
+        @user_session.user.reset_perishable_token!
+        flash[:success] = "Login successful"
+        redirect_back_or_default(root_path)
+      else
+        flash[:error] = @user_session.errors.full_messages.join(",")
+      end
     else
 
-      # increment login_attempts because the user failed validation 
-      @user_ip.increment(:login_attempts).save
-      @user_ip.login_attempts > 3 ? flash[:captcha] = "Captcha" : nil
-      flash[:error] = "You entered a wrong username or password."
-      redirect_to(:action => :new)
+      # "lock" the account if there are 4 login attempts with the current time. 
+      @user_ip.login_attempts == 4 ? @user_ip.time_locked = Time.now : nil
+
+      # if current time is more than 30 minutes since the IP was locked for the captcha, reset number of login attempts
+      # this prevents entire pool of IP's from being "locked" out
+      Time.now > @user_ip.time_locked + 30.minutes ? @user_ip.login_attempts = 0 : nil
+      
+      # if simple captcha is valid, then check to see if credentials are also valid
+      if simple_captcha_valid?
+        
+        # reset login attempts 
+        @user_ip.login_attempts = 0
+        
+        # if credentials are incorrect and captcha is valid          
+        if !@user_session.save
+          flash[:error] = @user_session.errors.full_messages.join(",")
+        end
+          
+      else       
+        # else show the captcha
+        flash[:captcha] = "Captcha"
+        
+        # only show the wrong captcha error if the user just entered the wrong captcha
+        # this only occurs when the user has more than 3 attempts
+        @user_ip.login_attempts > 3 ? flash[:error] = "You entered the wrong captcha" : nil
+      end
     end
+    
+    @user_ip.increment(:login_attempts)
+    @user_ip.save    
+    redirect_to(:action => :new)
   end
   
   def destroy
