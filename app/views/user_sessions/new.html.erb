@@ -13,7 +13,7 @@
       <td class="details"></td>
     </tr>
     <tr>
-      <% if :captcha %>
+      <% if :captcha == true %>
         <td><%= "Captcha" %></td>
         <td><%= show_simple_captcha :label => "Please enter the symbols above." %></td>
       <% end %>
