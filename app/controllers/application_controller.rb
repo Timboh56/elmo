@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
     
     # Loads the user-specified timezone from configatron, if one exists.
     def set_timezone
-      Time.zone = configatron.timezone.to_s if configatron.timezone
+      # Time.zone = configatron.timezone.to_s if configatron.timezone
     end
     
     def load_objects_with_subindex(klass)
@@ -173,14 +173,6 @@ class ApplicationController < ActionController::Base
       obj = controller_name.gsub("_", " ").ucwords
       obj = obj.singularize unless action_name == "index"
       @title = action + obj
-    end
-    
-    def cookies_enabled?
-      if cookies["_session_id"]
-        return true
-      else
-        return false
-      end
     end
     
     def store_location  

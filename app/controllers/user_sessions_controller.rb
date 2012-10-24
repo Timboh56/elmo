@@ -17,15 +17,16 @@
 class UserSessionsController < ApplicationController
   
   def new
-      @title = "Login"
-      @user_session = UserSession.new
+    @title = "Login"
+    @user_session = UserSession.new
   end
   
   def create
     @captcha = false
     # if IP has not been logged yet, or this is the first attempt to login from the user..
-    if (@user_ip =  IpLogin.find_by_ip_address(request.env['REMOTE_ADDR'].to_s)).nil?
-      @user_ip = IpLogin.create(:ip_address =>  request.env['REMOTE_ADDR'].to_s, :login_attempts => 0 )
+    ip = request.env['REMOTE_ADDR'].to_s
+    if (@user_ip = IpLogin.find_by_ip_address(ip)).nil?
+      @user_ip = IpLogin.create(:ip_address => ip, :login_attempts => 0 )
     end
     
     @user_session = UserSession.new(params[:user_session])
@@ -38,7 +39,13 @@ class UserSessionsController < ApplicationController
 
         # reset the perishable token for security's sake
         @user_session.user.reset_perishable_token!
+        
+        # destroy the row in user ip table once user logs in successfully
+        @user_ip.destroy
+        
         flash[:success] = "Login successful"
+        redirect_back_or_default(root_path)
+        return
       else
         flash[:error] = @user_session.errors.full_messages.join(",")
       end
@@ -46,8 +53,11 @@ class UserSessionsController < ApplicationController
       
       # if current time is more than 30 minutes since the IP was locked for the captcha, reset number of login attempts
       # this prevents entire pool of IP's from being "locked" out
-      Time.now > @user_ip.time_locked + 30.minutes ? @user_ip.login_attempts = 0 : nil
-
+      if !@user_ip.time_locked.nil? && Time.now > @user_ip.time_locked + 30.minutes
+        @user_ip.login_attempts = 0
+      end
+      
+      # update the lock time since user failed to login
       @user_ip.time_locked = Time.now
       
       # if simple captcha is valid, then check to see if credentials are also valid
@@ -61,19 +71,23 @@ class UserSessionsController < ApplicationController
           flash[:error] = @user_session.errors.full_messages.join(",")
         end
           
-      else       
+      else
+        
+        Rails.logger.debug("in here")       
         # else show the captcha
-        @captcha = true
+        flash[:captcha] = true
         
         # only show the wrong captcha error if the user just entered the wrong captcha
         # this only occurs when the user has more than 3 attempts
-        @user_ip.login_attempts > 3 ? flash[:error] = "You entered the wrong captcha" : nil
+        if @user_ip.login_attempts > 3
+          flash[:error] = "You entered the wrong captcha"
+        end
       end
     end
     
     @user_ip.increment(:login_attempts)
-    @user_ip.save    
-    redirect_to(:action => :new, :captcha => @captcha)
+    @user_ip.save
+    redirect_to(:action => :new)    
   end
   
   def destroy
