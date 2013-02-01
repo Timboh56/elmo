@@ -70,8 +70,11 @@ class ResponsesController < ApplicationController
     @resp = Response.new(:form => form)
   end
   
-  def edit
+  def edit    
     @resp = Response.find_eager(params[:id])
+    @possible_duplicates = Response.find_duplicates(@resp.signature)
+    @resp[:possible_duplicates] = @possible_duplicates
+    puts(@resp.possible_duplicates.first.id)  
   end
   
   def show
@@ -103,7 +106,12 @@ class ResponsesController < ApplicationController
       # set user_id if this is an observer
       @resp.user = current_user if current_user.is_observer?
       # try to save
+      
       begin
+        @resp.update_attributes!(params[:response])
+        
+        @duplicates = Response.find_duplicates(@resp.signature)
+        !@duplicates.nil? ? @resp.update_attributes!("duplicate" => 1) : @resp.update_attributes!("duplicate" => 0) 
         @resp.update_attributes!(params[:response])
         flash[:success] = "Response #{action}d successfully."
         redirect_to(:action => :index)

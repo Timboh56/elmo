@@ -22,6 +22,9 @@ class Response < ActiveRecord::Base
     :autosave => true, :validate => false, :dependent => :destroy)
   belongs_to(:user)
   
+  # before_save hashAnswers and set Response.hash to the hash
+  before_save :hash_answers
+  
   attr_accessor(:modifier)
   
   # we turn off validate above and do it here so we can control the message and have only one message
@@ -62,6 +65,7 @@ class Response < ActiveRecord::Base
       Search::Qualifier.new(:label => "reviewed", :col => "responses.reviewed", :subst => {"yes" => "1", "no" => "0"}),
       Search::Qualifier.new(:label => "submitter", :col => "users.name", :assoc => :users, :partials => true),
       Search::Qualifier.new(:label => "answer", :col => "answers.value", :assoc => :answers, :partials => true, :default => true),
+      Search::Qualifier.new(:label => "signature", :col => "responses.signature"),
       Search::Qualifier.new(:label => "source", :col => "responses.source"),
       Search::Qualifier.new(:label => "date", :col => "DATE(CONVERT_TZ(responses.created_at, 'UTC', '#{Time.zone.mysql_name}'))")
     ]
@@ -108,9 +112,27 @@ class Response < ActiveRecord::Base
     "No recent reports"
   end
   
+  # finds all responses with duplicate hashes
+  def self.find_duplicates(signature)
+    possible_duplicates = self.where("signature = '" + signature + "' AND id != " + self.id.to_s + " ")
+    return possible_duplicates
+  end
+  
   def visible_questionings
     # get visible questionings from form
     form.visible_questionings
+  end
+  
+  # hashes all the answer values of the response
+  def hash_answers
+    answers = self.all_answers
+    answers_digest = ""
+    answers.each do |a|
+      answer_value = a.value || a.option_id || a.time_value || a.date_value || a.datetime_value
+      answers_digest = answers_digest + answer_value.to_s
+    end
+    signature = Digest::SHA1.hexdigest(answers_digest)
+    self.signature = signature
   end
   
   def all_answers

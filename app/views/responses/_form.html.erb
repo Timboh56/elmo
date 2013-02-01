@@ -20,6 +20,13 @@
         :value => f.mode == :show ? 
           content_tag("div", :class => "dummy"){resp.reviewed? ? "Yes" : "No"} : 
           f.check_box(:reviewed?)
+      },
+      {
+        :col => :duplicate,
+        :label => "Duplicate?",
+        :value => f.mode == :show ? 
+          content_tag("div", :class => "dummy"){resp.duplicate? ? "<b>Yes</b>" : "No"} : 
+          f.check_box(:duplicate?)
       }].compact
     },{
       :contents => answers_subform(resp.all_answers)
@@ -29,5 +36,3 @@
   }
 end
 %>
-
-<br><br>

@@ -28,6 +28,8 @@ div.success, div.error { position: absolute; left: 25%; top: 76px; padding: 3px;
     color: white; font-weight: bold; width: 600px; margin-bottom: 10px; text-align: center; }
 div.success { background-color: #9dc400; }
 div.error { background-color: #d02000; }
+div.duplicates { position: absolute; left:25%; top: 95px; padding: 2px; width: 600px; 
+    color: black; font-weight: bold; background-color: #ffcc33; text-align: center; }
 
 /* hide printable things */
 .printable { display: none; }

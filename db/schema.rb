@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121125221947) do
+ActiveRecord::Schema.define(:version => 20121125234227) do
 
   create_table "#Tableau_sid_00485CC8_4_none_form_name_nk", :id => false, :force => true do |t|
     t.string  "none_form_name_nk"
@@ -224,7 +224,7 @@ ActiveRecord::Schema.define(:version => 20121125221947) do
     t.datetime "updated_at"
     t.boolean  "reviewed",   :default => false
     t.string   "source"
-    t.string   "hash"
+    t.string   "signature"
     t.boolean  "duplicate"
   end
 
