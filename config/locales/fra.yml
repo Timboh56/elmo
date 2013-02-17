@@ -1,0 +1,19 @@
+# translations used for sms reply messages
+fra:
+  sms:
+    error:
+      system:
+        general:
+        multiple_users:
+      form:
+        permission_denied:
+        not_found:
+      message:
+        no_of_answers:
+        cant_read:
+        question_not_found:
+      response:
+        not_an_integer:
+        not_valid:
+    success:
+    

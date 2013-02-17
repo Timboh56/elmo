@@ -2993,3 +2993,37 @@ Processing by SettingsController#index as HTML
   [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `missions` WHERE (1)[0m
   [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE (1)
 Completed 200 OK in 44ms (Views: 30.2ms | ActiveRecord: 5.1ms)
+
+
+Started PUT "/settings/1" for 127.0.0.1 at 2013-02-17 22:14:06 +0100
+Processing by SettingsController#update as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"/3IohLtb0FZ89yX9DbKgnNeuztjyPV/RqLRhxpe0evw=", "setting"=>{"mission_id"=>"1", "timezone"=>"UTC", "languages"=>"eng", "outgoing_sms_adapter"=>"ISMS", "outgoing_sms_username"=>"admin", "outgoing_sms_password1"=>"[FILTERED]", "outgoing_sms_password2"=>"[FILTERED]", "outgoing_sms_language"=>"fra", "outgoing_sms_extra"=>"192.168.1.142:81"}, "commit"=>"Submit", "id"=>"1"}
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 21:14:06', `updated_at` = '2013-02-17 21:14:06' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.4ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.3ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`id` = 1 LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `settings` SET `outgoing_sms_language` = 'fra', `updated_at` = '2013-02-17 21:14:06' WHERE `settings`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+Redirected to http://0.0.0.0:3000/settings
+Completed 302 Found in 240ms (ActiveRecord: 14.6ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 22:14:06 +0100
+Processing by SettingsController#index as HTML
+  [1m[35mUser Load (0.6ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.5ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.5ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.1ms)
+  Rendered layouts/_flash.html.erb (0.8ms)
+  Rendered settings/_tableau_sql.html.erb (0.2ms)
+  Rendered settings/index.html.erb within layouts/application (13.2ms)
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM `missions` WHERE (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE (1)
+Completed 200 OK in 179ms (Views: 166.3ms | ActiveRecord: 3.2ms)

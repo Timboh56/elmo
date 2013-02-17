@@ -1,9 +1,10 @@
 class SmsResponsesController < ApplicationController
-	def incoming				
-		
+	def incoming					
 		@adapter = Sms::Adapters::Factory.new.create(params[:provider])
 		smses = adapter.receive(params) # return hash with phone number and message
 
+		I18n.locale = configatron.outgoing_sms_language
+		
 		smses.each{ |sms|
 			begin	
 				sender_info = User.where('phone = ? || phone2 = ?', sms.phone, sms.phone)
