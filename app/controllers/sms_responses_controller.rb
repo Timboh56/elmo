@@ -6,36 +6,45 @@ class SmsResponsesController < ApplicationController
 
 		smses.each{ |sms|
 			sender_info = User.where('phone = ? || phone2 = ?', sms.phone, sms.phone)
+			
 			unless sender_info.empty?
+				
 				unless sender_info.count > 1
+					
 					@sender = sender_info.first
 					sms_response = new smsResponse
-					if sms_response.load_message?(sms.message)
-						# form_id = sms_response.get_form_id
-						# mission = get_mission
-						#if user has access
-							# response.save
-							# sms_response.save
-						#else
-							# message = 'sms.error.cantaccess' 
-						#end
+					
+					if sms_response.message_loaded?(sms.message)
+						
+						mission = sms_response.get_missionn
+						
+						if @sender.can_access_mission?(mission)
+							
+							sms_response.save_answers(@sender)
+							@adapter.add_outgoing_message( sms_response.get_outgoing_message(), sms.phone )
+						
+						else	
+							@adapter.add_outgoing_message('sms.error.cantAccessForm.'+form.id.to_s, sms.phone)
+						
+						end
+					
 					else
-						@adapter.add_outgoing_message( sms_response.get_outgoing_message) )
+						@adapter.add_outgoing_message( sms_response.get_outgoing_message(), sms.phone )
+					
 					end
+				
 				else
-					@adapter.add_outgoing_message('sms.error.morethanoneuserwithphone')
+					@adapter.add_outgoing_message('sms.error.moreThanOneUserWithPhone', sms.phone)
+				
 				end
+			
 			else	
-				#  #blank message for non responses
+				#  #blank message for non-recognized numbers
+			
 			end
 		}
 		
-		#adapter.reply(phone)
-			
-		@output = 'hello'
+		@output = adapter.reply()
 		render :template => "sms_responses/ok.txt.erb"
   	end
-  	
-  	
-  		
 end

@@ -15,15 +15,15 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 		if base.is_a? Array
 			base.each{ |message|
 				m = {
-					'phone' => message['SenderNumber'],
-					'message' => message['Message']
+					:phone => message['SenderNumber'],
+					:message => message['Message']
 					}
 				messages << m
 			}
 		else
 			m = {
-				'phone' => base['SenderNumber'],
-				'message' => base['Message']
+				:phone => base['SenderNumber'],
+				:message => base['Message']
 				}
 			incoming_messages << m
 		end
