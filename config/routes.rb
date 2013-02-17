@@ -6,6 +6,9 @@ ELMO::Application.routes.draw do
   match("/missions/:mission_compact_name/submission" => 'responses#create', :format => :xml)
   match("/m/:mission_compact_name/submission" => 'responses#create', :format => :xml)
 
+  match("sms_codes/show/:form_id" => "sms_codes#show")
+  match("sms_responses/incoming" => "sms_responses#incoming")
+
   resources(:broadcasts){collection{post 'new_with_users'}}
   resources(:forms){member{post *%w(add_questions remove_questions update_ranks); get *%w(publish clone choose_questions)}}
   resources(:form_types)

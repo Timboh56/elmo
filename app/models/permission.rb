@@ -40,6 +40,7 @@ class Permission
     "user_sessions#destroy" => {:group => :anyone},
     "welcome#*" => {:group => :anyone},
     "permissions#no" => {:group => :anyone},
+	"sms_responses#incoming" => {:group => :anyone},
 
     "user_sessions#create" => {:group => :logged_out},
     "user_sessions#logged_out" => {:group => :logged_out},

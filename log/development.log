@@ -1797,3 +1797,273 @@ Migrating to CreateSmsCodes (20130217133401)
   [1m[35m (15.8ms)[0m  CREATE TABLE `sms_codes` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `code` varchar(255) DEFAULT 0, `questioning_id` int(11), `option_id` int(11) DEFAULT 0, `form_id` int(11), `question_number` int(11), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
   [1m[36m (0.5ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20130217133401')[0m
   [1m[35m (0.4ms)[0m  SELECT `schema_migrations`.`version` FROM `schema_migrations` 
+
+
+Started GET "/sms_codes/show/3" for 127.0.0.1 at 2013-02-17 15:10:44 +0100
+Processing by SmsCodesController#show as HTML
+  Parameters: {"form_id"=>"3"}
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 14:10:45', `updated_at` = '2013-02-17 14:10:45' WHERE `users`.`id` = 1
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.3ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mForm Load (0.3ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` = 3 LIMIT 1[0m
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `sms_codes` WHERE `sms_codes`.`form_id` = 3
+  [1m[36mQuestioning Load (0.5ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`form_id` = 3 ORDER BY rank[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 6 ORDER BY code LIMIT 1
+  [1m[36mQuestionType Load (0.3ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 7 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 9 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 10 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 11 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 19 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 20 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 21 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 22 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 23 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 24 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 25 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mOptionSet Load (0.4ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.2ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)[0m
+  [1m[35mOption Load (0.3ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)
+  [1m[36mTranslation Load (0.4ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSetting Load (0.4ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name[0m
+  [1m[35mQuestion Load (0.6ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code
+  [1m[36mQuestioning Load (0.5ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)[0m
+  [1m[35mForm Load (0.3ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 1, 9, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 1, 9, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 1, 9, '2013-02-17 14:10:45')
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 6 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.4ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.4ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)
+  [1m[36mOption Load (0.3ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name
+  [1m[36mQuestion Load (0.4ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.6ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)
+  [1m[36mForm Load (0.3ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 2, 10, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 2, 10, '2013-02-17 14:10:45')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 2, 10, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.5ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 7 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)[0m
+  [1m[35mOption Load (0.4ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)
+  [1m[36mTranslation Load (0.6ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSetting Load (0.4ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name[0m
+  [1m[35mQuestion Load (0.5ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)[0m
+  [1m[35mForm Load (0.6ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 3, 12, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 3, 12, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 3, 12, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.6ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 9 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.2ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)
+  [1m[36mOption Load (0.4ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSet Load (0.2ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name
+  [1m[36mQuestion Load (0.4ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.6ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)
+  [1m[36mForm Load (0.4ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 4, 13, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 4, 13, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 4, 13, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.5ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 10 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)[0m
+  [1m[35mOption Load (0.3ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)
+  [1m[36mTranslation Load (0.4ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name[0m
+  [1m[35mQuestion Load (0.5ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)[0m
+  [1m[35mForm Load (0.4ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 5, 14, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 5, 14, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 5, 14, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 11 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.4ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)
+  [1m[36mOption Load (0.3ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name
+  [1m[36mQuestion Load (0.5ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.6ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)
+  [1m[36mForm Load (0.4ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 6, 22, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 6, 22, '2013-02-17 14:10:45')
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 6, 22, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.7ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 19 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.4ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)[0m
+  [1m[35mOption Load (0.5ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)
+  [1m[36mTranslation Load (0.5ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSetting Load (0.5ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)
+  [1m[36mOptionSet Load (0.4ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name[0m
+  [1m[35mQuestion Load (0.5ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code
+  [1m[36mQuestioning Load (0.5ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)[0m
+  [1m[35mForm Load (0.5ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 7, 23, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 7, 23, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 7, 23, '2013-02-17 14:10:45')
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 20 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)
+  [1m[36mOption Load (0.5ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name
+  [1m[36mQuestion Load (0.7ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.8ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)
+  [1m[36mForm Load (0.5ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 8, 24, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 8, 24, '2013-02-17 14:10:45')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 8, 24, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.5ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 21 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.4ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)[0m
+  [1m[35mOption Load (0.4ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)
+  [1m[36mTranslation Load (0.5ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSetting Load (0.4ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)[0m
+  [1m[35mForm Load (0.4ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 9, 25, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 9, 25, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 9, 25, '2013-02-17 14:10:45')
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.6ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 22 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)
+  [1m[36mOption Load (0.3ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name
+  [1m[36mQuestion Load (0.4ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.7ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)
+  [1m[36mForm Load (0.5ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 10, 26, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 10, 26, '2013-02-17 14:10:45')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 10, 26, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.6ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 23 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.4ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.4ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)[0m
+  [1m[35mOption Load (0.4ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)
+  [1m[36mTranslation Load (0.7ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name[0m
+  [1m[35mQuestion Load (0.6ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)[0m
+  [1m[35mForm Load (0.4ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 11, 27, '2013-02-17 14:10:45')
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 11, 27, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 11, 27, '2013-02-17 14:10:45')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 24 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 1 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.4ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (1)
+  [1m[36mOption Load (0.4ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (1, 2, 3)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (1, 2, 3)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (1, 2, 3)[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (1) ORDER BY name
+  [1m[36mQuestion Load (0.4ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (1) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.4ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (11, 17, 22, 1, 21, 7, 25, 12, 9, 14, 24, 23, 10, 6, 19, 20)
+  [1m[36mForm Load (0.4ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (3, 4, 7, 6)[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 14:10:45', 3, 1, 12, 28, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 14:10:45', 3, 2, 12, 28, '2013-02-17 14:10:45')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 14:10:45', 3, 3, 12, 28, '2013-02-17 14:10:45')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.6ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 25 AND `translations`.`class_name` = 'Question'[0m
+DEPRECATION WARNING: Passing a template handler in the template name is deprecated. You can simply remove the handler name or pass render :handlers => [:erb] instead. (called from realtime at /Users/damienbrockmann/.rvm/rubies/ruby-1.9.3-p362/lib/ruby/1.9.1/benchmark.rb:295)
+  Rendered sms_codes/show.txt.erb (0.1ms)
+Completed 200 OK in 799ms (Views: 2.1ms | ActiveRecord: 108.7ms)
