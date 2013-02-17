@@ -281,13 +281,13 @@ ActiveRecord::Schema.define(:version => 20130217133401) do
   add_index "settings", ["mission_id"], :name => "index_settings_on_mission_id"
 
   create_table "sms_codes", :force => true do |t|
-    t.string   "code"
+    t.string   "code",            :default => "0"
     t.integer  "questioning_id"
-    t.integer  "option_id"
+    t.integer  "option_id",       :default => 0
     t.integer  "form_id"
     t.integer  "question_number"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
   create_table "sms_responses", :force => true do |t|
