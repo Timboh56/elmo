@@ -1,0 +1,1652 @@
+Connecting to database specified by database.yml
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 13:16:07 +0100
+Processing by WelcomeController#index as HTML
+  [1m[36mUser Load (2.2ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+Redirected to http://0.0.0.0:3000/login
+Completed 302 Found in 400ms (ActiveRecord: 8.6ms)
+
+
+Started GET "/login" for 127.0.0.1 at 2013-02-17 13:16:08 +0100
+Processing by UserSessionsController#new as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.6ms)
+  Rendered layouts/_flash.html.erb (2.4ms)
+  Rendered user_sessions/new.html.erb within layouts/application (16.0ms)
+Completed 200 OK in 289ms (Views: 284.5ms | ActiveRecord: 0.4ms)
+
+
+Started POST "/user_session" for 127.0.0.1 at 2013-02-17 13:16:21 +0100
+Processing by UserSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"HuFYq1O06AAT17/etIkwF3IvHl5iDg+hOVIv2b/pfgY=", "user_session"=>{"login"=>"super", "password"=>"[FILTERED]"}, "commit"=>"Login"}
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mUser Load (3.6ms)[0m  SELECT `users`.* FROM `users` WHERE (LOWER(`users`.login) = 'super') ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.8ms)[0m  UPDATE `users` SET `login_count` = 28, `last_request_at` = '2013-02-17 12:16:21', `updated_at` = '2013-02-17 12:16:21' WHERE `users`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (1.1ms)[0m  UPDATE `users` SET `perishable_token` = 'PR8LCvxczZBiFpGL0AK', `updated_at` = '2013-02-17 12:16:21' WHERE `users`.`id` = 1
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (1.5ms)[0m  SELECT COUNT(*) FROM `assignments` WHERE `assignments`.`user_id` = 1 AND `assignments`.`active` = 1
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mAssignment Load (0.6ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` = 1
+  [1m[36m (2.0ms)[0m  [1mUPDATE `users` SET `current_mission_id` = NULL, `updated_at` = '2013-02-17 12:16:21' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+Redirected to http://0.0.0.0:3000/
+Completed 302 Found in 202ms (ActiveRecord: 18.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 13:16:21 +0100
+Processing by WelcomeController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `forms` WHERE `forms`.`published` = 1 AND (1) AND (0)
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM `forms` WHERE (1) AND (0)[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`user_id` = 1 AND (1) AND (0)
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE (1) AND (0)[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `responses` WHERE (1) AND (0) AND (created_at > '2013-02-17 11:16:21')
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE (1) AND (0) AND (created_at > '2013-02-16 12:16:21')[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `responses` WHERE (1) AND (0) AND (created_at > '2013-02-10 12:16:21')
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE (1) AND (0) AND (created_at > '2013-01-17 12:16:21')[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`reviewed` = 0 AND (1) AND (0)
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.6ms)
+  Rendered welcome/_blocks.html.erb (3.4ms)
+  Rendered welcome/index.html.erb within layouts/application (6.0ms)
+  [1m[36m (0.8ms)[0m  [1mSELECT COUNT(*) FROM `missions` WHERE (1)[0m
+  [1m[35mMission Load (0.5ms)[0m  SELECT `missions`.* FROM `missions` WHERE (1)
+Completed 200 OK in 58ms (Views: 22.8ms | ActiveRecord: 11.4ms)
+
+
+Started PUT "/users/1" for 127.0.0.1 at 2013-02-17 13:16:25 +0100
+Processing by UsersController#update as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"LX45QZZ6mfPV+wKtylMGcAGVFuZqPHCkgj6LmZ3AtsY=", "user"=>{"current_mission_id"=>"1"}, "changing_current_mission"=>"1", "id"=>"1"}
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36m (3.3ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 12:16:25', `updated_at` = '2013-02-17 12:16:25' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.4ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (1.4ms)[0m  UPDATE `users` SET `current_mission_id` = 1, `updated_at` = '2013-02-17 12:16:25' WHERE `users`.`id` = 1
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mMission Load (1.0ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mSetting Load (1.1ms)[0m  [1mSELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1[0m
+Completed 500 Internal Server Error in 36ms
+
+NoMethodError (undefined method `outgoing_sms_username' for #<Setting:0x007fb16e1f7da0>):
+  app/models/setting.rb:64:in `block in copy_to_config'
+  app/models/setting.rb:64:in `collect'
+  app/models/setting.rb:64:in `copy_to_config'
+  app/models/setting.rb:46:in `copy_to_config'
+  app/controllers/users_controller.rb:24:in `update'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (30.0ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.3ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (39.3ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 13:17:01 +0100
+Processing by WelcomeController#index as HTML
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (3.7ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 12:17:01', `updated_at` = '2013-02-17 12:17:01' WHERE `users`.`id` = 1
+  [1m[36m (10.8ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (1.1ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mSetting Load (0.3ms)[0m  [1mSELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1[0m
+Completed 500 Internal Server Error in 29ms
+
+NoMethodError (undefined method `outgoing_sms_username' for #<Setting:0x007fb16c6abad8>):
+  app/models/setting.rb:64:in `block in copy_to_config'
+  app/models/setting.rb:64:in `collect'
+  app/models/setting.rb:64:in `copy_to_config'
+  app/models/setting.rb:46:in `copy_to_config'
+  app/models/setting.rb:31:in `mission_was_set'
+  app/controllers/application_controller.rb:162:in `get_user_and_mission'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.4ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.4ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (9.5ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 13:17:20 +0100
+Processing by WelcomeController#index as HTML
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (3.3ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 12:17:20', `updated_at` = '2013-02-17 12:17:20' WHERE `users`.`id` = 1
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36m (6.3ms)[0m  [1mSELECT COUNT(*) FROM `users` WHERE (users.id IN (SELECT user_id FROM assignments WHERE mission_id = 1))[0m
+  [1m[35m (1.4ms)[0m  SELECT COUNT(*) FROM `forms` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1)
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM `forms` WHERE `forms`.`mission_id` = 1 AND (1)[0m
+  [1m[35m (1.3ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND `responses`.`user_id` = 1 AND (1)
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1)[0m
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-17 11:17:20')
+  [1m[36m (0.7ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-16 12:17:20')[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-10 12:17:20')
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND `responses`.`reviewed` = 0 AND (1)[0m
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.7ms)
+  [1m[35mSQL (1.4ms)[0m  SELECT `forms`.`id` AS t0_r0, `forms`.`name` AS t0_r1, `forms`.`created_at` AS t0_r2, `forms`.`updated_at` AS t0_r3, `forms`.`published` AS t0_r4, `forms`.`form_type_id` AS t0_r5, `forms`.`downloads` AS t0_r6, `forms`.`questionings_count` AS t0_r7, `forms`.`responses_count` AS t0_r8, `forms`.`mission_id` AS t0_r9, `form_types`.`id` AS t1_r0, `form_types`.`name` AS t1_r1, `form_types`.`created_at` AS t1_r2, `form_types`.`updated_at` AS t1_r3, `form_types`.`mission_id` AS t1_r4 FROM `forms` LEFT OUTER JOIN `form_types` ON `form_types`.`id` = `forms`.`form_type_id` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1) ORDER BY form_types.name, forms.name
+  [1m[36m (0.7ms)[0m  [1mSELECT COUNT(*) FROM `report_reports` WHERE `report_reports`.`mission_id` = 1[0m
+  [1m[35mReport::Report Load (1.1ms)[0m  SELECT `report_reports`.* FROM `report_reports` WHERE `report_reports`.`mission_id` = 1 ORDER BY view_count desc
+  Rendered welcome/_blocks.html.erb (152.2ms)
+  Rendered welcome/index.html.erb within layouts/application (154.8ms)
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM `missions` WHERE (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE (1)
+Completed 200 OK in 203ms (Views: 155.6ms | ActiveRecord: 29.0ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 13:17:31 +0100
+Processing by SettingsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (2.4ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 12:17:31', `updated_at` = '2013-02-17 12:17:31' WHERE `users`.`id` = 1[0m
+  [1m[35m (1.2ms)[0m  COMMIT
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.4ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.3ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.1ms)
+  Rendered layouts/_flash.html.erb (0.9ms)
+  Rendered settings/index.html.erb within layouts/application (403.1ms)
+Completed 500 Internal Server Error in 422ms
+
+NoMethodError (undefined method `outgoing_sms_adapter' for #<Setting:0x007fb16e2003d8>):
+  config/initializers/form_helper.rb:52:in `rewrite_if_show_mode'
+  config/initializers/form_helper.rb:17:in `text_field'
+  app/helpers/application_helper.rb:86:in `block (2 levels) in form_field'
+  app/helpers/application_helper.rb:75:in `block in form_field'
+  app/helpers/application_helper.rb:66:in `form_field'
+  app/views/settings/index.html.erb:13:in `block in _app_views_settings_index_html_erb___4168476474599844397_70200016785280'
+  app/helpers/application_helper.rb:50:in `block in nice_form_for'
+  app/helpers/application_helper.rb:47:in `nice_form_for'
+  app/views/settings/index.html.erb:5:in `_app_views_settings_index_html_erb___4168476474599844397_70200016785280'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.2ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.9ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (7.7ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 13:17:51 +0100
+Processing by SettingsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36m (2.7ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 12:17:51', `updated_at` = '2013-02-17 12:17:51' WHERE `users`.`id` = 1[0m
+  [1m[35m (1.1ms)[0m  COMMIT
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.4ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.3ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.1ms)
+  Rendered layouts/_flash.html.erb (0.7ms)
+  Rendered settings/index.html.erb within layouts/application (7.9ms)
+Completed 500 Internal Server Error in 25ms
+
+NoMethodError (undefined method `outgoing_sms_adapter' for #<Setting:0x007fb16e23e868>):
+  config/initializers/form_helper.rb:52:in `rewrite_if_show_mode'
+  config/initializers/form_helper.rb:17:in `text_field'
+  app/helpers/application_helper.rb:86:in `block (2 levels) in form_field'
+  app/helpers/application_helper.rb:75:in `block in form_field'
+  app/helpers/application_helper.rb:66:in `form_field'
+  app/views/settings/index.html.erb:13:in `block in _app_views_settings_index_html_erb___4168476474599844397_70200016785280'
+  app/helpers/application_helper.rb:50:in `block in nice_form_for'
+  app/helpers/application_helper.rb:47:in `nice_form_for'
+  app/views/settings/index.html.erb:5:in `_app_views_settings_index_html_erb___4168476474599844397_70200016785280'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.9ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.0ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (8.1ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 13:18:00 +0100
+Processing by SettingsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (2.7ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 12:18:00', `updated_at` = '2013-02-17 12:18:00' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.6ms)[0m  COMMIT
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.4ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.4ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.6ms)
+  Rendered settings/index.html.erb within layouts/application (7.2ms)
+Completed 500 Internal Server Error in 23ms
+
+NoMethodError (undefined method `outgoing_sms_adapter' for #<Setting:0x007fb16e2f78b8>):
+  config/initializers/form_helper.rb:52:in `rewrite_if_show_mode'
+  config/initializers/form_helper.rb:17:in `text_field'
+  app/helpers/application_helper.rb:86:in `block (2 levels) in form_field'
+  app/helpers/application_helper.rb:75:in `block in form_field'
+  app/helpers/application_helper.rb:66:in `form_field'
+  app/views/settings/index.html.erb:13:in `block in _app_views_settings_index_html_erb___4168476474599844397_70200016785280'
+  app/helpers/application_helper.rb:50:in `block in nice_form_for'
+  app/helpers/application_helper.rb:47:in `nice_form_for'
+  app/views/settings/index.html.erb:5:in `_app_views_settings_index_html_erb___4168476474599844397_70200016785280'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.2ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.9ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (7.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 13:18:08 +0100
+Processing by WelcomeController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (2.5ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 12:18:08', `updated_at` = '2013-02-17 12:18:08' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.4ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `users` WHERE (users.id IN (SELECT user_id FROM assignments WHERE mission_id = 1))
+  [1m[36m (0.7ms)[0m  [1mSELECT COUNT(*) FROM `forms` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1)[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `forms` WHERE `forms`.`mission_id` = 1 AND (1)
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND `responses`.`user_id` = 1 AND (1)[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1)
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-17 11:18:08')[0m
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-16 12:18:08')
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-10 12:18:08')[0m
+  [1m[35m (0.8ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND `responses`.`reviewed` = 0 AND (1)
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.5ms)
+  [1m[36mSQL (1.1ms)[0m  [1mSELECT `forms`.`id` AS t0_r0, `forms`.`name` AS t0_r1, `forms`.`created_at` AS t0_r2, `forms`.`updated_at` AS t0_r3, `forms`.`published` AS t0_r4, `forms`.`form_type_id` AS t0_r5, `forms`.`downloads` AS t0_r6, `forms`.`questionings_count` AS t0_r7, `forms`.`responses_count` AS t0_r8, `forms`.`mission_id` AS t0_r9, `form_types`.`id` AS t1_r0, `form_types`.`name` AS t1_r1, `form_types`.`created_at` AS t1_r2, `form_types`.`updated_at` AS t1_r3, `form_types`.`mission_id` AS t1_r4 FROM `forms` LEFT OUTER JOIN `form_types` ON `form_types`.`id` = `forms`.`form_type_id` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1) ORDER BY form_types.name, forms.name[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `report_reports` WHERE `report_reports`.`mission_id` = 1
+  [1m[36mReport::Report Load (0.4ms)[0m  [1mSELECT `report_reports`.* FROM `report_reports` WHERE `report_reports`.`mission_id` = 1 ORDER BY view_count desc[0m
+  Rendered welcome/_blocks.html.erb (11.9ms)
+  Rendered welcome/index.html.erb within layouts/application (13.8ms)
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 53ms (Views: 24.0ms | ActiveRecord: 11.5ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2013-02-17 13:18:12 +0100
+Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (2.6ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 12:18:12', `updated_at` = '2013-02-17 12:18:12' WHERE `users`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.3ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.1ms)
+  Rendered layouts/_flash.html.erb (1.0ms)
+  Rendered searches/_form.html.erb (1.0ms)
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `users` WHERE (1)[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(*) FROM `users` WHERE (1)
+  [1m[36mUser Load (3.9ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (1) ORDER BY users.name[0m
+  [1m[35mSQL (1.2ms)[0m  SELECT `assignments`.`id` AS t0_r0, `assignments`.`mission_id` AS t0_r1, `assignments`.`user_id` AS t0_r2, `assignments`.`role_id` AS t0_r3, `assignments`.`active` AS t0_r4, `assignments`.`created_at` AS t0_r5, `assignments`.`updated_at` AS t0_r6, `missions`.`id` AS t1_r0, `missions`.`name` AS t1_r1, `missions`.`compact_name` AS t1_r2, `missions`.`created_at` AS t1_r3, `missions`.`updated_at` AS t1_r4, `roles`.`id` AS t2_r0, `roles`.`name` AS t2_r1, `roles`.`level` AS t2_r2, `roles`.`location_required` AS t2_r3, `roles`.`created_at` AS t2_r4, `roles`.`updated_at` AS t2_r5 FROM `assignments` LEFT OUTER JOIN `missions` ON `missions`.`id` = `assignments`.`mission_id` LEFT OUTER JOIN `roles` ON `roles`.`id` = `assignments`.`role_id` WHERE `assignments`.`user_id` IN (13, 14, 4, 9, 15, 12, 6, 16, 2, 7, 8, 5, 11, 10, 1, 3) ORDER BY missions.created_at DESC
+  Rendered layouts/_index_table.html.erb (109.6ms)
+  Rendered users/index.html.erb within layouts/application (120.3ms)
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM `missions` WHERE (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE (1)
+Completed 200 OK in 192ms (Views: 126.3ms | ActiveRecord: 14.5ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 13:18:39 +0100
+Processing by SettingsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (3.4ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 12:18:39', `updated_at` = '2013-02-17 12:18:39' WHERE `users`.`id` = 1[0m
+  [1m[35m (1.0ms)[0m  COMMIT
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.3ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.8ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.7ms)
+  Rendered settings/index.html.erb within layouts/application (9.7ms)
+Completed 500 Internal Server Error in 28ms
+
+NoMethodError (undefined method `outgoing_sms_adapter' for #<Setting:0x007fb16e50c130>):
+  config/initializers/form_helper.rb:52:in `rewrite_if_show_mode'
+  config/initializers/form_helper.rb:17:in `text_field'
+  app/helpers/application_helper.rb:86:in `block (2 levels) in form_field'
+  app/helpers/application_helper.rb:75:in `block in form_field'
+  app/helpers/application_helper.rb:66:in `form_field'
+  app/views/settings/index.html.erb:13:in `block in _app_views_settings_index_html_erb___4168476474599844397_70200016785280'
+  app/helpers/application_helper.rb:50:in `block in nice_form_for'
+  app/helpers/application_helper.rb:47:in `nice_form_for'
+  app/views/settings/index.html.erb:5:in `_app_views_settings_index_html_erb___4168476474599844397_70200016785280'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.2ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.0ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (7.3ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 13:19:36 +0100
+Processing by WelcomeController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (3.3ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 12:19:36', `updated_at` = '2013-02-17 12:19:36' WHERE `users`.`id` = 1[0m
+  [1m[35m (1.0ms)[0m  COMMIT
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.4ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `users` WHERE (users.id IN (SELECT user_id FROM assignments WHERE mission_id = 1))
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM `forms` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1)[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `forms` WHERE `forms`.`mission_id` = 1 AND (1)
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND `responses`.`user_id` = 1 AND (1)[0m
+  [1m[35m (0.7ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1)
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-17 11:19:36')[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-16 12:19:36')
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-10 12:19:36')[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND `responses`.`reviewed` = 0 AND (1)
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.8ms)
+  [1m[36mSQL (0.6ms)[0m  [1mSELECT `forms`.`id` AS t0_r0, `forms`.`name` AS t0_r1, `forms`.`created_at` AS t0_r2, `forms`.`updated_at` AS t0_r3, `forms`.`published` AS t0_r4, `forms`.`form_type_id` AS t0_r5, `forms`.`downloads` AS t0_r6, `forms`.`questionings_count` AS t0_r7, `forms`.`responses_count` AS t0_r8, `forms`.`mission_id` AS t0_r9, `form_types`.`id` AS t1_r0, `form_types`.`name` AS t1_r1, `form_types`.`created_at` AS t1_r2, `form_types`.`updated_at` AS t1_r3, `form_types`.`mission_id` AS t1_r4 FROM `forms` LEFT OUTER JOIN `form_types` ON `form_types`.`id` = `forms`.`form_type_id` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1) ORDER BY form_types.name, forms.name[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `report_reports` WHERE `report_reports`.`mission_id` = 1
+  [1m[36mReport::Report Load (0.3ms)[0m  [1mSELECT `report_reports`.* FROM `report_reports` WHERE `report_reports`.`mission_id` = 1 ORDER BY view_count desc[0m
+  Rendered welcome/_blocks.html.erb (10.7ms)
+  Rendered welcome/index.html.erb within layouts/application (13.4ms)
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 99ms (Views: 65.4ms | ActiveRecord: 12.0ms)
+
+
+Started GET "/responses" for 127.0.0.1 at 2013-02-17 13:19:40 +0100
+Processing by ResponsesController#index as HTML
+  [1m[35mUser Load (0.6ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 12:19:40', `updated_at` = '2013-02-17 12:19:40' WHERE `users`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mResponse Load (3.5ms)[0m  [1mSELECT `responses`.* FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) ORDER BY responses.created_at DESC LIMIT 20 OFFSET 0[0m
+  [1m[35mForm Load (0.4ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (9, 7, 6, 3)
+  [1m[36mFormType Load (0.7ms)[0m  [1mSELECT `form_types`.* FROM `form_types` WHERE `form_types`.`id` IN (4) ORDER BY name[0m
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` IN (3, 11, 12, 10, 5) ORDER BY users.name
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1)[0m
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.7ms)
+  Rendered searches/_form.html.erb (0.1ms)
+  [1m[35m (1.0ms)[0m  SELECT COUNT(DISTINCT `forms`.`id`) FROM `forms` LEFT OUTER JOIN `form_types` ON `form_types`.`id` = `forms`.`form_type_id` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1)
+  [1m[36mSQL (0.6ms)[0m  [1mSELECT `forms`.`id` AS t0_r0, `forms`.`name` AS t0_r1, `forms`.`created_at` AS t0_r2, `forms`.`updated_at` AS t0_r3, `forms`.`published` AS t0_r4, `forms`.`form_type_id` AS t0_r5, `forms`.`downloads` AS t0_r6, `forms`.`questionings_count` AS t0_r7, `forms`.`responses_count` AS t0_r8, `forms`.`mission_id` AS t0_r9, `form_types`.`id` AS t1_r0, `form_types`.`name` AS t1_r1, `form_types`.`created_at` AS t1_r2, `form_types`.`updated_at` AS t1_r3, `form_types`.`mission_id` AS t1_r4 FROM `forms` LEFT OUTER JOIN `form_types` ON `form_types`.`id` = `forms`.`form_type_id` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1) ORDER BY form_types.name, forms.name[0m
+  Rendered layouts/_index_table.html.erb (34.5ms)
+  Rendered responses/index.html.erb within layouts/application (44.9ms)
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 119ms (Views: 81.2ms | ActiveRecord: 10.4ms)
+
+
+Started PUT "/users/1" for 127.0.0.1 at 2013-02-17 13:19:43 +0100
+Processing by UsersController#update as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"LX45QZZ6mfPV+wKtylMGcAGVFuZqPHCkgj6LmZ3AtsY=", "user"=>{"current_mission_id"=>""}, "changing_current_mission"=>"1", "id"=>"1"}
+  [1m[35mUser Load (0.6ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.5ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 12:19:44', `updated_at` = '2013-02-17 12:19:44' WHERE `users`.`id` = 1
+  [1m[36m (1.8ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.5ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `current_mission_id` = NULL, `updated_at` = '2013-02-17 12:19:44' WHERE `users`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mSetting Load (0.4ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` IS NULL LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.3ms)[0m  ROLLBACK
+Completed 500 Internal Server Error in 31ms
+
+NameError (undefined local variable or method `outgoing_sms_adapter' for #<Setting:0x007fb16e08bd40>):
+  app/models/setting.rb:109:in `sms_adapter_is_valid'
+  app/models/setting.rb:58:in `create_default'
+  app/models/setting.rb:38:in `find_or_create'
+  app/models/setting.rb:46:in `copy_to_config'
+  app/controllers/users_controller.rb:24:in `update'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.4ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.0ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (9.1ms)
+Connecting to database specified by database.yml
+  [1m[36m (1.6ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations` [0m
+Migrating to CreateRoles (20110602191123)
+Migrating to CreateLanguages (20110602191155)
+Migrating to CreateUsers (20110602191220)
+Migrating to CreatePlaces (20110621231556)
+Migrating to CreatePlaceTypes (20110621231721)
+Migrating to CreateGoogleGeolocations (20110622182016)
+Migrating to CreatePlaceSuggs (20110623183148)
+Migrating to CreatePlaceLookups (20110623193938)
+Migrating to CreateSearches (20110624133714)
+Migrating to CreateOptions (20110629190738)
+Migrating to CreateOptionSets (20110629190744)
+Migrating to CreateOptionSettings (20110629190749)
+Migrating to CreateForms (20110629190755)
+Migrating to CreateQuestions (20110629190801)
+Migrating to CreateResponses (20110629190806)
+Migrating to CreateAnswers (20110629190812)
+Migrating to CreateQuestionTypes (20110629190817)
+Migrating to CreateTranslations (20110629190823)
+Migrating to CreateFormTypes (20110629190829)
+Migrating to CreateQuestionings (20110629190834)
+Migrating to ChangeLanguageToCode (20110630141414)
+Migrating to ChangeTranslationsToPolymorphic (20110630154332)
+Migrating to AddOdkNameToQuestionTypes (20110630160747)
+Migrating to AddOdkTagToQuestionTypes (20110630195026)
+Migrating to AddIncompleteToPlaces (20110713165635)
+Migrating to AddPreloadStuffToQuestionTypes (20110713174932)
+Migrating to CreateReviews (20110713185801)
+Migrating to AddSessionsTable (20110713211903)
+Migrating to QuestionShouldBeQuestioningForAnswer (20110719191108)
+Migrating to CreateChoices (20110720164304)
+Migrating to RenameObjectIdToObjIdInTranslation (20110721204754)
+Migrating to AddReviewedToResponses (20110722194551)
+Migrating to DropReviews (20110722194603)
+Migrating to AddPhoneOnlyToQuestionType (20110722200238)
+Migrating to RenameIsActiveToActiveForUser (20110722205622)
+Migrating to CreateSettables (20110726143633)
+Migrating to CreateSettings (20110726144308)
+Migrating to AddLongNameToQuestionTypes (20110726185552)
+Migrating to CreateBroadcasts (20110810133630)
+Migrating to CreateBroadcastAddressings (20110810134344)
+Migrating to AddDownloadsToForms (20110811154224)
+Migrating to AddSourceToResponse (20110814182130)
+Migrating to RemoveTimestampQuestions (20110814185101)
+Migrating to AddLoginCountToUsers (20110815174137)
+Migrating to AddDeviceAndNotesToUsers (20110815193346)
+Migrating to RenameNumericToInteger (20110816185426)
+Migrating to AddTranslationIndex (20110817175237)
+Migrating to ChoiceForeignKey (20110817183704)
+Migrating to CreateMainView (20110817184219)
+Migrating to AddBooleanDefaults (20110823170400)
+Migrating to StandardizeBooleanNames (20110823171727)
+Migrating to AddObserverIdToMainView (20110901141457)
+Migrating to CreateConditions (20110901175612)
+Migrating to RenamePlacesIncompleteToTemporary (20110908165935)
+Migrating to DropQuestionTypeFields (20110908195844)
+Migrating to DropUnneededPlaceTables (20110908211409)
+Migrating to AddPlaceTypeShortNames (20110913142741)
+Migrating to AddRedundantLinksToPlaces (20110913143939)
+Migrating to FixPlacesInMainView (20110913162231)
+Migrating to CreatePlaceCreators (20110913202244)
+Migrating to AddLastRequestAtToUsers (20110914144631)
+Migrating to AddOrderingToOptionSets (20110922181111)
+Migrating to AddOptionIdToCondition (20110923004101)
+Migrating to AddTeamNumberToUsers (20111006155632)
+Migrating to ChangeUserToOneNameField (20111103141618)
+Migrating to RemoveTeamNumberFromUsers (20111103152358)
+Migrating to DropGoogleGeolocations (20111122190536)
+Migrating to RenameSearchesToSearchSearches (20120110163524)
+Migrating to ClearSessions (20120110163624)
+Migrating to RenameSearchQueryToStr (20120110163625)
+Migrating to CreateReportReports (20120110163724)
+Migrating to CreateReportGroupings (20120110163922)
+Migrating to CreateReportCalculations (20120110163943)
+Migrating to CreateReportAggregations (20120110164008)
+Migrating to CreateReportFields (20120117191616)
+Migrating to AddViewedAtAndViewCountToReportReports (20120131161053)
+Migrating to CreateReportGroupingAttributes (20120131202355)
+Migrating to UpdateGroupingToUseNewGroupingAttributeClass (20120131202427)
+Migrating to ChangeReportTypeToKind (20120203164645)
+Migrating to AddDisplayTypeToReportReport (20120221210027)
+Migrating to AddStackedBarsToReportReport (20120223201044)
+Migrating to DropViews (20120223205639)
+Migrating to AddUnreviewedToReportReports (20120320153040)
+Migrating to AddPercentagesToReportReports (20120321155330)
+Migrating to RemoveKindFromReportReports (20120322151536)
+Migrating to RenameReportGroupingAttributesToReportResponseAttributes (20120322173538)
+Migrating to RenameReportFieldsAttribName (20120322175333)
+Migrating to AddGroupableToReportResponseAttributes (20120322180750)
+Migrating to AddDataTypeToReportResponseAttribute (20120413151514)
+Migrating to AddQuestioningIdIndexToAnswers (20120426154100)
+Migrating to ConvertBlankAnswerValuesToNulls (20120426182952)
+Migrating to CreateUserBatches (20120519202915)
+Migrating to RemovePhoneIsMobile (20120521191051)
+Migrating to AddAlternatePhoneNumbers (20120521192411)
+Migrating to AddWhichPhoneToBroadcasts (20120521221511)
+Migrating to RemoveQuestionCodeSpaces (20120626184028)
+Migrating to AddRangeToQuestions (20120629210925)
+Migrating to AddDateTimeValuesToAnswers (20120702172029)
+Migrating to ChangeTranslationLanguageIdToLanguageAndFixIndex (20120706180000)
+Migrating to RemoveLanguageFromUsers (20120706183000)
+Migrating to AddQuestioningCountAndResponseCountToForm (20120706184000)
+Migrating to RemoveObservedAtFromResponses (20120706193519)
+Migrating to RemoveDeviceFromUsers (20120706201054)
+Migrating to RemovePlaces (20120717162456)
+Migrating to AddUniqueRowsToReportReports (20120717182055)
+Migrating to CreateMissions (20120820145220)
+Migrating to AddAdminToUser (20120820165013)
+Migrating to CreateAssignments (20120820181620)
+Migrating to CreateDefaultMission (20120820181749)
+Migrating to MoveUsersToDefaultMission (20120820181944)
+Migrating to RemoveOldUserFields (20120820182538)
+Migrating to AddCurrentMissionIdToUsers (20120820193330)
+Migrating to AddMissionIdToModels (20120822152209)
+Migrating to AddCompactNameIndexToMissions (20120822161441)
+Migrating to RemoveSettables (20120906150610)
+Migrating to RevampSettings (20120906155118)
+Migrating to AddLanguagesToSettings (20120906170242)
+Migrating to AddForeignKeyIndices (20120925145245)
+Migrating to RemoveLanguages (20121008152421)
+Migrating to AddForeignKeyIndicesToAssignments (20121008153636)
+Migrating to AddValueCodeToReportResponseAttribute (20121015163120)
+Migrating to AddFkIndices (20121015164830)
+Migrating to DumpOldReports (20121018182218)
+Migrating to DropOldReportTables (20121018183850)
+Migrating to CreateNewReportReports (20121018184503)
+Migrating to CreateNewReportCalculations (20121022153208)
+Migrating to RenameReportFields (20121112143155)
+Migrating to RemoveSecondCalculationFields (20121112143800)
+Migrating to RemoveOmnibusCalculationFromReportReports (20121112174623)
+Migrating to AddRankToReportCalculations (20121126153456)
+Migrating to CreateReportOptionSetChoices (20121230200218)
+Migrating to AddOutgoingSmsAdapterToSettings (20130213223146)
+  [1m[35m (25.8ms)[0m  ALTER TABLE `settings` ADD `outgoing_sms_adapter` varchar(255)
+  [1m[36mSQL (0.5ms)[0m  [1mUPDATE `settings` SET outgoing_sms_adapter = 'IntelliSms'[0m
+  [1m[35m (1.1ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20130213223146')
+Migrating to AddOtherSmsFieldsToSettings (20130214013213)
+  [1m[36m (19.5ms)[0m  [1mALTER TABLE `settings` ADD `outgoing_sms_username` varchar(255)[0m
+  [1m[35m (16.8ms)[0m  ALTER TABLE `settings` ADD `outgoing_sms_password` varchar(255)
+  [1m[36m (20.6ms)[0m  [1mALTER TABLE `settings` ADD `outgoing_sms_extra` varchar(255)[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20130214013213')
+Migrating to AddOutgoingSmsLanguageToSettings (20130214040034)
+  [1m[36m (15.1ms)[0m  [1mALTER TABLE `settings` ADD `outgoing_sms_language` varchar(255)[0m
+  [1m[35m (0.8ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20130214040034')
+  [1m[36m (0.5ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations` [0m
+Connecting to database specified by database.yml
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 13:49:57 +0100
+Processing by WelcomeController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (1.5ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 12:49:58', `updated_at` = '2013-02-17 12:49:58' WHERE `users`.`id` = 1[0m
+  [1m[35m (1.7ms)[0m  COMMIT
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.3ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM `forms` WHERE `forms`.`published` = 1 AND (1) AND (0)[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `forms` WHERE (1) AND (0)
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`user_id` = 1 AND (1) AND (0)[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `responses` WHERE (1) AND (0)
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE (1) AND (0) AND (created_at > '2013-02-17 11:49:58')[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `responses` WHERE (1) AND (0) AND (created_at > '2013-02-16 12:49:58')
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE (1) AND (0) AND (created_at > '2013-02-10 12:49:58')[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `responses` WHERE (1) AND (0) AND (created_at > '2013-01-17 12:49:58')
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`reviewed` = 0 AND (1) AND (0)[0m
+  Rendered layouts/_object_errors.html.erb (0.4ms)
+  Rendered layouts/_flash.html.erb (1.7ms)
+  Rendered welcome/_blocks.html.erb (4.6ms)
+  Rendered welcome/index.html.erb within layouts/application (12.4ms)
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 732ms (Views: 126.9ms | ActiveRecord: 21.6ms)
+
+
+Started PUT "/users/1" for 127.0.0.1 at 2013-02-17 13:50:07 +0100
+Processing by UsersController#update as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"LX45QZZ6mfPV+wKtylMGcAGVFuZqPHCkgj6LmZ3AtsY=", "user"=>{"current_mission_id"=>"1"}, "changing_current_mission"=>"1", "id"=>"1"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 12:50:07', `updated_at` = '2013-02-17 12:50:07' WHERE `users`.`id` = 1
+  [1m[36m (3.0ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `users` SET `current_mission_id` = 1, `updated_at` = '2013-02-17 12:50:07' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.3ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1
+Redirected to http://0.0.0.0:3000/
+Completed 302 Found in 75ms (ActiveRecord: 8.9ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 13:50:07 +0100
+Processing by WelcomeController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mSetting Load (0.3ms)[0m  [1mSELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `users` WHERE (users.id IN (SELECT user_id FROM assignments WHERE mission_id = 1))
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `forms` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1)[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `forms` WHERE `forms`.`mission_id` = 1 AND (1)
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND `responses`.`user_id` = 1 AND (1)[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1)
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-17 11:50:07')[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-16 12:50:07')
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND (1) AND (created_at > '2013-02-10 12:50:07')[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `responses` WHERE `responses`.`mission_id` = 1 AND `responses`.`reviewed` = 0 AND (1)
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.6ms)
+  [1m[36mSQL (0.6ms)[0m  [1mSELECT `forms`.`id` AS t0_r0, `forms`.`name` AS t0_r1, `forms`.`created_at` AS t0_r2, `forms`.`updated_at` AS t0_r3, `forms`.`published` AS t0_r4, `forms`.`form_type_id` AS t0_r5, `forms`.`downloads` AS t0_r6, `forms`.`questionings_count` AS t0_r7, `forms`.`responses_count` AS t0_r8, `forms`.`mission_id` AS t0_r9, `form_types`.`id` AS t1_r0, `form_types`.`name` AS t1_r1, `form_types`.`created_at` AS t1_r2, `form_types`.`updated_at` AS t1_r3, `form_types`.`mission_id` AS t1_r4 FROM `forms` LEFT OUTER JOIN `form_types` ON `form_types`.`id` = `forms`.`form_type_id` WHERE `forms`.`mission_id` = 1 AND `forms`.`published` = 1 AND (1) ORDER BY form_types.name, forms.name[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `report_reports` WHERE `report_reports`.`mission_id` = 1
+  [1m[36mReport::Report Load (0.4ms)[0m  [1mSELECT `report_reports`.* FROM `report_reports` WHERE `report_reports`.`mission_id` = 1 ORDER BY view_count desc[0m
+  Rendered welcome/_blocks.html.erb (146.6ms)
+  Rendered welcome/index.html.erb within layouts/application (148.9ms)
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 190ms (Views: 158.7ms | ActiveRecord: 11.6ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 13:50:10 +0100
+Processing by SettingsController#index as HTML
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (2.6ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 12:50:10', `updated_at` = '2013-02-17 12:50:10' WHERE `users`.`id` = 1
+  [1m[36m (0.8ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.3ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mSetting Load (0.3ms)[0m  [1mSELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1[0m
+  Rendered layouts/_object_errors.html.erb (0.1ms)
+  Rendered layouts/_flash.html.erb (0.7ms)
+  Rendered settings/_tableau_sql.html.erb (0.5ms)
+  Rendered settings/index.html.erb within layouts/application (276.4ms)
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 303ms (Views: 288.5ms | ActiveRecord: 6.2ms)
+
+
+Started GET "/forms" for 127.0.0.1 at 2013-02-17 14:05:31 +0100
+Processing by FormsController#index as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.8ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 13:05:31', `updated_at` = '2013-02-17 13:05:31' WHERE `users`.`id` = 1
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mSQL (0.6ms)[0m  [1mSELECT `forms`.`id` AS t0_r0, `forms`.`name` AS t0_r1, `forms`.`created_at` AS t0_r2, `forms`.`updated_at` AS t0_r3, `forms`.`published` AS t0_r4, `forms`.`form_type_id` AS t0_r5, `forms`.`downloads` AS t0_r6, `forms`.`questionings_count` AS t0_r7, `forms`.`responses_count` AS t0_r8, `forms`.`mission_id` AS t0_r9, `form_types`.`id` AS t1_r0, `form_types`.`name` AS t1_r1, `form_types`.`created_at` AS t1_r2, `form_types`.`updated_at` AS t1_r3, `form_types`.`mission_id` AS t1_r4 FROM `forms` LEFT OUTER JOIN `form_types` ON `form_types`.`id` = `forms`.`form_type_id` WHERE `forms`.`mission_id` = 1 AND (1) ORDER BY form_types.name, forms.name[0m
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.6ms)
+  Rendered layouts/_index_table.html.erb (16.3ms)
+  Rendered forms/index.html.erb within layouts/application (19.3ms)
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 62ms (Views: 32.9ms | ActiveRecord: 6.1ms)
+
+
+Started GET "/forms" for 127.0.0.1 at 2013-02-17 14:26:30 +0100
+Processing by FormsController#index as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 13:26:30', `updated_at` = '2013-02-17 13:26:30' WHERE `users`.`id` = 1
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.3ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mSQL (0.6ms)[0m  [1mSELECT `forms`.`id` AS t0_r0, `forms`.`name` AS t0_r1, `forms`.`created_at` AS t0_r2, `forms`.`updated_at` AS t0_r3, `forms`.`published` AS t0_r4, `forms`.`form_type_id` AS t0_r5, `forms`.`downloads` AS t0_r6, `forms`.`questionings_count` AS t0_r7, `forms`.`responses_count` AS t0_r8, `forms`.`mission_id` AS t0_r9, `form_types`.`id` AS t1_r0, `form_types`.`name` AS t1_r1, `form_types`.`created_at` AS t1_r2, `form_types`.`updated_at` AS t1_r3, `form_types`.`mission_id` AS t1_r4 FROM `forms` LEFT OUTER JOIN `form_types` ON `form_types`.`id` = `forms`.`form_type_id` WHERE `forms`.`mission_id` = 1 AND (1) ORDER BY form_types.name, forms.name[0m
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.7ms)
+  Rendered layouts/_index_table.html.erb (13.3ms)
+  Rendered forms/index.html.erb within layouts/application (16.2ms)
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 384ms (Views: 133.6ms | ActiveRecord: 18.4ms)
+
+
+Started GET "/sms_codes/show/8" for 127.0.0.1 at 2013-02-17 14:26:35 +0100
+Processing by SmsCodesController#show as HTML
+  Parameters: {"form_id"=>"8"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (1.2ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 13:26:35', `updated_at` = '2013-02-17 13:26:35' WHERE `users`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mForm Load (0.3ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` = 8 LIMIT 1[0m
+Completed 500 Internal Server Error in 14ms
+
+NameError (uninitialized constant SmsCodesController::SmsCode):
+  app/controllers/sms_codes_controller.rb:14:in `make_code'
+  app/controllers/sms_codes_controller.rb:5:in `show'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.3ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.0ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (9.0ms)
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (1.6ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations` [0m
+Migrating to CreateRoles (20110602191123)
+Migrating to CreateLanguages (20110602191155)
+Migrating to CreateUsers (20110602191220)
+Migrating to CreatePlaces (20110621231556)
+Migrating to CreatePlaceTypes (20110621231721)
+Migrating to CreateGoogleGeolocations (20110622182016)
+Migrating to CreatePlaceSuggs (20110623183148)
+Migrating to CreatePlaceLookups (20110623193938)
+Migrating to CreateSearches (20110624133714)
+Migrating to CreateOptions (20110629190738)
+Migrating to CreateOptionSets (20110629190744)
+Migrating to CreateOptionSettings (20110629190749)
+Migrating to CreateForms (20110629190755)
+Migrating to CreateQuestions (20110629190801)
+Migrating to CreateResponses (20110629190806)
+Migrating to CreateAnswers (20110629190812)
+Migrating to CreateQuestionTypes (20110629190817)
+Migrating to CreateTranslations (20110629190823)
+Migrating to CreateFormTypes (20110629190829)
+Migrating to CreateQuestionings (20110629190834)
+Migrating to ChangeLanguageToCode (20110630141414)
+Migrating to ChangeTranslationsToPolymorphic (20110630154332)
+Migrating to AddOdkNameToQuestionTypes (20110630160747)
+Migrating to AddOdkTagToQuestionTypes (20110630195026)
+Migrating to AddIncompleteToPlaces (20110713165635)
+Migrating to AddPreloadStuffToQuestionTypes (20110713174932)
+Migrating to CreateReviews (20110713185801)
+Migrating to AddSessionsTable (20110713211903)
+Migrating to QuestionShouldBeQuestioningForAnswer (20110719191108)
+Migrating to CreateChoices (20110720164304)
+Migrating to RenameObjectIdToObjIdInTranslation (20110721204754)
+Migrating to AddReviewedToResponses (20110722194551)
+Migrating to DropReviews (20110722194603)
+Migrating to AddPhoneOnlyToQuestionType (20110722200238)
+Migrating to RenameIsActiveToActiveForUser (20110722205622)
+Migrating to CreateSettables (20110726143633)
+Migrating to CreateSettings (20110726144308)
+Migrating to AddLongNameToQuestionTypes (20110726185552)
+Migrating to CreateBroadcasts (20110810133630)
+Migrating to CreateBroadcastAddressings (20110810134344)
+Migrating to AddDownloadsToForms (20110811154224)
+Migrating to AddSourceToResponse (20110814182130)
+Migrating to RemoveTimestampQuestions (20110814185101)
+Migrating to AddLoginCountToUsers (20110815174137)
+Migrating to AddDeviceAndNotesToUsers (20110815193346)
+Migrating to RenameNumericToInteger (20110816185426)
+Migrating to AddTranslationIndex (20110817175237)
+Migrating to ChoiceForeignKey (20110817183704)
+Migrating to CreateMainView (20110817184219)
+Migrating to AddBooleanDefaults (20110823170400)
+Migrating to StandardizeBooleanNames (20110823171727)
+Migrating to AddObserverIdToMainView (20110901141457)
+Migrating to CreateConditions (20110901175612)
+Migrating to RenamePlacesIncompleteToTemporary (20110908165935)
+Migrating to DropQuestionTypeFields (20110908195844)
+Migrating to DropUnneededPlaceTables (20110908211409)
+Migrating to AddPlaceTypeShortNames (20110913142741)
+Migrating to AddRedundantLinksToPlaces (20110913143939)
+Migrating to FixPlacesInMainView (20110913162231)
+Migrating to CreatePlaceCreators (20110913202244)
+Migrating to AddLastRequestAtToUsers (20110914144631)
+Migrating to AddOrderingToOptionSets (20110922181111)
+Migrating to AddOptionIdToCondition (20110923004101)
+Migrating to AddTeamNumberToUsers (20111006155632)
+Migrating to ChangeUserToOneNameField (20111103141618)
+Migrating to RemoveTeamNumberFromUsers (20111103152358)
+Migrating to DropGoogleGeolocations (20111122190536)
+Migrating to RenameSearchesToSearchSearches (20120110163524)
+Migrating to ClearSessions (20120110163624)
+Migrating to RenameSearchQueryToStr (20120110163625)
+Migrating to CreateReportReports (20120110163724)
+Migrating to CreateReportGroupings (20120110163922)
+Migrating to CreateReportCalculations (20120110163943)
+Migrating to CreateReportAggregations (20120110164008)
+Migrating to CreateReportFields (20120117191616)
+Migrating to AddViewedAtAndViewCountToReportReports (20120131161053)
+Migrating to CreateReportGroupingAttributes (20120131202355)
+Migrating to UpdateGroupingToUseNewGroupingAttributeClass (20120131202427)
+Migrating to ChangeReportTypeToKind (20120203164645)
+Migrating to AddDisplayTypeToReportReport (20120221210027)
+Migrating to AddStackedBarsToReportReport (20120223201044)
+Migrating to DropViews (20120223205639)
+Migrating to AddUnreviewedToReportReports (20120320153040)
+Migrating to AddPercentagesToReportReports (20120321155330)
+Migrating to RemoveKindFromReportReports (20120322151536)
+Migrating to RenameReportGroupingAttributesToReportResponseAttributes (20120322173538)
+Migrating to RenameReportFieldsAttribName (20120322175333)
+Migrating to AddGroupableToReportResponseAttributes (20120322180750)
+Migrating to AddDataTypeToReportResponseAttribute (20120413151514)
+Migrating to AddQuestioningIdIndexToAnswers (20120426154100)
+Migrating to ConvertBlankAnswerValuesToNulls (20120426182952)
+Migrating to CreateUserBatches (20120519202915)
+Migrating to RemovePhoneIsMobile (20120521191051)
+Migrating to AddAlternatePhoneNumbers (20120521192411)
+Migrating to AddWhichPhoneToBroadcasts (20120521221511)
+Migrating to RemoveQuestionCodeSpaces (20120626184028)
+Migrating to AddRangeToQuestions (20120629210925)
+Migrating to AddDateTimeValuesToAnswers (20120702172029)
+Migrating to ChangeTranslationLanguageIdToLanguageAndFixIndex (20120706180000)
+Migrating to RemoveLanguageFromUsers (20120706183000)
+Migrating to AddQuestioningCountAndResponseCountToForm (20120706184000)
+Migrating to RemoveObservedAtFromResponses (20120706193519)
+Migrating to RemoveDeviceFromUsers (20120706201054)
+Migrating to RemovePlaces (20120717162456)
+Migrating to AddUniqueRowsToReportReports (20120717182055)
+Migrating to CreateMissions (20120820145220)
+Migrating to AddAdminToUser (20120820165013)
+Migrating to CreateAssignments (20120820181620)
+Migrating to CreateDefaultMission (20120820181749)
+Migrating to MoveUsersToDefaultMission (20120820181944)
+Migrating to RemoveOldUserFields (20120820182538)
+Migrating to AddCurrentMissionIdToUsers (20120820193330)
+Migrating to AddMissionIdToModels (20120822152209)
+Migrating to AddCompactNameIndexToMissions (20120822161441)
+Migrating to RemoveSettables (20120906150610)
+Migrating to RevampSettings (20120906155118)
+Migrating to AddLanguagesToSettings (20120906170242)
+Migrating to AddForeignKeyIndices (20120925145245)
+Migrating to RemoveLanguages (20121008152421)
+Migrating to AddForeignKeyIndicesToAssignments (20121008153636)
+Migrating to AddValueCodeToReportResponseAttribute (20121015163120)
+Migrating to AddFkIndices (20121015164830)
+Migrating to DumpOldReports (20121018182218)
+Migrating to DropOldReportTables (20121018183850)
+Migrating to CreateNewReportReports (20121018184503)
+Migrating to CreateNewReportCalculations (20121022153208)
+Migrating to RenameReportFields (20121112143155)
+Migrating to RemoveSecondCalculationFields (20121112143800)
+Migrating to RemoveOmnibusCalculationFromReportReports (20121112174623)
+Migrating to AddRankToReportCalculations (20121126153456)
+Migrating to CreateReportOptionSetChoices (20121230200218)
+Migrating to AddOutgoingSmsAdapterToSettings (20130213223146)
+Migrating to AddOtherSmsFieldsToSettings (20130214013213)
+Migrating to AddOutgoingSmsLanguageToSettings (20130214040034)
+Migrating to CreateSmsCodes (20130217133401)
+Connecting to database specified by database.yml
+  [1m[36m (1.6ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations` [0m
+Migrating to CreateRoles (20110602191123)
+Migrating to CreateLanguages (20110602191155)
+Migrating to CreateUsers (20110602191220)
+Migrating to CreatePlaces (20110621231556)
+Migrating to CreatePlaceTypes (20110621231721)
+Migrating to CreateGoogleGeolocations (20110622182016)
+Migrating to CreatePlaceSuggs (20110623183148)
+Migrating to CreatePlaceLookups (20110623193938)
+Migrating to CreateSearches (20110624133714)
+Migrating to CreateOptions (20110629190738)
+Migrating to CreateOptionSets (20110629190744)
+Migrating to CreateOptionSettings (20110629190749)
+Migrating to CreateForms (20110629190755)
+Migrating to CreateQuestions (20110629190801)
+Migrating to CreateResponses (20110629190806)
+Migrating to CreateAnswers (20110629190812)
+Migrating to CreateQuestionTypes (20110629190817)
+Migrating to CreateTranslations (20110629190823)
+Migrating to CreateFormTypes (20110629190829)
+Migrating to CreateQuestionings (20110629190834)
+Migrating to ChangeLanguageToCode (20110630141414)
+Migrating to ChangeTranslationsToPolymorphic (20110630154332)
+Migrating to AddOdkNameToQuestionTypes (20110630160747)
+Migrating to AddOdkTagToQuestionTypes (20110630195026)
+Migrating to AddIncompleteToPlaces (20110713165635)
+Migrating to AddPreloadStuffToQuestionTypes (20110713174932)
+Migrating to CreateReviews (20110713185801)
+Migrating to AddSessionsTable (20110713211903)
+Migrating to QuestionShouldBeQuestioningForAnswer (20110719191108)
+Migrating to CreateChoices (20110720164304)
+Migrating to RenameObjectIdToObjIdInTranslation (20110721204754)
+Migrating to AddReviewedToResponses (20110722194551)
+Migrating to DropReviews (20110722194603)
+Migrating to AddPhoneOnlyToQuestionType (20110722200238)
+Migrating to RenameIsActiveToActiveForUser (20110722205622)
+Migrating to CreateSettables (20110726143633)
+Migrating to CreateSettings (20110726144308)
+Migrating to AddLongNameToQuestionTypes (20110726185552)
+Migrating to CreateBroadcasts (20110810133630)
+Migrating to CreateBroadcastAddressings (20110810134344)
+Migrating to AddDownloadsToForms (20110811154224)
+Migrating to AddSourceToResponse (20110814182130)
+Migrating to RemoveTimestampQuestions (20110814185101)
+Migrating to AddLoginCountToUsers (20110815174137)
+Migrating to AddDeviceAndNotesToUsers (20110815193346)
+Migrating to RenameNumericToInteger (20110816185426)
+Migrating to AddTranslationIndex (20110817175237)
+Migrating to ChoiceForeignKey (20110817183704)
+Migrating to CreateMainView (20110817184219)
+Migrating to AddBooleanDefaults (20110823170400)
+Migrating to StandardizeBooleanNames (20110823171727)
+Migrating to AddObserverIdToMainView (20110901141457)
+Migrating to CreateConditions (20110901175612)
+Migrating to RenamePlacesIncompleteToTemporary (20110908165935)
+Migrating to DropQuestionTypeFields (20110908195844)
+Migrating to DropUnneededPlaceTables (20110908211409)
+Migrating to AddPlaceTypeShortNames (20110913142741)
+Migrating to AddRedundantLinksToPlaces (20110913143939)
+Migrating to FixPlacesInMainView (20110913162231)
+Migrating to CreatePlaceCreators (20110913202244)
+Migrating to AddLastRequestAtToUsers (20110914144631)
+Migrating to AddOrderingToOptionSets (20110922181111)
+Migrating to AddOptionIdToCondition (20110923004101)
+Migrating to AddTeamNumberToUsers (20111006155632)
+Migrating to ChangeUserToOneNameField (20111103141618)
+Migrating to RemoveTeamNumberFromUsers (20111103152358)
+Migrating to DropGoogleGeolocations (20111122190536)
+Migrating to RenameSearchesToSearchSearches (20120110163524)
+Migrating to ClearSessions (20120110163624)
+Migrating to RenameSearchQueryToStr (20120110163625)
+Migrating to CreateReportReports (20120110163724)
+Migrating to CreateReportGroupings (20120110163922)
+Migrating to CreateReportCalculations (20120110163943)
+Migrating to CreateReportAggregations (20120110164008)
+Migrating to CreateReportFields (20120117191616)
+Migrating to AddViewedAtAndViewCountToReportReports (20120131161053)
+Migrating to CreateReportGroupingAttributes (20120131202355)
+Migrating to UpdateGroupingToUseNewGroupingAttributeClass (20120131202427)
+Migrating to ChangeReportTypeToKind (20120203164645)
+Migrating to AddDisplayTypeToReportReport (20120221210027)
+Migrating to AddStackedBarsToReportReport (20120223201044)
+Migrating to DropViews (20120223205639)
+Migrating to AddUnreviewedToReportReports (20120320153040)
+Migrating to AddPercentagesToReportReports (20120321155330)
+Migrating to RemoveKindFromReportReports (20120322151536)
+Migrating to RenameReportGroupingAttributesToReportResponseAttributes (20120322173538)
+Migrating to RenameReportFieldsAttribName (20120322175333)
+Migrating to AddGroupableToReportResponseAttributes (20120322180750)
+Migrating to AddDataTypeToReportResponseAttribute (20120413151514)
+Migrating to AddQuestioningIdIndexToAnswers (20120426154100)
+Migrating to ConvertBlankAnswerValuesToNulls (20120426182952)
+Migrating to CreateUserBatches (20120519202915)
+Migrating to RemovePhoneIsMobile (20120521191051)
+Migrating to AddAlternatePhoneNumbers (20120521192411)
+Migrating to AddWhichPhoneToBroadcasts (20120521221511)
+Migrating to RemoveQuestionCodeSpaces (20120626184028)
+Migrating to AddRangeToQuestions (20120629210925)
+Migrating to AddDateTimeValuesToAnswers (20120702172029)
+Migrating to ChangeTranslationLanguageIdToLanguageAndFixIndex (20120706180000)
+Migrating to RemoveLanguageFromUsers (20120706183000)
+Migrating to AddQuestioningCountAndResponseCountToForm (20120706184000)
+Migrating to RemoveObservedAtFromResponses (20120706193519)
+Migrating to RemoveDeviceFromUsers (20120706201054)
+Migrating to RemovePlaces (20120717162456)
+Migrating to AddUniqueRowsToReportReports (20120717182055)
+Migrating to CreateMissions (20120820145220)
+Migrating to AddAdminToUser (20120820165013)
+Migrating to CreateAssignments (20120820181620)
+Migrating to CreateDefaultMission (20120820181749)
+Migrating to MoveUsersToDefaultMission (20120820181944)
+Migrating to RemoveOldUserFields (20120820182538)
+Migrating to AddCurrentMissionIdToUsers (20120820193330)
+Migrating to AddMissionIdToModels (20120822152209)
+Migrating to AddCompactNameIndexToMissions (20120822161441)
+Migrating to RemoveSettables (20120906150610)
+Migrating to RevampSettings (20120906155118)
+Migrating to AddLanguagesToSettings (20120906170242)
+Migrating to AddForeignKeyIndices (20120925145245)
+Migrating to RemoveLanguages (20121008152421)
+Migrating to AddForeignKeyIndicesToAssignments (20121008153636)
+Migrating to AddValueCodeToReportResponseAttribute (20121015163120)
+Migrating to AddFkIndices (20121015164830)
+Migrating to DumpOldReports (20121018182218)
+Migrating to DropOldReportTables (20121018183850)
+Migrating to CreateNewReportReports (20121018184503)
+Migrating to CreateNewReportCalculations (20121022153208)
+Migrating to RenameReportFields (20121112143155)
+Migrating to RemoveSecondCalculationFields (20121112143800)
+Migrating to RemoveOmnibusCalculationFromReportReports (20121112174623)
+Migrating to AddRankToReportCalculations (20121126153456)
+Migrating to CreateReportOptionSetChoices (20121230200218)
+Migrating to AddOutgoingSmsAdapterToSettings (20130213223146)
+Migrating to AddOtherSmsFieldsToSettings (20130214013213)
+Migrating to AddOutgoingSmsLanguageToSettings (20130214040034)
+Migrating to CreateSmsCodes (20130217133401)
+Connecting to database specified by database.yml
+  [1m[36m (1.7ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations` [0m
+Migrating to CreateRoles (20110602191123)
+Migrating to CreateLanguages (20110602191155)
+Migrating to CreateUsers (20110602191220)
+Migrating to CreatePlaces (20110621231556)
+Migrating to CreatePlaceTypes (20110621231721)
+Migrating to CreateGoogleGeolocations (20110622182016)
+Migrating to CreatePlaceSuggs (20110623183148)
+Migrating to CreatePlaceLookups (20110623193938)
+Migrating to CreateSearches (20110624133714)
+Migrating to CreateOptions (20110629190738)
+Migrating to CreateOptionSets (20110629190744)
+Migrating to CreateOptionSettings (20110629190749)
+Migrating to CreateForms (20110629190755)
+Migrating to CreateQuestions (20110629190801)
+Migrating to CreateResponses (20110629190806)
+Migrating to CreateAnswers (20110629190812)
+Migrating to CreateQuestionTypes (20110629190817)
+Migrating to CreateTranslations (20110629190823)
+Migrating to CreateFormTypes (20110629190829)
+Migrating to CreateQuestionings (20110629190834)
+Migrating to ChangeLanguageToCode (20110630141414)
+Migrating to ChangeTranslationsToPolymorphic (20110630154332)
+Migrating to AddOdkNameToQuestionTypes (20110630160747)
+Migrating to AddOdkTagToQuestionTypes (20110630195026)
+Migrating to AddIncompleteToPlaces (20110713165635)
+Migrating to AddPreloadStuffToQuestionTypes (20110713174932)
+Migrating to CreateReviews (20110713185801)
+Migrating to AddSessionsTable (20110713211903)
+Migrating to QuestionShouldBeQuestioningForAnswer (20110719191108)
+Migrating to CreateChoices (20110720164304)
+Migrating to RenameObjectIdToObjIdInTranslation (20110721204754)
+Migrating to AddReviewedToResponses (20110722194551)
+Migrating to DropReviews (20110722194603)
+Migrating to AddPhoneOnlyToQuestionType (20110722200238)
+Migrating to RenameIsActiveToActiveForUser (20110722205622)
+Migrating to CreateSettables (20110726143633)
+Migrating to CreateSettings (20110726144308)
+Migrating to AddLongNameToQuestionTypes (20110726185552)
+Migrating to CreateBroadcasts (20110810133630)
+Migrating to CreateBroadcastAddressings (20110810134344)
+Migrating to AddDownloadsToForms (20110811154224)
+Migrating to AddSourceToResponse (20110814182130)
+Migrating to RemoveTimestampQuestions (20110814185101)
+Migrating to AddLoginCountToUsers (20110815174137)
+Migrating to AddDeviceAndNotesToUsers (20110815193346)
+Migrating to RenameNumericToInteger (20110816185426)
+Migrating to AddTranslationIndex (20110817175237)
+Migrating to ChoiceForeignKey (20110817183704)
+Migrating to CreateMainView (20110817184219)
+Migrating to AddBooleanDefaults (20110823170400)
+Migrating to StandardizeBooleanNames (20110823171727)
+Migrating to AddObserverIdToMainView (20110901141457)
+Migrating to CreateConditions (20110901175612)
+Migrating to RenamePlacesIncompleteToTemporary (20110908165935)
+Migrating to DropQuestionTypeFields (20110908195844)
+Migrating to DropUnneededPlaceTables (20110908211409)
+Migrating to AddPlaceTypeShortNames (20110913142741)
+Migrating to AddRedundantLinksToPlaces (20110913143939)
+Migrating to FixPlacesInMainView (20110913162231)
+Migrating to CreatePlaceCreators (20110913202244)
+Migrating to AddLastRequestAtToUsers (20110914144631)
+Migrating to AddOrderingToOptionSets (20110922181111)
+Migrating to AddOptionIdToCondition (20110923004101)
+Migrating to AddTeamNumberToUsers (20111006155632)
+Migrating to ChangeUserToOneNameField (20111103141618)
+Migrating to RemoveTeamNumberFromUsers (20111103152358)
+Migrating to DropGoogleGeolocations (20111122190536)
+Migrating to RenameSearchesToSearchSearches (20120110163524)
+Migrating to ClearSessions (20120110163624)
+Migrating to RenameSearchQueryToStr (20120110163625)
+Migrating to CreateReportReports (20120110163724)
+Migrating to CreateReportGroupings (20120110163922)
+Migrating to CreateReportCalculations (20120110163943)
+Migrating to CreateReportAggregations (20120110164008)
+Migrating to CreateReportFields (20120117191616)
+Migrating to AddViewedAtAndViewCountToReportReports (20120131161053)
+Migrating to CreateReportGroupingAttributes (20120131202355)
+Migrating to UpdateGroupingToUseNewGroupingAttributeClass (20120131202427)
+Migrating to ChangeReportTypeToKind (20120203164645)
+Migrating to AddDisplayTypeToReportReport (20120221210027)
+Migrating to AddStackedBarsToReportReport (20120223201044)
+Migrating to DropViews (20120223205639)
+Migrating to AddUnreviewedToReportReports (20120320153040)
+Migrating to AddPercentagesToReportReports (20120321155330)
+Migrating to RemoveKindFromReportReports (20120322151536)
+Migrating to RenameReportGroupingAttributesToReportResponseAttributes (20120322173538)
+Migrating to RenameReportFieldsAttribName (20120322175333)
+Migrating to AddGroupableToReportResponseAttributes (20120322180750)
+Migrating to AddDataTypeToReportResponseAttribute (20120413151514)
+Migrating to AddQuestioningIdIndexToAnswers (20120426154100)
+Migrating to ConvertBlankAnswerValuesToNulls (20120426182952)
+Migrating to CreateUserBatches (20120519202915)
+Migrating to RemovePhoneIsMobile (20120521191051)
+Migrating to AddAlternatePhoneNumbers (20120521192411)
+Migrating to AddWhichPhoneToBroadcasts (20120521221511)
+Migrating to RemoveQuestionCodeSpaces (20120626184028)
+Migrating to AddRangeToQuestions (20120629210925)
+Migrating to AddDateTimeValuesToAnswers (20120702172029)
+Migrating to ChangeTranslationLanguageIdToLanguageAndFixIndex (20120706180000)
+Migrating to RemoveLanguageFromUsers (20120706183000)
+Migrating to AddQuestioningCountAndResponseCountToForm (20120706184000)
+Migrating to RemoveObservedAtFromResponses (20120706193519)
+Migrating to RemoveDeviceFromUsers (20120706201054)
+Migrating to RemovePlaces (20120717162456)
+Migrating to AddUniqueRowsToReportReports (20120717182055)
+Migrating to CreateMissions (20120820145220)
+Migrating to AddAdminToUser (20120820165013)
+Migrating to CreateAssignments (20120820181620)
+Migrating to CreateDefaultMission (20120820181749)
+Migrating to MoveUsersToDefaultMission (20120820181944)
+Migrating to RemoveOldUserFields (20120820182538)
+Migrating to AddCurrentMissionIdToUsers (20120820193330)
+Migrating to AddMissionIdToModels (20120822152209)
+Migrating to AddCompactNameIndexToMissions (20120822161441)
+Migrating to RemoveSettables (20120906150610)
+Migrating to RevampSettings (20120906155118)
+Migrating to AddLanguagesToSettings (20120906170242)
+Migrating to AddForeignKeyIndices (20120925145245)
+Migrating to RemoveLanguages (20121008152421)
+Migrating to AddForeignKeyIndicesToAssignments (20121008153636)
+Migrating to AddValueCodeToReportResponseAttribute (20121015163120)
+Migrating to AddFkIndices (20121015164830)
+Migrating to DumpOldReports (20121018182218)
+Migrating to DropOldReportTables (20121018183850)
+Migrating to CreateNewReportReports (20121018184503)
+Migrating to CreateNewReportCalculations (20121022153208)
+Migrating to RenameReportFields (20121112143155)
+Migrating to RemoveSecondCalculationFields (20121112143800)
+Migrating to RemoveOmnibusCalculationFromReportReports (20121112174623)
+Migrating to AddRankToReportCalculations (20121126153456)
+Migrating to CreateReportOptionSetChoices (20121230200218)
+Migrating to AddOutgoingSmsAdapterToSettings (20130213223146)
+Migrating to AddOtherSmsFieldsToSettings (20130214013213)
+Migrating to AddOutgoingSmsLanguageToSettings (20130214040034)
+Migrating to CreateSmsCodes (20130217133401)
+  [1m[35m (0.8ms)[0m  CREATE TABLE `sms_codes` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `code` varchar(255), `questioning_id` int(11), `option_id` int(11), `form_id` int(11), `question_number` int(11), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+Mysql2::Error: Table 'sms_codes' already exists: CREATE TABLE `sms_codes` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `code` varchar(255), `questioning_id` int(11), `option_id` int(11), `form_id` int(11), `question_number` int(11), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+Connecting to database specified by database.yml
+  [1m[36m (1.6ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations` [0m
+Migrating to CreateRoles (20110602191123)
+Migrating to CreateLanguages (20110602191155)
+Migrating to CreateUsers (20110602191220)
+Migrating to CreatePlaces (20110621231556)
+Migrating to CreatePlaceTypes (20110621231721)
+Migrating to CreateGoogleGeolocations (20110622182016)
+Migrating to CreatePlaceSuggs (20110623183148)
+Migrating to CreatePlaceLookups (20110623193938)
+Migrating to CreateSearches (20110624133714)
+Migrating to CreateOptions (20110629190738)
+Migrating to CreateOptionSets (20110629190744)
+Migrating to CreateOptionSettings (20110629190749)
+Migrating to CreateForms (20110629190755)
+Migrating to CreateQuestions (20110629190801)
+Migrating to CreateResponses (20110629190806)
+Migrating to CreateAnswers (20110629190812)
+Migrating to CreateQuestionTypes (20110629190817)
+Migrating to CreateTranslations (20110629190823)
+Migrating to CreateFormTypes (20110629190829)
+Migrating to CreateQuestionings (20110629190834)
+Migrating to ChangeLanguageToCode (20110630141414)
+Migrating to ChangeTranslationsToPolymorphic (20110630154332)
+Migrating to AddOdkNameToQuestionTypes (20110630160747)
+Migrating to AddOdkTagToQuestionTypes (20110630195026)
+Migrating to AddIncompleteToPlaces (20110713165635)
+Migrating to AddPreloadStuffToQuestionTypes (20110713174932)
+Migrating to CreateReviews (20110713185801)
+Migrating to AddSessionsTable (20110713211903)
+Migrating to QuestionShouldBeQuestioningForAnswer (20110719191108)
+Migrating to CreateChoices (20110720164304)
+Migrating to RenameObjectIdToObjIdInTranslation (20110721204754)
+Migrating to AddReviewedToResponses (20110722194551)
+Migrating to DropReviews (20110722194603)
+Migrating to AddPhoneOnlyToQuestionType (20110722200238)
+Migrating to RenameIsActiveToActiveForUser (20110722205622)
+Migrating to CreateSettables (20110726143633)
+Migrating to CreateSettings (20110726144308)
+Migrating to AddLongNameToQuestionTypes (20110726185552)
+Migrating to CreateBroadcasts (20110810133630)
+Migrating to CreateBroadcastAddressings (20110810134344)
+Migrating to AddDownloadsToForms (20110811154224)
+Migrating to AddSourceToResponse (20110814182130)
+Migrating to RemoveTimestampQuestions (20110814185101)
+Migrating to AddLoginCountToUsers (20110815174137)
+Migrating to AddDeviceAndNotesToUsers (20110815193346)
+Migrating to RenameNumericToInteger (20110816185426)
+Migrating to AddTranslationIndex (20110817175237)
+Migrating to ChoiceForeignKey (20110817183704)
+Migrating to CreateMainView (20110817184219)
+Migrating to AddBooleanDefaults (20110823170400)
+Migrating to StandardizeBooleanNames (20110823171727)
+Migrating to AddObserverIdToMainView (20110901141457)
+Migrating to CreateConditions (20110901175612)
+Migrating to RenamePlacesIncompleteToTemporary (20110908165935)
+Migrating to DropQuestionTypeFields (20110908195844)
+Migrating to DropUnneededPlaceTables (20110908211409)
+Migrating to AddPlaceTypeShortNames (20110913142741)
+Migrating to AddRedundantLinksToPlaces (20110913143939)
+Migrating to FixPlacesInMainView (20110913162231)
+Migrating to CreatePlaceCreators (20110913202244)
+Migrating to AddLastRequestAtToUsers (20110914144631)
+Migrating to AddOrderingToOptionSets (20110922181111)
+Migrating to AddOptionIdToCondition (20110923004101)
+Migrating to AddTeamNumberToUsers (20111006155632)
+Migrating to ChangeUserToOneNameField (20111103141618)
+Migrating to RemoveTeamNumberFromUsers (20111103152358)
+Migrating to DropGoogleGeolocations (20111122190536)
+Migrating to RenameSearchesToSearchSearches (20120110163524)
+Migrating to ClearSessions (20120110163624)
+Migrating to RenameSearchQueryToStr (20120110163625)
+Migrating to CreateReportReports (20120110163724)
+Migrating to CreateReportGroupings (20120110163922)
+Migrating to CreateReportCalculations (20120110163943)
+Migrating to CreateReportAggregations (20120110164008)
+Migrating to CreateReportFields (20120117191616)
+Migrating to AddViewedAtAndViewCountToReportReports (20120131161053)
+Migrating to CreateReportGroupingAttributes (20120131202355)
+Migrating to UpdateGroupingToUseNewGroupingAttributeClass (20120131202427)
+Migrating to ChangeReportTypeToKind (20120203164645)
+Migrating to AddDisplayTypeToReportReport (20120221210027)
+Migrating to AddStackedBarsToReportReport (20120223201044)
+Migrating to DropViews (20120223205639)
+Migrating to AddUnreviewedToReportReports (20120320153040)
+Migrating to AddPercentagesToReportReports (20120321155330)
+Migrating to RemoveKindFromReportReports (20120322151536)
+Migrating to RenameReportGroupingAttributesToReportResponseAttributes (20120322173538)
+Migrating to RenameReportFieldsAttribName (20120322175333)
+Migrating to AddGroupableToReportResponseAttributes (20120322180750)
+Migrating to AddDataTypeToReportResponseAttribute (20120413151514)
+Migrating to AddQuestioningIdIndexToAnswers (20120426154100)
+Migrating to ConvertBlankAnswerValuesToNulls (20120426182952)
+Migrating to CreateUserBatches (20120519202915)
+Migrating to RemovePhoneIsMobile (20120521191051)
+Migrating to AddAlternatePhoneNumbers (20120521192411)
+Migrating to AddWhichPhoneToBroadcasts (20120521221511)
+Migrating to RemoveQuestionCodeSpaces (20120626184028)
+Migrating to AddRangeToQuestions (20120629210925)
+Migrating to AddDateTimeValuesToAnswers (20120702172029)
+Migrating to ChangeTranslationLanguageIdToLanguageAndFixIndex (20120706180000)
+Migrating to RemoveLanguageFromUsers (20120706183000)
+Migrating to AddQuestioningCountAndResponseCountToForm (20120706184000)
+Migrating to RemoveObservedAtFromResponses (20120706193519)
+Migrating to RemoveDeviceFromUsers (20120706201054)
+Migrating to RemovePlaces (20120717162456)
+Migrating to AddUniqueRowsToReportReports (20120717182055)
+Migrating to CreateMissions (20120820145220)
+Migrating to AddAdminToUser (20120820165013)
+Migrating to CreateAssignments (20120820181620)
+Migrating to CreateDefaultMission (20120820181749)
+Migrating to MoveUsersToDefaultMission (20120820181944)
+Migrating to RemoveOldUserFields (20120820182538)
+Migrating to AddCurrentMissionIdToUsers (20120820193330)
+Migrating to AddMissionIdToModels (20120822152209)
+Migrating to AddCompactNameIndexToMissions (20120822161441)
+Migrating to RemoveSettables (20120906150610)
+Migrating to RevampSettings (20120906155118)
+Migrating to AddLanguagesToSettings (20120906170242)
+Migrating to AddForeignKeyIndices (20120925145245)
+Migrating to RemoveLanguages (20121008152421)
+Migrating to AddForeignKeyIndicesToAssignments (20121008153636)
+Migrating to AddValueCodeToReportResponseAttribute (20121015163120)
+Migrating to AddFkIndices (20121015164830)
+Migrating to DumpOldReports (20121018182218)
+Migrating to DropOldReportTables (20121018183850)
+Migrating to CreateNewReportReports (20121018184503)
+Migrating to CreateNewReportCalculations (20121022153208)
+Migrating to RenameReportFields (20121112143155)
+Migrating to RemoveSecondCalculationFields (20121112143800)
+Migrating to RemoveOmnibusCalculationFromReportReports (20121112174623)
+Migrating to AddRankToReportCalculations (20121126153456)
+Migrating to CreateReportOptionSetChoices (20121230200218)
+Migrating to AddOutgoingSmsAdapterToSettings (20130213223146)
+Migrating to AddOtherSmsFieldsToSettings (20130214013213)
+Migrating to AddOutgoingSmsLanguageToSettings (20130214040034)
+Migrating to CreateSmsCodes (20130217133401)
+  [1m[35m (8.6ms)[0m  CREATE TABLE `sms_codes` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `code` varchar(255), `questioning_id` int(11), `option_id` int(11), `form_id` int(11), `question_number` int(11), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (0.7ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20130217133401')[0m
+  [1m[35m (0.3ms)[0m  SELECT `schema_migrations`.`version` FROM `schema_migrations` 
+
+
+Started GET "/sms_codes/show/8" for 127.0.0.1 at 2013-02-17 14:47:47 +0100
+Processing by SmsCodesController#show as HTML
+  Parameters: {"form_id"=>"8"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 13:47:47', `updated_at` = '2013-02-17 13:47:47' WHERE `users`.`id` = 1
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.2ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mForm Load (0.3ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` = 8 LIMIT 1[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM `sms_codes` WHERE `sms_codes`.`form_id` = 8
+  [1m[36mQuestioning Load (0.5ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`form_id` = 8 ORDER BY rank[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 26 ORDER BY code LIMIT 1
+  [1m[36mQuestionType Load (0.3ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 27 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 28 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 29 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 30 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.6ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 31 ORDER BY code LIMIT 1
+  [1m[36mQuestionType Load (0.3ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 14 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 32 ORDER BY code LIMIT 1
+  [1m[36mQuestionType Load (0.3ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 19 ORDER BY long_name LIMIT 1[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 6 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.7ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (6)[0m
+  [1m[35mOption Load (0.4ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (19, 20, 21, 22, 23)
+  [1m[36mTranslation Load (0.4ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (19, 20, 21, 22, 23)[0m
+  [1m[35mOptionSetting Load (0.4ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (19, 20, 21, 22, 23)
+  [1m[36mOptionSet Load (0.6ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name[0m
+  [1m[35mQuestion Load (0.5ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)[0m
+  [1m[35mForm Load (0.5ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:47:47', 8, 19, 1, 37, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:47:47', 8, 20, 1, 37, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:47:47', 8, 21, 1, 37, '2013-02-17 13:47:47')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:47:47', 8, 22, 1, 37, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:47:47', 8, 23, 1, 37, '2013-02-17 13:47:47')
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 26 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 7 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (7)
+  [1m[36mOption Load (0.3ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 24, 25, 26, 27)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 24, 25, 26, 27)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 24, 25, 26, 27)[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name
+  [1m[36mQuestion Load (0.4ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.4ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)
+  [1m[36mForm Load (0.5ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:47:47', 8, 24, 2, 38, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:47:47', 8, 25, 2, 38, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:47:47', 8, 26, 2, 38, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:47:47', 8, 27, 2, 38, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:47:47', 8, 23, 2, 38, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.5ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 27 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.4ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 8 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.4ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (8)[0m
+  [1m[35mOption Load (0.4ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 28, 29, 30, 31)
+  [1m[36mTranslation Load (0.4ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 28, 29, 30, 31)[0m
+  [1m[35mOptionSetting Load (0.5ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 28, 29, 30, 31)
+  [1m[36mOptionSet Load (0.4ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name[0m
+  [1m[35mQuestion Load (0.5ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)[0m
+  [1m[35mForm Load (0.4ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:47:47', 8, 28, 3, 39, '2013-02-17 13:47:47')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.9ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:47:47', 8, 29, 3, 39, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:47:47', 8, 30, 3, 39, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:47:47', 8, 31, 3, 39, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:47:47', 8, 23, 3, 39, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 28 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.4ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 9 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (9)
+  [1m[36mOption Load (0.5ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 32, 33, 34, 35)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 32, 33, 34, 35)
+  [1m[36mOptionSetting Load (0.4ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 32, 33, 34, 35)[0m
+  [1m[35mOptionSet Load (0.4ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name
+  [1m[36mQuestion Load (0.5ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.7ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)
+  [1m[36mForm Load (0.4ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (1.4ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:47:47', 8, 32, 4, 40, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:47:47', 8, 33, 4, 40, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:47:47', 8, 34, 4, 40, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:47:47', 8, 35, 4, 40, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:47:47', 8, 23, 4, 40, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.5ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 29 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.4ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 10 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.4ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (10)[0m
+  [1m[35mOption Load (1.2ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 36, 37, 38, 39)
+  [1m[36mTranslation Load (0.7ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 36, 37, 38, 39)[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 36, 37, 38, 39)
+  [1m[36mOptionSet Load (0.4ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name[0m
+  [1m[35mQuestion Load (0.5ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)[0m
+  [1m[35mForm Load (0.8ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.8ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:47:47', 8, 36, 5, 41, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:47:47', 8, 37, 5, 41, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.5ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:47:47', 8, 38, 5, 41, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (1.0ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:47:47', 8, 39, 5, 41, '2013-02-17 13:47:47')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:47:47', 8, 23, 5, 41, '2013-02-17 13:47:47')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 30 AND `translations`.`class_name` = 'Question'
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES (NULL, '2013-02-17 13:47:47', 8, NULL, 6, 42, '2013-02-17 13:47:47')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 31 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 8 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (8)
+  [1m[36mOption Load (0.3ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 28, 29, 30, 31)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 28, 29, 30, 31)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 28, 29, 30, 31)[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name
+  [1m[36mQuestion Load (0.9ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.4ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)
+  [1m[36mForm Load (0.4ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:47:48', 8, 28, 7, 43, '2013-02-17 13:47:48')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:47:48', 8, 29, 7, 43, '2013-02-17 13:47:48')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:47:48', 8, 30, 7, 43, '2013-02-17 13:47:48')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:47:48', 8, 31, 7, 43, '2013-02-17 13:47:48')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:47:48', 8, 23, 7, 43, '2013-02-17 13:47:48')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.7ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 32 AND `translations`.`class_name` = 'Question'[0m
+DEPRECATION WARNING: Passing a template handler in the template name is deprecated. You can simply remove the handler name or pass render :handlers => [:erb] instead. (called from realtime at /Users/damienbrockmann/.rvm/rubies/ruby-1.9.3-p362/lib/ruby/1.9.1/benchmark.rb:295)
+Completed 500 Internal Server Error in 683ms
+
+ActionView::MissingTemplate (Missing template sms_codes/show.txt with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder]}. Searched in:
+  * "/Users/damienbrockmann/Desktop/elmo/app/views"
+):
+  app/controllers/sms_codes_controller.rb:6:in `show'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/missing_template.erb within rescues/layout (0.4ms)
+
+
+Started GET "/sms_codes/show/8" for 127.0.0.1 at 2013-02-17 14:48:34 +0100
+Processing by SmsCodesController#show as HTML
+  Parameters: {"form_id"=>"8"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (2.3ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 13:48:34', `updated_at` = '2013-02-17 13:48:34' WHERE `users`.`id` = 1
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.5ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mForm Load (0.4ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` = 8 LIMIT 1[0m
+  [1m[35mSQL (1.5ms)[0m  DELETE FROM `sms_codes` WHERE `sms_codes`.`form_id` = 8
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`form_id` = 8 ORDER BY rank[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 26 ORDER BY code LIMIT 1
+  [1m[36mQuestionType Load (0.3ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 27 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 28 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 29 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 30 ORDER BY code LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 18 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 31 ORDER BY code LIMIT 1
+  [1m[36mQuestionType Load (0.3ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 14 ORDER BY long_name LIMIT 1[0m
+  [1m[35mQuestion Load (0.3ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`id` = 32 ORDER BY code LIMIT 1
+  [1m[36mQuestionType Load (0.2ms)[0m  [1mSELECT `question_types`.* FROM `question_types` WHERE `question_types`.`id` = 19 ORDER BY long_name LIMIT 1[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 6 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (6)[0m
+  [1m[35mOption Load (0.4ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (19, 20, 21, 22, 23)
+  [1m[36mTranslation Load (0.4ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (19, 20, 21, 22, 23)[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (19, 20, 21, 22, 23)
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name[0m
+  [1m[35mQuestion Load (0.6ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code
+  [1m[36mQuestioning Load (0.6ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)[0m
+  [1m[35mForm Load (0.5ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:48:34', 8, 19, 1, 37, '2013-02-17 13:48:34')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:48:34', 8, 20, 1, 37, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:48:34', 8, 21, 1, 37, '2013-02-17 13:48:34')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:48:34', 8, 22, 1, 37, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:48:34', 8, 23, 1, 37, '2013-02-17 13:48:34')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 26 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 7 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.5ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (7)
+  [1m[36mOption Load (0.5ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 24, 25, 26, 27)[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 24, 25, 26, 27)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 24, 25, 26, 27)[0m
+  [1m[35mOptionSet Load (0.4ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name
+  [1m[36mQuestion Load (0.4ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.4ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)
+  [1m[36mForm Load (0.5ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:48:34', 8, 24, 2, 38, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:48:34', 8, 25, 2, 38, '2013-02-17 13:48:34')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:48:34', 8, 26, 2, 38, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:48:34', 8, 27, 2, 38, '2013-02-17 13:48:34')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:48:34', 8, 23, 2, 38, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.5ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 27 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.5ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 8 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.4ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (8)[0m
+  [1m[35mOption Load (0.4ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 28, 29, 30, 31)
+  [1m[36mTranslation Load (0.4ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 28, 29, 30, 31)[0m
+  [1m[35mOptionSetting Load (0.2ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 28, 29, 30, 31)
+  [1m[36mOptionSet Load (0.4ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name[0m
+  [1m[35mQuestion Load (0.4ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code
+  [1m[36mQuestioning Load (0.3ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)[0m
+  [1m[35mForm Load (0.4ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:48:34', 8, 28, 3, 39, '2013-02-17 13:48:34')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:48:34', 8, 29, 3, 39, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:48:34', 8, 30, 3, 39, '2013-02-17 13:48:34')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:48:34', 8, 31, 3, 39, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:48:34', 8, 23, 3, 39, '2013-02-17 13:48:34')
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.6ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 28 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.4ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 9 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (9)
+  [1m[36mOption Load (0.4ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 32, 33, 34, 35)[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 32, 33, 34, 35)
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 32, 33, 34, 35)[0m
+  [1m[35mOptionSet Load (0.3ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name
+  [1m[36mQuestion Load (0.5ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.5ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)
+  [1m[36mForm Load (0.3ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:48:34', 8, 32, 4, 40, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:48:34', 8, 33, 4, 40, '2013-02-17 13:48:34')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:48:34', 8, 34, 4, 40, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.2ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:48:34', 8, 35, 4, 40, '2013-02-17 13:48:34')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:48:34', 8, 23, 4, 40, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.6ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 29 AND `translations`.`class_name` = 'Question'[0m
+  [1m[35mOptionSet Load (0.4ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 10 ORDER BY name LIMIT 1
+  [1m[36mOptionSetting Load (0.3ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (10)[0m
+  [1m[35mOption Load (0.3ms)[0m  SELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 36, 37, 38, 39)
+  [1m[36mTranslation Load (0.4ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 36, 37, 38, 39)[0m
+  [1m[35mOptionSetting Load (0.4ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 36, 37, 38, 39)
+  [1m[36mOptionSet Load (0.4ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name[0m
+  [1m[35mQuestion Load (0.6ms)[0m  SELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code
+  [1m[36mQuestioning Load (0.4ms)[0m  [1mSELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)[0m
+  [1m[35mForm Load (0.4ms)[0m  SELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:48:34', 8, 36, 5, 41, '2013-02-17 13:48:34')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:48:34', 8, 37, 5, 41, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:48:34', 8, 38, 5, 41, '2013-02-17 13:48:34')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:48:34', 8, 39, 5, 41, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:48:34', 8, 23, 5, 41, '2013-02-17 13:48:34')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 30 AND `translations`.`class_name` = 'Question'
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES (NULL, '2013-02-17 13:48:34', 8, NULL, 6, 42, '2013-02-17 13:48:34')
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mTranslation Load (0.4ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 31 AND `translations`.`class_name` = 'Question'
+  [1m[36mOptionSet Load (0.3ms)[0m  [1mSELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` = 8 ORDER BY name LIMIT 1[0m
+  [1m[35mOptionSetting Load (0.3ms)[0m  SELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_set_id` IN (8)
+  [1m[36mOption Load (0.4ms)[0m  [1mSELECT `options`.* FROM `options` WHERE `options`.`id` IN (23, 28, 29, 30, 31)[0m
+  [1m[35mTranslation Load (0.5ms)[0m  SELECT `translations`.* FROM `translations` WHERE `translations`.`class_name` = 'Option' AND `translations`.`obj_id` IN (23, 28, 29, 30, 31)
+  [1m[36mOptionSetting Load (0.4ms)[0m  [1mSELECT `option_settings`.* FROM `option_settings` WHERE `option_settings`.`option_id` IN (23, 28, 29, 30, 31)[0m
+  [1m[35mOptionSet Load (0.4ms)[0m  SELECT `option_sets`.* FROM `option_sets` WHERE `option_sets`.`id` IN (6, 7, 8, 9, 10) ORDER BY name
+  [1m[36mQuestion Load (0.4ms)[0m  [1mSELECT `questions`.* FROM `questions` WHERE `questions`.`option_set_id` IN (6, 7, 8, 9, 10) ORDER BY code[0m
+  [1m[35mQuestioning Load (0.3ms)[0m  SELECT `questionings`.* FROM `questionings` WHERE `questionings`.`question_id` IN (26, 27, 28, 32, 29, 30)
+  [1m[36mForm Load (0.3ms)[0m  [1mSELECT `forms`.* FROM `forms` WHERE `forms`.`id` IN (5, 8, 9)[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('a', '2013-02-17 13:48:34', 8, 28, 7, 43, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('b', '2013-02-17 13:48:34', 8, 29, 7, 43, '2013-02-17 13:48:34')
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('c', '2013-02-17 13:48:34', 8, 30, 7, 43, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('d', '2013-02-17 13:48:34', 8, 31, 7, 43, '2013-02-17 13:48:34')
+  [1m[36m (0.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO `sms_codes` (`code`, `created_at`, `form_id`, `option_id`, `question_number`, `questioning_id`, `updated_at`) VALUES ('e', '2013-02-17 13:48:34', 8, 23, 7, 43, '2013-02-17 13:48:34')[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mTranslation Load (0.6ms)[0m  [1mSELECT `translations`.* FROM `translations` WHERE `translations`.`obj_id` = 32 AND `translations`.`class_name` = 'Question'[0m
+DEPRECATION WARNING: Passing a template handler in the template name is deprecated. You can simply remove the handler name or pass render :handlers => [:erb] instead. (called from realtime at /Users/damienbrockmann/.rvm/rubies/ruby-1.9.3-p362/lib/ruby/1.9.1/benchmark.rb:295)
+  Rendered sms_codes/show.txt.erb (0.6ms)
+Completed 200 OK in 234ms (Views: 3.0ms | ActiveRecord: 57.3ms)

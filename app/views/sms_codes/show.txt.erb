@@ -1,0 +1,12 @@
+Si vous plaît, commencé votre réponse avec un point d'exclamation <!>, suivi par l'ID de votre fiche <<%=@form_id %>>.
+Puis, mettez un espace. Pour chaque question mettez le numero de la question suivi par un point <.>, ensuite par la lettre de la réponse.
+Separez chaque question par un espace.
+
+Un exemple: !<%=@form_id %> 1.a 2.b 3.a
+
+l'ID de cette fiche est: <%=@form_id %>
+
+<% @codeText.each { |x| %>
+  <%= raw x %>
+<% } %>
+
