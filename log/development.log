@@ -2067,3 +2067,152 @@ Processing by SmsCodesController#show as HTML
 DEPRECATION WARNING: Passing a template handler in the template name is deprecated. You can simply remove the handler name or pass render :handlers => [:erb] instead. (called from realtime at /Users/damienbrockmann/.rvm/rubies/ruby-1.9.3-p362/lib/ruby/1.9.1/benchmark.rb:295)
   Rendered sms_codes/show.txt.erb (0.1ms)
 Completed 200 OK in 799ms (Views: 2.1ms | ActiveRecord: 108.7ms)
+
+
+Started GET "/sms_responses/incoming" for 127.0.0.1 at 2013-02-17 15:24:35 +0100
+Processing by SmsResponsesController#incoming as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 14:24:35', `updated_at` = '2013-02-17 14:24:35' WHERE `users`.`id` = 1
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.2ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+DEPRECATION WARNING: Passing a template handler in the template name is deprecated. You can simply remove the handler name or pass render :handlers => [:erb] instead. (called from realtime at /Users/damienbrockmann/.rvm/rubies/ruby-1.9.3-p362/lib/ruby/1.9.1/benchmark.rb:295)
+  Rendered sms_responses/ok.txt.erb (0.4ms)
+Completed 200 OK in 144ms (Views: 2.2ms | ActiveRecord: 7.8ms)
+
+
+Started GET "/sms_responses/incoming?provider=isms" for 127.0.0.1 at 2013-02-17 15:27:45 +0100
+Processing by SmsResponsesController#incoming as HTML
+  Parameters: {"provider"=>"isms"}
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 14:27:45', `updated_at` = '2013-02-17 14:27:45' WHERE `users`.`id` = 1[0m
+  [1m[35m (2.0ms)[0m  COMMIT
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.3ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+DEPRECATION WARNING: Passing a template handler in the template name is deprecated. You can simply remove the handler name or pass render :handlers => [:erb] instead. (called from realtime at /Users/damienbrockmann/.rvm/rubies/ruby-1.9.3-p362/lib/ruby/1.9.1/benchmark.rb:295)
+  Rendered sms_responses/ok.txt.erb (0.1ms)
+Completed 200 OK in 152ms (Views: 2.8ms | ActiveRecord: 11.7ms)
+
+
+Started GET "/sms_responses/incoming?provider=isms" for 127.0.0.1 at 2013-02-17 15:32:45 +0100
+Processing by SmsResponsesController#incoming as HTML
+  Parameters: {"provider"=>"isms"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.5ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 14:32:46', `updated_at` = '2013-02-17 14:32:46' WHERE `users`.`id` = 1
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.8ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.3ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+Completed 500 Internal Server Error in 203ms
+
+NameError (undefined local variable or method `isms_adapter' for #<SmsResponsesController:0x007fd3bd81f180>):
+  app/controllers/sms_responses_controller.rb:4:in `incoming'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.3ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.3ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (11.4ms)
+
+
+Started GET "/sms_responses/incoming?provider=isms" for 127.0.0.1 at 2013-02-17 15:40:52 +0100
+Processing by SmsResponsesController#incoming as HTML
+  Parameters: {"provider"=>"isms"}
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 14:40:52', `updated_at` = '2013-02-17 14:40:52' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.3ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+Completed 500 Internal Server Error in 153ms
+
+NameError (uninitialized constant SmsResponsesController::ISMSAdapter):
+  app/controllers/sms_responses_controller.rb:4:in `incoming'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.3ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.1ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (7.5ms)
+
+
+Started GET "/sms_responses/incoming?provider=ISMS" for 127.0.0.1 at 2013-02-17 16:25:53 +0100
+Processing by SmsResponsesController#incoming as HTML
+  Parameters: {"provider"=>"ISMS"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.3ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 15:25:53', `updated_at` = '2013-02-17 15:25:53' WHERE `users`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.2ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+Completed 500 Internal Server Error in 211ms
+
+NoMethodError (undefined method `create' for Sms::Adapters::Factory:Class):
+  app/controllers/sms_responses_controller.rb:4:in `incoming'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.4ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.1ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (8.5ms)
+
+
+Started GET "/sms_responses/incoming?provider=ISMS" for 127.0.0.1 at 2013-02-17 16:26:18 +0100
+Processing by SmsResponsesController#incoming as HTML
+  Parameters: {"provider"=>"ISMS"}
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 15:26:18', `updated_at` = '2013-02-17 15:26:18' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.7ms)[0m  COMMIT
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.3ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+Completed 500 Internal Server Error in 183ms
+
+NoMethodError (undefined method `create' for Sms::Adapters::Factory:Class):
+  app/controllers/sms_responses_controller.rb:4:in `incoming'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.6ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.9ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (7.5ms)
+
+
+Started GET "/sms_responses/incoming?provider=ISMS" for 127.0.0.1 at 2013-02-17 16:27:44 +0100
+Processing by SmsResponsesController#incoming as HTML
+  Parameters: {"provider"=>"ISMS"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (2.1ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 15:27:45', `updated_at` = '2013-02-17 15:27:45' WHERE `users`.`id` = 1
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.3ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+DEPRECATION WARNING: Passing a template handler in the template name is deprecated. You can simply remove the handler name or pass render :handlers => [:erb] instead. (called from realtime at /Users/damienbrockmann/.rvm/rubies/ruby-1.9.3-p362/lib/ruby/1.9.1/benchmark.rb:295)
+  Rendered sms_responses/ok.txt.erb (0.1ms)
+Completed 200 OK in 149ms (Views: 1.9ms | ActiveRecord: 9.8ms)
+
+
+Started GET "/sms_responses/incoming?provider=ISMS" for 127.0.0.1 at 2013-02-17 16:29:46 +0100
+Processing by SmsResponsesController#incoming as HTML
+  Parameters: {"provider"=>"ISMS"}
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 15:29:46', `updated_at` = '2013-02-17 15:29:46' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.3ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+Completed 500 Internal Server Error in 148ms
+
+NoMethodError (undefined method `create' for Sms::Adapters::Factory:Class):
+  app/controllers/sms_responses_controller.rb:4:in `incoming'
+
+
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.1ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.8ms)
+  Rendered /Users/damienbrockmann/.rvm/gems/ruby-1.9.3-p362/gems/actionpack-3.2.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (6.6ms)
