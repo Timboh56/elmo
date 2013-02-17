@@ -2868,3 +2868,128 @@ Processing by SmsCodesController#show as HTML
 DEPRECATION WARNING: Passing a template handler in the template name is deprecated. You can simply remove the handler name or pass render :handlers => [:erb] instead. (called from realtime at /Users/damienbrockmann/.rvm/rubies/ruby-1.9.3-p362/lib/ruby/1.9.1/benchmark.rb:295)
   Rendered sms_codes/show.txt.erb (0.1ms)
 Completed 200 OK in 120ms (Views: 2.2ms | ActiveRecord: 28.2ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 21:24:05 +0100
+Processing by SettingsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+Redirected to http://0.0.0.0:3000/login
+Filter chain halted as :authorize rendered or redirected
+Completed 302 Found in 58ms (ActiveRecord: 4.6ms)
+
+
+Started GET "/login" for 127.0.0.1 at 2013-02-17 21:24:05 +0100
+Processing by UserSessionsController#new as HTML
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.8ms)
+  Rendered user_sessions/new.html.erb within layouts/application (6.8ms)
+Completed 200 OK in 232ms (Views: 226.5ms | ActiveRecord: 0.5ms)
+
+
+Started POST "/user_session" for 127.0.0.1 at 2013-02-17 21:24:11 +0100
+Processing by UserSessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"LX45QZZ6mfPV+wKtylMGcAGVFuZqPHCkgj6LmZ3AtsY=", "user_session"=>{"login"=>"super", "password"=>"[FILTERED]"}, "commit"=>"Login"}
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (LOWER(`users`.login) = 'super') ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `login_count` = 29, `last_request_at` = '2013-02-17 20:24:11', `updated_at` = '2013-02-17 20:24:11' WHERE `users`.`id` = 1
+  [1m[36m (1.8ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `perishable_token` = 'HteLZukxzkQWhzYl4P9', `updated_at` = '2013-02-17 20:24:11' WHERE `users`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM `assignments` WHERE `assignments`.`user_id` = 1 AND `assignments`.`active` = 1
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mAssignment Load (0.4ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` = 1
+  [1m[36m (0.3ms)[0m  [1mUPDATE `users` SET `current_mission_id` = NULL, `updated_at` = '2013-02-17 20:24:11' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.5ms)[0m  COMMIT
+Redirected to http://0.0.0.0:3000/settings
+Completed 302 Found in 212ms (ActiveRecord: 9.2ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 21:24:11 +0100
+Processing by SettingsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (1.0ms)
+  Rendered permissions/no.html.erb within layouts/application (2.2ms)
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Filter chain halted as :authorize rendered or redirected
+Completed 401 Unauthorized in 34ms (Views: 24.7ms | ActiveRecord: 3.1ms)
+
+
+Started PUT "/users/1" for 127.0.0.1 at 2013-02-17 21:24:17 +0100
+Processing by UsersController#update as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"/3IohLtb0FZ89yX9DbKgnNeuztjyPV/RqLRhxpe0evw=", "user"=>{"current_mission_id"=>"1"}, "changing_current_mission"=>"1", "id"=>"1"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (2.9ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 20:24:17', `updated_at` = '2013-02-17 20:24:17' WHERE `users`.`id` = 1
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.5ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `users` SET `current_mission_id` = 1, `updated_at` = '2013-02-17 20:24:17' WHERE `users`.`id` = 1[0m
+  [1m[35m (0.6ms)[0m  COMMIT
+  [1m[36mMission Load (0.4ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.3ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1
+Redirected to http://0.0.0.0:3000/settings
+Completed 302 Found in 45ms (ActiveRecord: 10.2ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 21:24:17 +0100
+Processing by SettingsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mSetting Load (0.6ms)[0m  [1mSELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1[0m
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.6ms)
+  Rendered settings/_tableau_sql.html.erb (0.1ms)
+  Rendered settings/index.html.erb within layouts/application (49.5ms)
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM `missions` WHERE (1)
+  [1m[36mMission Load (0.3ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE (1)[0m
+Completed 200 OK in 72ms (Views: 61.6ms | ActiveRecord: 2.9ms)
+
+
+Started PUT "/settings/1" for 127.0.0.1 at 2013-02-17 21:27:21 +0100
+Processing by SettingsController#update as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"/3IohLtb0FZ89yX9DbKgnNeuztjyPV/RqLRhxpe0evw=", "setting"=>{"mission_id"=>"1", "timezone"=>"UTC", "languages"=>"eng", "outgoing_sms_adapter"=>"ISMS", "outgoing_sms_username"=>"admin", "outgoing_sms_password1"=>"[FILTERED]", "outgoing_sms_password2"=>"[FILTERED]", "outgoing_sms_language"=>"frn", "outgoing_sms_extra"=>"192.168.1.142:81"}, "commit"=>"Submit", "id"=>"1"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (0.4ms)[0m  UPDATE `users` SET `last_request_at` = '2013-02-17 20:27:21', `updated_at` = '2013-02-17 20:27:21' WHERE `users`.`id` = 1
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1
+  [1m[36mAssignment Load (0.4ms)[0m  [1mSELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)[0m
+  [1m[35mMission Load (0.3ms)[0m  SELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1
+  [1m[36mSetting Load (0.4ms)[0m  [1mSELECT `settings`.* FROM `settings` WHERE `settings`.`id` = 1 LIMIT 1[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `settings` SET `outgoing_sms_adapter` = 'ISMS', `outgoing_sms_username` = 'admin', `outgoing_sms_language` = 'frn', `outgoing_sms_extra` = '192.168.1.142:81', `outgoing_sms_password` = 'admin', `updated_at` = '2013-02-17 20:27:22' WHERE `settings`.`id` = 1[0m
+  [1m[35m (0.3ms)[0m  COMMIT
+Redirected to http://0.0.0.0:3000/settings
+Completed 302 Found in 66ms (ActiveRecord: 3.8ms)
+
+
+Started GET "/settings" for 127.0.0.1 at 2013-02-17 21:27:22 +0100
+Processing by SettingsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (0.4ms)[0m  [1mUPDATE `users` SET `last_request_at` = '2013-02-17 20:27:22', `updated_at` = '2013-02-17 20:27:22' WHERE `users`.`id` = 1[0m
+  [1m[35m (1.7ms)[0m  COMMIT
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 1 ORDER BY users.name LIMIT 1[0m
+  [1m[35mAssignment Load (0.3ms)[0m  SELECT `assignments`.* FROM `assignments` WHERE `assignments`.`user_id` IN (1)
+  [1m[36mMission Load (0.2ms)[0m  [1mSELECT `missions`.* FROM `missions` WHERE `missions`.`id` = 1 LIMIT 1[0m
+  [1m[35mSetting Load (0.3ms)[0m  SELECT `settings`.* FROM `settings` WHERE `settings`.`mission_id` = 1 LIMIT 1
+  Rendered layouts/_object_errors.html.erb (0.0ms)
+  Rendered layouts/_flash.html.erb (0.7ms)
+  Rendered settings/_tableau_sql.html.erb (0.2ms)
+  Rendered settings/index.html.erb within layouts/application (16.0ms)
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM `missions` WHERE (1)[0m
+  [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE (1)
+Completed 200 OK in 44ms (Views: 30.2ms | ActiveRecord: 5.1ms)

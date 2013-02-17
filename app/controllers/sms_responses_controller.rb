@@ -5,9 +5,11 @@ class SmsResponsesController < ApplicationController
 		smses = adapter.receive(params) # return hash with phone number and message
 
 		smses.each{ |sms|
-			sender_info = User.where('phone = ? || phone2 = ?', sms.phone, sms.phone)
-			
-			unless sender_info.empty?
+			begin	
+				sender_info = User.where('phone = ? || phone2 = ?', sms.phone, sms.phone)
+			rescue ActiveRecord::RecordNotFound
+				#  #blank message for non-recognized numbers
+			else
 				
 				unless sender_info.count > 1
 					
@@ -27,7 +29,7 @@ class SmsResponsesController < ApplicationController
 							@adapter.add_outgoing_message('sms.error.cantAccessForm.'+form.id.to_s, sms.phone)
 						
 						end
-					
+						
 					else
 						@adapter.add_outgoing_message( sms_response.get_outgoing_message(), sms.phone )
 					
@@ -36,15 +38,11 @@ class SmsResponsesController < ApplicationController
 				else
 					@adapter.add_outgoing_message('sms.error.moreThanOneUserWithPhone', sms.phone)
 				
-				end
-			
-			else	
-				#  #blank message for non-recognized numbers
-			
+				end				
 			end
 		}
 		
-		@output = adapter.reply()
-		render :template => "sms_responses/ok.txt.erb"
+		@output = @adapter.get_reply()
+		render :template => "sms_responses/ok.#{@output[:format]}.erb"
   	end
 end

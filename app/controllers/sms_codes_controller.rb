@@ -8,8 +8,7 @@ class SmsCodesController < ApplicationController
  
  
   def make_code()	
-		@codeText = []
-		
+		@codeText = []	
 		begin	
 			@form = Form.find(@form_id)			
 		rescue ActiveRecord::RecordNotFound
