@@ -20,6 +20,7 @@ class Permission
     "questionings#*" => {:min_level => 3},
     "options#*" => {:min_level => 3},
     "option_sets#*" => {:min_level => 3},
+    "sms_codes#show" => {:min_level => 3},
 
     "forms#show" => {:min_level => 2},
     "report_reports#*" => {:min_level => 2},
