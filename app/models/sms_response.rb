@@ -8,7 +8,7 @@ class SmsResponse < ActiveRecord::Base
   
   
 	def initialize
-		@outgoing_message = 'sms.error.notProcessed'
+		@outgoing_message = 'sms.error.general'
 		@noerrors = true
 	end
 	
@@ -23,21 +23,40 @@ class SmsResponse < ActiveRecord::Base
 		unless is_flagged?
 			all_answers = Hash[*answers]
 			self.response = Response.create(:form => @form, :user => sender, :mission => @mission, 'source' => 'sms', :all_answers => all_answers)			
-			self.save
+			
+			if self.responsenew_record ?
+				self.save
+				@outgoing_message = 'sms.success'
+				@outgoing_message_vars = {:message=>@message}
+			else
+				@outgoing_message = 'sms.response.not_valid'
+				@outgoing_message_vars = {:message=>@message}
+			end
+		else
+			@outgoing_message = 'sms.success'
+			@outgoing_message_vars = {:message=>@message}
 		end
-		@outgoing_message = 'sms.success'		
 	end
 	
 	def get_outgoing_message
-		return @outgoing_message	
+		@outgoing_message	
+	end
+	
+	def get_outgoing_messag_vars
+		@outgoing_vars	
+	end
+	
+	def get_form_id
+		@form_id	
 	end
 	
 	def get_mission
-		return @mission
+		@mission
 	end
 	
 	private
 	def message_decoded? (message)
+		@message = message
 		result = message.scan(/^(! ?([0-9]+) ([^\-]+[a-z0-9]{1})) ?-?(r)?$/)
 		result_array = result[0]		
 		@noerrors = true
@@ -47,7 +66,8 @@ class SmsResponse < ActiveRecord::Base
 			begin	
 				@form = Form.find_by_id(@form_id)
 			rescue ActiveRecord::RecordNotFound
-				@outgoing_message = 'sms.error.formNotFound.'+@form_id
+				@outgoing_message = 'sms.error.form.not_found.'
+				@outgoing_message_vars = {:form_id=>@form_id, :message=>@message}
 				@noerrors = nil
 			else
 				if (@form.published == true)
@@ -61,16 +81,20 @@ class SmsResponse < ActiveRecord::Base
 					
 					@incoming_codes = @incoming_message.strip.split(' ')
 					if(question_count != @incoming_codes.count)
-						@outgoing_message = 'sms.error.numberOfAnswersDoNotMatch'
+						@outgoing_message = 'sms.error.message.no_of_answers'
+						@outgoing_message_vars = {:no_responses => @incoming_codes.count, :no_questions => question_count, :message=>@message}
+
 						@noerrors = nil
 					end	
 				else
-					@outgoing_message = 'sms.error.formNotFound.'+@form_id
+					@outgoing_message = 'sms.error.form.not_avail.'
+					@outgoing_message_vars = {:form_id => @form_id, :message=>@message}					
 					@noerrors = nil
 				end
 			end	
 		else
-			@outgoing_message = 'sms.error.cantReadMessage'
+			@outgoing_message = 'sms.error.message.cant_read'
+			@outgoing_message_vars = {:message => @message }
 			@noerrors = nil
 		end
 		return @noerrors
@@ -87,7 +111,8 @@ class SmsResponse < ActiveRecord::Base
 			begin
 				sms_codes = SmsCode.where('form_id = ? AND question_number = ?', @incoming_form_id, incoming_question_number)
 			rescue ActiveRecord::RecordNotFound
-				@outgoing_message = 'sms.error.questionNotFound.'+incoming_question_number
+				@outgoing_message = 'sms.error.response.question_not_found.'
+				@outgoing_message_vars = {:message => @message, ':question_no'=> incoming_question_number}				
 				@noerrors = nil
 			else
 				type = sms_codes.first.questioning.question.type.name
@@ -97,7 +122,8 @@ class SmsResponse < ActiveRecord::Base
 					if incoming_answer is_a? Integer
 						add_answer(sms_codes.first, incoming_answer)
 					else
-						@outgoing_message = 'sms.error.answerNotAnInteger.'+incoming_question_number
+						@outgoing_message = 'sms.error.response.NotAnInteger.'
+						@outgoing_message_vars = {:message => @message, ':question_no'=> incoming_question_number, :response=>incoming_answer}				
 						@noerrors = nil
 					end
 				when 'select_one'
@@ -105,7 +131,8 @@ class SmsResponse < ActiveRecord::Base
 					unless answer == nil
 						add_answer(answer.first)
 					else
-						@outgoing_message = 'sms.error.answerNotValid.'+incoming_question_number
+						@outgoing_message = 'sms.error.response.not_valid_specific.'
+						@outgoing_message_vars = {:message => @message, ':question_no'=> incoming_question_number, :response=>answer}				
 						@noerrors = nil
 					end
 				when 'select_mutiple'
@@ -113,10 +140,11 @@ class SmsResponse < ActiveRecord::Base
 				
 					answers.each( |a|
 						answer = sms_codes.select { |c| c.code == a}
-						unless answer == nil
+						unless answer == nil || @noerrors = nil
 							add_answer(answer.first)
 						else
-							@outgoing_message = 'sms.error.answerNotValid.'+incoming_question_number
+							@outgoing_message = 'sms.error.response.not_valid_specific.'
+							@outgoing_message_vars = {:message => @message, ':question_no'=> incoming_question_number, :response=> a}				
 							@noerrors = nil
 						end	
 					}

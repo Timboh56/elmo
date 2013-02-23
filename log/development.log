@@ -3027,3 +3027,4 @@ Processing by SettingsController#index as HTML
   [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM `missions` WHERE (1)[0m
   [1m[35mMission Load (0.4ms)[0m  SELECT `missions`.* FROM `missions` WHERE (1)
 Completed 200 OK in 179ms (Views: 166.3ms | ActiveRecord: 3.2ms)
+Connecting to database specified by database.yml

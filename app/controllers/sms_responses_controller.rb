@@ -3,7 +3,7 @@ class SmsResponsesController < ApplicationController
 		@adapter = Sms::Adapters::Factory.new.create(params[:provider])
 		smses = adapter.receive(params) # return hash with phone number and message
 
-		I18n.locale = configatron.outgoing_sms_language
+		I18n.locale = params[:lng]
 		
 		smses.each{ |sms|
 			begin	
@@ -15,31 +15,36 @@ class SmsResponsesController < ApplicationController
 				unless sender_info.count > 1
 					
 					@sender = sender_info.first
-					sms_response = new smsResponse
+					sms_response = new SmsResponse
 					
 					if sms_response.message_loaded?(sms.message)
 						
 						mission = sms_response.get_missionn
+						Setting.find_or_create(mission)
 						
 						if @sender.can_access_mission?(mission)
-							
+				
 							sms_response.save_answers(@sender)
-							@adapter.add_outgoing_message( sms_response.get_outgoing_message(), sms.phone )
+							
+							message = t(sms_response.get_outgoing_message, sms_response.get_outgoing_messag_vars),
 						
-						else	
-							@adapter.add_outgoing_message('sms.error.cantAccessForm.'+form.id.to_s, sms.phone)
-						
+						else
+							message = t('sms.form.permission_denied', :form_id => sms_response.get_form_id, :message=>sms.message),
 						end
 						
 					else
-						@adapter.add_outgoing_message( sms_response.get_outgoing_message(), sms.phone )
-					
+						message = t(sms_response.get_outgoing_message, sms_response.get_outgoing_messag_vars),					
 					end
 				
 				else
-					@adapter.add_outgoing_message('sms.error.moreThanOneUserWithPhone', sms.phone)
+					message = t 'sms.error.system.multiple_users'
+					
+					@adapter.add_outgoing_message('sms.error.system.multiple_users', sms.phone)
 				
-				end				
+				end
+				
+				@adapter.add_outgoing_message(message, sms.phone))
+			
 			end
 		}
 		
