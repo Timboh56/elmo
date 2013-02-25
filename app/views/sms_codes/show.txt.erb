@@ -1,10 +1,16 @@
-Si vous plaît, commencé votre réponse avec un point d'exclamation <!>, suivi par l'ID de votre fiche <<%=@form_id %>>.
-Puis, mettez un espace. Pour chaque question mettez le numero de la question suivi par un point <.>, ensuite par la lettre de la réponse.
-Separez chaque question par un espace.
+<%= raw t 'sms.instructions.title' %>
 
-Un exemple: !<%=@form_id %> 1.a 2.b 3.a
+<%= raw t 'sms.instructions.form_id', :form_id => @form_id %>
+<%= raw t 'sms.instructions.question' %>
 
-l'ID de cette fiche est: <%=@form_id %>
+<%= raw t 'sms.instructions.spacing' %>
+
+<%= raw t 'sms.instructions.response.select_one' %>
+
+<%= raw t 'sms.instructions.response.select_multiple' %>
+
+<%= raw t 'sms.instructions.response.number' %>
+
 
 <% @codeText.each { |x| %>
   <%= raw x %>

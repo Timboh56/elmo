@@ -1,0 +1,36 @@
+<html>
+	<body style="width:800px;">
+		<h3><%= t 'sms.instructions.form_name', :form_name => @form.name, :form_id => @form.id %></h3>
+		<b><%= t 'sms.instructions.title' %></b>
+		<br>
+		<%= t 'sms.instructions.message_start', :form_id => @form_id %>
+		<br><br>
+		<b><%= t 'sms.instructions.form_id', :form_id => @form_id %></b>
+		<br><br>
+		<%= t 'sms.instructions.question' %>&nbps;
+		<%= t 'sms.instructions.spacing' %>
+		<ul>
+		<li>
+			<%= t 'sms.instructions.response.select_one' %>
+			<br>
+			<%= t 'sms.instructions.response.select_one_example' %>
+		</li>
+		<li>
+			<%= t 'sms.instructions.response.select_multiple' %>
+			<br>
+			<%= t 'sms.instructions.response.select_multiple_example' %>
+		</li>
+		<li>
+			<%= t 'sms.instructions.response.number' %>
+			<br>
+			<%= t 'sms.instructions.response.number_example' %>
+		</li>
+		</ul>
+		<br>
+		<b><%= t 'sms.instructions.questions_title' %></b></br>
+		<% @codeText.each { |x| %>
+		  <%= raw x %>
+		<% } %>
+	</body>
+</html
+

@@ -1,6 +1,21 @@
 # translations used for sms reply messages
 fra:
   sms:
+    instructions: 
+      form_name: "%{form_name} Fiche  (ID: %{form_id})"
+      title: "INSTRUCTIONS:"
+      questions_title: "QUESTIONS:"
+      message_start: "Si vous plaît, commencé votre réponse avec un point d'exclamation <!>, suivi par l'ID de votre fiche <%{form_id}>."
+      form_id: "L'ID de cette fiche est <%{form_id}>, donc commencez votre message avec <!%{form_id}>."
+      question: "Aprés l'ID de la fiche, mettez un espace. Pour chaque question mettez la numéro de la question suivi par un point <.>, ensuite par la réponse."
+      response:
+        select_one: "Si la question vous demande à choisir une seule reponse, mettez la lettre de la reponse aprés le numéro de la question."
+        select_one_example: "Exemple: <1.b> Le reponse pour question 1 c'est 'b'."
+        select_multiple: "Si la question vous demande à choisir plusiers choix de response, mettez la lettre de chaque choix (sans des éspaces) aprés le numéro de la question."
+        select_multiple_example: "Exemple: <2.bef> Le reponse pour question 2 c'est les choix 'b', 'e' et 'f'."
+        number: "Si la question vous demande à repondre avec un numéro, mettez la numéro aprés le numéro de la question."
+        number_example: "Exemple: <3.45> Le reponse pour question 3 c'est 45."
+      spacing: "Separez chaque question par un espace.  Exemple: <!2 1.a 2.bc 3.2>"
     error:
       system: 
         general: "Désolé. Il y avait une erreur dans le sytème. Veuillez et recommencez votre message.  Nous avons reçu <%{message}>."
