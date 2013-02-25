@@ -17,5 +17,4 @@ fra:
         not_an_integer: "Désolé.  Votre reponse à question %{question_no} <%{response}> doit etre un nombre.  Veuillez et recommencez votre message: <%{message}>."
         not_valid: "Désolé. Vous avez une erreur dans votre message. Veuillez et recommencez votre message: <%{message}>."
         not_valid_specific: "Désolé.  Votre reponse à question %{question_no} <%{response}> n'est pas valide.  Veuillez et recommencez votre message: <%{message}>."
-   success: "Succes! Votre message a été reçu: <%{message}>"
-    
+    success: "Succes! Votre message a été reçu: <%{message}>."

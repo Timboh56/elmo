@@ -35,13 +35,10 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 	
 	def deliver(message, options = {})
 	super	
-		numbers = message.to.join(',')
 		text = URI.encode(message.body)
-		numbers.each{ |n|
+		message.to.each{ |n|
 			# build the URI the request
-			uri = build_uri("sendmsg", "to=\"#{n}\"&text=#{text}")
-			Rails.logger.debug("http request: #{@uri}")
-			
+			uri = build_uri("sendmsg", "to=#{n}&text=#{text}")			
 			# honor the dont_send option
 			unless options[:dont_send]
 			  response = send_request(uri)
@@ -55,27 +52,23 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 	
 	def get_reply
 		unless @outgoing_messages.empty?
-				
-			outgoing_messages.each{ |m|
-				deliver(m.phone, m.message)
+			@outgoing_messages.each{ |m|				
+				deliver(m)
 			}
 		end
-		return {:output => '', 'format'=>'txt'}
-	
+		{:output => '', :format=>'txt'}	
 	end
 	
 	def add_outgoing_message (message, phone)
-		@outgoing_messages << {:message => message, :phone => phone}
+		m = Sms::Message.new(:direction => :outgoing, :to => [phone], :body => message)
+		@outgoing_messages << m
 	end
 	
 	private
     # builds uri based on given action and query string params
     def build_uri(action, params = "")
     	"http://#{configatron.outgoing_sms_extra}/#{action}?" + 
-    	"user=#{@outgoing_sms_username}&passwd=#{@outgoing_sms_password}&cat=1&#{params}"
-    
-      "http://www.intellisoftware.co.uk/smsgateway/#{action}.aspx?" +
-        "username=#{configatron.intellisms_username}&password=#{configatron.intellisms_password}&#{params}"
+    	"user=#{configatron.outgoing_sms_username}&passwd=#{configatron.outgoing_sms_password}&cat=1&#{params}"
     end
     
     # sends request to given uri and returns response

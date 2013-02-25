@@ -15,7 +15,7 @@ class SmsCodesController < ApplicationController
 			@codeText << 'Form Not Found!'
 		else			
 			SmsCode.delete_all(:form_id => @form_id)				
-			qing = form.questionings.select { |q| q.question.type.name == 'select_one' || q.question.type.name == 'select_multiple' || q.question.type.name == 'integer'}	
+			qing = @form.questionings.select { |q| q.question.type.name == 'select_one' || q.question.type.name == 'select_multiple' || q.question.type.name == 'integer'}	
 			qing.each_with_index do |q, n|
 				nn = n + 1
 				code_text = q.add_sms_code(nn)

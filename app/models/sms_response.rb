@@ -5,169 +5,169 @@ class SmsResponse < ActiveRecord::Base
   
   validates(:message, :presence => true)
   validates(:response_id, :presence => true)
-  
-  
-	def initialize
-		@outgoing_message = 'sms.error.general'
-		@noerrors = true
-	end
+  	
 	
-	def message_loaded?(message)
-		if message_decoded? (message)
-			get_answers
+	def self.message_loaded?(message)
+		@outgoing = {:message=>'sms.error.system.general', :vars=>{:message=>message}}
+		@noerrors = true
+		if self.message_decoded? (message)
+			self.get_answers
 		end	
 		return @noerrors
 	end
 	
-	def save_answers(sender)
-		unless is_flagged?
-			all_answers = Hash[*answers]
-			self.response = Response.create(:form => @form, :user => sender, :mission => @mission, 'source' => 'sms', :all_answers => all_answers)			
-			
-			if self.responsenew_record ?
-				self.save
-				@outgoing_message = 'sms.success'
-				@outgoing_message_vars = {:message=>@message}
+	def self.save_answers(sender)
+	@sender = sender
+	Rails.logger.debug(@answers)
+		unless self.is_flagged?
+			resp = Response.new(:form => @form, :user => sender, :mission => @mission, 'source' => 'sms', :answers => @answers)			
+			resp.save!
+			unless resp.new_record?
+				@outgoing[:message] = 'sms.success'
+    			sms_resp = create(:message => @message, :response_id => resp.id )
+				sms_resp.save!
 			else
-				@outgoing_message = 'sms.response.not_valid'
-				@outgoing_message_vars = {:message=>@message}
+				@outgoing[:message] = 'sms.error.response.not_valid'
 			end
 		else
-			@outgoing_message = 'sms.success'
-			@outgoing_message_vars = {:message=>@message}
+			@outgoing[:message] = 'sms.success'
 		end
 	end
 	
-	def get_outgoing_message
-		@outgoing_message	
+	def self.get_outgoing
+		@outgoing	
 	end
 	
-	def get_outgoing_messag_vars
-		@outgoing_vars	
-	end
-	
-	def get_form_id
+	def self.get_form_id
 		@form_id	
 	end
 	
-	def get_mission
+	def self.get_mission
 		@mission
 	end
 	
 	private
-	def message_decoded? (message)
-		@message = message
-		result = message.scan(/^(! ?([0-9]+) ([^\-]+[a-z0-9]{1})) ?-?(r)?$/)
-		result_array = result[0]		
-		@noerrors = true
-		
-		unless result_array == nil
-			@form_id = result_array[1]
+	def self.message_decoded? (message)
+		result = message.scan(/^(! ?([0-9]+) ([^\-]+[a-z0-9]{1})) ?-?(r)?$/).first				
+		unless result == nil
+			@form_id = result[1]
 			begin	
-				@form = Form.find_by_id(@form_id)
+				@form = Form.find_by_id!(@form_id)
 			rescue ActiveRecord::RecordNotFound
-				@outgoing_message = 'sms.error.form.not_found.'
-				@outgoing_message_vars = {:form_id=>@form_id, :message=>@message}
+				@outgoing[:message] = 'sms.error.form.not_found.'
+				@outgoing[:vars][:form_id] = @form_id
 				@noerrors = nil
 			else
 				if (@form.published == true)
 					@mission = @form.mission
 
-					question_count = SmsCode.where('form_id = ?',@incoming_form_id).map(&:questioning).uniq.count
+					question_count = SmsCode.where('form_id = ?',@form_id).map(&:questioning).uniq.count
 					
-					self.message = result_array[0]
-					@incoming_message = result_array[2]	
-					@incoming_flag = result_array[3]
+					@message = result[0]
+					message_code = result[2]	
+					@message_flag = result[3]
 					
-					@incoming_codes = @incoming_message.strip.split(' ')
+					@incoming_codes = message_code.strip.split(' ')
 					if(question_count != @incoming_codes.count)
-						@outgoing_message = 'sms.error.message.no_of_answers'
-						@outgoing_message_vars = {:no_responses => @incoming_codes.count, :no_questions => question_count, :message=>@message}
+						@outgoing[:message] = 'sms.error.message.no_of_answers'
+						@outgoing[:vars][:no_responses] = @incoming_codes.count
+						@outgoing[:vars][:no_questions] = question_count
 
 						@noerrors = nil
 					end	
 				else
-					@outgoing_message = 'sms.error.form.not_avail.'
-					@outgoing_message_vars = {:form_id => @form_id, :message=>@message}					
+					@outgoing[:message] = 'sms.error.form.not_avail'
+					@outgoing[:vars][:form_id] = @form_id					
 					@noerrors = nil
 				end
 			end	
 		else
-			@outgoing_message = 'sms.error.message.cant_read'
-			@outgoing_message_vars = {:message => @message }
+			@outgoing[:message] = 'sms.error.message.cant_read'
 			@noerrors = nil
 		end
 		return @noerrors
 	end
 	
 	
-	def get_answers
+	def self.get_answers
 		@answers = []
-		@incoming_codes.each { |code|	
+		@incoming_codes.each_with_index { |code, n|	
 			result = code.scan(/^([0-9]+)\.(.+)?$/)
 			incoming_question_number = result[0][0]
 			incoming_answer = result[0][1]
-			
-			begin
-				sms_codes = SmsCode.where('form_id = ? AND question_number = ?', @incoming_form_id, incoming_question_number)
-			rescue ActiveRecord::RecordNotFound
-				@outgoing_message = 'sms.error.response.question_not_found.'
-				@outgoing_message_vars = {:message => @message, ':question_no'=> incoming_question_number}				
+			sms_codes = SmsCode.where('form_id = ? AND question_number = ?', @form_id, incoming_question_number)
+			if sms_codes.empty?
+				@outgoing[:message] = 'sms.error.response.question_not_found.'
+				@outgoing[:vars][:question_no] =  incoming_question_number				
 				@noerrors = nil
 			else
-				type = sms_codes.first.questioning.question.type.name
-				
-				case type
-				when 'integer'
-					if incoming_answer is_a? Integer
-						add_answer(sms_codes.first, incoming_answer)
-					else
-						@outgoing_message = 'sms.error.response.NotAnInteger.'
-						@outgoing_message_vars = {:message => @message, ':question_no'=> incoming_question_number, :response=>incoming_answer}				
-						@noerrors = nil
-					end
-				when 'select_one'
-					answer = sms_codes.select { |c| c.code == incoming_answer}
-					unless answer == nil
-						add_answer(answer.first)
-					else
-						@outgoing_message = 'sms.error.response.not_valid_specific.'
-						@outgoing_message_vars = {:message => @message, ':question_no'=> incoming_question_number, :response=>answer}				
-						@noerrors = nil
-					end
-				when 'select_mutiple'
-					answers = incoming_answer.split('')
-				
-					answers.each( |a|
-						answer = sms_codes.select { |c| c.code == a}
-						unless answer == nil || @noerrors = nil
-							add_answer(answer.first)
+				if @noerrors == true	
+					type = sms_codes.first.questioning.question.type.name
+					case type
+					when 'integer'
+						int = incoming_answer.scan(/\A[0-9]+\Z/).first					
+						unless int == nil
+							self.add_answer(n, sms_codes.first, int.to_i)
 						else
-							@outgoing_message = 'sms.error.response.not_valid_specific.'
-							@outgoing_message_vars = {:message => @message, ':question_no'=> incoming_question_number, :response=> a}				
+							@outgoing[:message] = 'sms.error.response.NotAnInteger.'
+							@outgoing[:vars][:question_no] =  incoming_question_number				
+							@outgoing[:vars][:response] =  incoming_answer						
 							@noerrors = nil
-						end	
-					}
-				else
-					@outgoing_message = 'sms.error.system'
-					@noerrors = nil
+						end
+					when 'select_one'
+						answer = sms_codes.select { |c| c.code == incoming_answer}
+						unless answer == nil
+							add_answer(n, answer.first)
+						else
+							@outgoing[:message] = 'sms.error.response.not_valid_specific.'
+							@outgoing[:vars][:question_no] =  incoming_question_number				
+							@outgoing[:vars][:response] =  incoming_answer							
+							@noerrors = nil
+						end
+					when 'select_multiple'
+						choices = []
+						answers = incoming_answer.split('')
+						answers.each do |a| 
+							answer = sms_codes.select { |c| c.code == a}
+							unless answer == nil
+								choices << answer.first.option.id
+							else @noerrors == true
+								@outgoing[:message] = 'sms.error.response.not_valid_specific.'
+								@outgoing[:vars][:question_no] =  incoming_question_number				
+								@outgoing[:vars][:response] =  a							
+								@noerrors = nil
+							end	
+						end
+						unless @noerrors == nil
+							add_answer(n, answer.first, nil, choices)
+						end
+					else
+						@outgoing[:message] = 'sms.error.system.general'
+						@noerrors = nil
+					end
 				end
 			end
 		}	
-		return noerrors
+		return @noerrors
 	end
 	
-	def add_answer(code, value = nil)
-		@answers << {:relevant=> 'true', :response_id => '', :option_id => code.option.id, :questioning_id => code.questioning.id, :value => value }
+	def self.add_answer(n, code, value = nil, choices=nil)
+		ans = Answer.new(:relevant=> 'true', :response_id => '', :option_id => (code.option == nil || choices == true ? nil : code.option.id), :questioning_id => code.questioning.id, :value => value )
+		unless choices == nil
+			choices.each do |c|
+				ans.choices.build(:option_id => c)
+			end
+		end
+		@answers << ans
 	end
 	
-	def is_flagged?
+	def self.is_flagged?
 		flag_action = nil 
-		unless @incoming_flag == nil
+		unless @message_flag == nil
 
-			case @incoming_flag
+			case @message_flag
 			when 'r'
-				sms_response = SmsResponse.find(:all, :conditions => ["responses.user_id = ? AND sms = ? AND sms_responses.created_at BETWEEN ? AND ?", @sender.id, self.message, Time.now - 45.minutes, Time.now], :joins => {:response =>{}} ).first
+				sms_response = SmsResponse.find(:all, :conditions => ["responses.user_id = ? AND message = ? AND sms_responses.created_at BETWEEN ? AND ?", @sender.id, @message, Time.now - 45.minutes, Time.now], :joins => {:response =>{}} ).first
 				flag_action = (sms_response == nil ? nil : true)
 			end	
 		end

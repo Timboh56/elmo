@@ -2,6 +2,24 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  sms:
+    error:
+      system: 
+        general: "Désolé. Il y avait une erreur dans le sytème. Veuillez et recommencez votre message.  Nous avons reçu <%{message}>."
+        multiple_users: "Nous avons reçu <%{message}>."
+      form:
+        permission_denied: "Désolé. Vous n'avez pas la permission d'accéder à fiche %{form_id}.  Verifiez le numero de la fiche et recomencez votre message. Nous avons reçu <%{message}>."
+        not_found: "Désolé. Fiche %{form_id} n'etait pas trouvé.  Si vous plaît, verifiez le numéro de fiche et recomencez votre message: <%{message}>."
+        not_avail: "Désolé. Fiche %{form_id} n'etait pas disponible.  Si vous plaît, verifiez le numéro de fiche et recomencez votre message: <%{message}>."
+      message:
+        no_of_answers: "Désolé. Le nombre de réponses <%{no_responses}> ne correspond pas au nombre de questions dans la fiche <%{no_questions}>. Veuillez et recommencez votre message: <%{message}>."
+        cant_read: "Votre message ne peut pas etre lu.  Veuillez et recommencez votre message: <%{message}>."
+      response:
+        question_not_found: "Désolé. Question %{question_no} n'a pas été trouvé. Veuillez et recommencez votre message: <%{message}>."
+        not_an_integer: "Désolé.  Votre reponse à question %{question_no} <%{response}> doit etre un nombre.  Veuillez et recommencez votre message: <%{message}>."
+        not_valid: "Désolé. Vous avez une erreur dans votre message. Veuillez et recommencez votre message: <%{message}>."
+        not_valid_specific: "Désolé.  Votre reponse à question %{question_no} <%{response}> n'est pas valide.  Veuillez et recommencez votre message: <%{message}>."
+    success: "Succes! Votre message a été reçu: <%{message}>."
   activerecord:
     models:
       report/report: Report
