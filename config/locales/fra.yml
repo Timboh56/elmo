@@ -18,7 +18,7 @@ fra:
       response:
         select_one: "Si la question vous demande de choisir une option, mettez la lettre de la réponse après le numéro de la question."
         select_one_example: "Exemple: <1.b> La réponse pour la question 1 c'est 'b'."
-        select_multiple: "Si la question vous demande de faire un choix ou faites plussiers choix, mettez la lettre de chaque choix (sans éspaces) après le numéro de la question."
+        select_multiple: "Si la question vous demande de faire un choix ou de faire plussiers choix, mettez la lettre de chaque choix (sans éspaces) après le numéro de la question."
         select_multiple_example: "Exemple: <2.bef> La réponse pour la question 2 c'est les choix 'b', 'e' et 'f'."
         number: "Si la question vous demande de mettre un nombre, mettez le numéro après le numéro de la question."
         number_example: "Exemple: <3.45> Le réponse pour la question 3 c'est 45."
@@ -26,11 +26,11 @@ fra:
     error:
       system: 
         general: "Desole. Il y avait une erreur dans le syteme. Veuillez et recommencez votre message.  Nous avons recu <%{message}>."
-        multiple_users: "Nous avons recu <%{message}>."
+        multiple_users: "Desole. Il y a un autre observateur sur le system avec votre numero de telephone.  Si vous plait, contactez votre coordinateur."
       form:
         permission_denied: "Desole. Vous n'avez pas la permission d'acceder a fiche %{form_id}.  Verifiez le numero de la fiche et recomencez votre message. Nous avons recu <%{message}>."
-        not_found: "Desole. Fiche %{form_id} n'etait pas trouve.  Si vous plaît, verifiez le numero de fiche et recomencez votre message: <%{message}>."
-        not_avail: "Desole. Fiche %{form_id} n'etait pas disponible.  Si vous plaît, verifiez le numero de fiche et recomencez votre message: <%{message}>."
+        not_found: "Desole. Fiche %{form_id} n'etait pas trouve.  Si vous plait, verifiez le numero de fiche et recomencez votre message: <%{message}>."
+        not_avail: "Desole. Fiche %{form_id} n'etait pas disponible.  Si vous plait, verifiez le numero de fiche et recomencez votre message: <%{message}>."
       message:
         no_of_answers: "Desole. Le nombre de reponses <%{no_responses}> ne correspond pas au nombre de questions dans la fiche <%{no_questions}>. Veuillez et recommencez votre message: <%{message}>."
         cant_read: "Votre message ne peut pas etre lu.  Veuillez et recommencez votre message: <%{message}>."
