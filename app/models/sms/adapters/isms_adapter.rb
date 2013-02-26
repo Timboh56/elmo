@@ -62,8 +62,11 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 	end
 	
 	def add_outgoing_message (message, phone)
+Rails.logger.debug(phone)	
+Rails.logger.debug(message)	
 		m = Sms::Message.new(:direction => :outgoing, :to => [phone], :body => message)
 		@outgoing_messages << m
+	Rails.logger.debug(@outgoing_messages)	
 	end
 	
 	private
