@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
   require 'open-uri'
   require 'uri'
@@ -12,9 +11,12 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
     "ISMS"
   end
   
+  # receives data in XML from ISMS server when a message is received  
   def receive (params)		
 		hash = Hash.from_xml( params[:XMLDATA] )				
 		base = hash['Response']['MessageNotification']
+		
+		# SMS sometimes sends incoming messages in a batch 
 		if base.is_a? Array
 			base.each{ |message|
 				m = {
@@ -23,6 +25,7 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 					}
 				@incoming_messages << m
 			}
+		#sometimes as a single message
 		else
 			m = {
 				:phone => base['SenderNumber'],
@@ -38,9 +41,7 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 		text = URI.encode(message.body)
 		message.to.each{ |n|
 			# build the URI the request
-			uri = build_uri("sendmsg", "to=#{n}&text=#{text}")
-		Rails.logger.debug(uri)
-			
+			uri = build_uri("sendmsg", "to=#{n}&text=#{text}")			
 			# honor the dont_send option
 			unless options[:dont_send]
 			  response = send_request(uri)
@@ -51,7 +52,7 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 		return true
 	end
 	
-	
+	# deliver each outgoing message
 	def get_reply
 		unless @outgoing_messages.empty?
 			@outgoing_messages.each{ |m|				
@@ -61,12 +62,13 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 		{:output => '', :format=>'txt'}	
 	end
 	
+	# since the system may receive a batch, 
+	# with each pass through the sms_response_controller
+	# we add an outgoing message and corresponding phone #
+	# to the outgoing_messages array
 	def add_outgoing_message (message, phone)
-Rails.logger.debug(phone)	
-Rails.logger.debug(message)	
 		m = Sms::Message.new(:direction => :outgoing, :to => [phone], :body => message)
 		@outgoing_messages << m
-	Rails.logger.debug(@outgoing_messages)	
 	end
 	
 	private
@@ -79,7 +81,7 @@ Rails.logger.debug(message)
     
     # sends request to given uri and returns response
     def send_request(uri)
-      open(uri){|f| f.read}
+       open(uri){|f| f.read}
     end
   
 end
