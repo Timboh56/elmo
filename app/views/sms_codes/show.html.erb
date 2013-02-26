@@ -40,9 +40,9 @@
 		<br>
 		<b><%= t 'sms.instructions.questions_title' %></b></br>
 		<ol style="list-style-type:decimal">
-		<% @sms_qings.each { |sms| %>
+		<% @sms_qings.each { |key, sms| %>
 		  	<li style="margin-bottom:10px;"> <%= sms[:qing].question.name%>&nbsp; [<%= t 'sms.instructions.question_types.'+sms[:qing].question.type.name%>]
-		  		<% unless sms[:code_text] == nil %>
+		  		<% unless sms[:code_text].empty? %>
 					<ol style="list-style-type:none">
 						<% sms[:code_text].each { |c| %>
 								<li><%= c %></li>

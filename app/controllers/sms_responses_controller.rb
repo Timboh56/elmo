@@ -46,13 +46,13 @@ class SmsResponsesController < ApplicationController
 									
 				end
 				# if the message hasn't been set by controller
-				# expect there to be a message provided by SmsResponse
+				# expects there to be a message provided by SmsResponse
 				unless @message
 					m = SmsResponse.get_outgoing
 					@message = t m[:message], m[:vars]
 				end
 				
-				# add message to bactch to be returned
+				# add message to batch to be returned to sender
 				@adapter.add_outgoing_message(@message, sms[:phone])
 			
 			else
@@ -62,6 +62,7 @@ class SmsResponsesController < ApplicationController
 		
 		# iterate over every outgoing message to be delivered
 		@output = @adapter.get_reply()
+		
 		# output could be in xml, json (depending on future adapters) in addition to txt, html 
 		# those templates not added yet!!!
 		render :template => "sms_responses/ok.#{@output[:format]}", :layout => false

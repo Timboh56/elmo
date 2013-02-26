@@ -8,27 +8,24 @@ class SmsCode < ActiveRecord::Base
   	validates(:form_id, :presence => true)
   	validates(:question_number, :presence => true)
   	
-  	def self.load_sms_code_and_get_text(qing, nn)
+  	def self.load_sms_code(qing, nn)
 		alpha_index = ('a'..'z').to_a
 		
 		# are there options for this qing?
 		options = (qing.question.option_set == nil ? [] : qing.question.option_set.sorted_options)
-		code_text = []
-		#if ther are options:
+
+		#if there are options:
 		unless options.empty?
 			options.each_with_index do |option, n|
 				# create a new sms_code for each option
 				sms_code = new(:form_id=> qing.form_id, :code => alpha_index.fetch(n), :option_id => option.id, :questioning_id => qing.id, :question_number => nn)
 				sms_code.save!
 				
-				code_text << alpha_index.fetch(n)+ '. '+option.name	
 			end
 		else
 			#if there are no options, just save sms_code with option_id = nil and code = nil
 			sms_code = new(:form_id=> qing.form_id, :questioning_id => qing.id, :question_number => nn)
 			sms_code.save!
-		end		
-		
-		return code_text
+		end				
 	end
 end
