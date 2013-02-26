@@ -8,7 +8,7 @@ class SmsCode < ActiveRecord::Base
   	validates(:form_id, :presence => true)
   	validates(:question_number, :presence => true)
   	
-  	def self.add_sms_code(qing, nn)
+  	def self.load_sms_code_and_get_text(qing, nn)
 		alpha_index = ('a'..'z').to_a
 		options = (qing.question.option_set == nil ? [] : qing.question.option_set.sorted_options)
 		code_text = []

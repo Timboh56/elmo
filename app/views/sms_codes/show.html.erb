@@ -42,9 +42,9 @@
 		<ol style="list-style-type:decimal">
 		<% @sms_qings.each { |sms| %>
 		  	<li style="margin-bottom:10px;"> <%= sms[:qing].question.name%>&nbsp; [<%= t 'sms.instructions.question_types.'+sms[:qing].question.type.name%>]
-		  		<% unless sms[:options_arr].empty?%>
+		  		<% unless sms[:code_text] == nil %>
 					<ol style="list-style-type:none">
-						<% sms[:options_arr].each { |c| %>
+						<% sms[:code_text].each { |c| %>
 								<li><%= c %></li>
 						<% } %>
 					</ol>
