@@ -4,7 +4,7 @@ class Questioning < ActiveRecord::Base
   has_many(:answers, :dependent => :destroy, :inverse_of => :questioning)
   has_one(:condition, :autosave => true, :dependent => :destroy, :validate => false, :inverse_of => :questioning)
   has_many(:referring_conditions, :class_name => "Condition", :foreign_key => "ref_qing_id", :dependent => :destroy, :inverse_of => :ref_qing)
-  
+  has_many(:sms_codes, :through => :sms_codes)
   before_create(:set_rank)
   before_destroy(:check_assoc)
 
@@ -101,40 +101,6 @@ class Questioning < ActiveRecord::Base
   def verify_condition_ordering
     condition.verify_ordering if condition
   end
-  
-  def add_sms_code(nn)
-		alpha_index = ('a'..'z').to_a
-		codeText = ''		
-		options = (question.option_set == nil ? [] : question.option_set.sorted_options)
-		
-		unless options.empty?
-			options.each_with_index do |option, n|
-			
-				label = option.name
-				option_id = option.id
-				
-				text = "\t" + alpha_index.fetch(n) + '. ' + label + "\n"
-				# code = nn.to_s + '.' + alpha_index.fetch(n)
-				
-				codeText += text
-				
-				smsCode = SmsCode.new
-				smsCode.code = alpha_index.fetch(n)
-				smsCode.form_id = form.id
-				smsCode.option_id = option_id
-				smsCode.questioning_id = id
-				smsCode.question_number = nn
-				smsCode.save				
-			end
-		else
-			smsCode = SmsCode.new
-			smsCode.form_id = form.id
-			smsCode.questioning_id = id
-			smsCode.question_number = nn
-			smsCode.save!
-		end
-		return codeText
-	end
   
   private
     def set_rank

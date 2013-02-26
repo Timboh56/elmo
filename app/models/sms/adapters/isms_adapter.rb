@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
   require 'open-uri'
   require 'uri'
-  
-  
+ 
   def initialize
   	  @incoming_messages = []
   	  @outgoing_messages = []
@@ -34,11 +34,13 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
 	end
 	
 	def deliver(message, options = {})
-	super	
+	super		
 		text = URI.encode(message.body)
 		message.to.each{ |n|
 			# build the URI the request
-			uri = build_uri("sendmsg", "to=#{n}&text=#{text}")			
+			uri = build_uri("sendmsg", "to=#{n}&text=#{text}")
+		Rails.logger.debug(uri)
+			
 			# honor the dont_send option
 			unless options[:dont_send]
 			  response = send_request(uri)
@@ -68,7 +70,8 @@ class Sms::Adapters::ISMSAdapter < Sms::Adapters::Adapter
     # builds uri based on given action and query string params
     def build_uri(action, params = "")
     	"http://#{configatron.outgoing_sms_extra}/#{action}?" + 
-    	"user=#{configatron.outgoing_sms_username}&passwd=#{configatron.outgoing_sms_password}&cat=1&#{params}"
+    	"user=#{configatron.outgoing_sms_username}&enc=1&passwd=#{configatron.outgoing_sms_password}&cat=1&#{params}"
+      
     end
     
     # sends request to given uri and returns response
