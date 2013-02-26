@@ -25,25 +25,25 @@ class SmsCodesController < ApplicationController
 			# get all the codes for this form
 			sms_codes = SmsCode.where('form_id = ? ', @form_id).order("question_number ASC, code ASC")
 			sms_codes.each do |c|
-				@qing = c.questioning
-Rails.logger.debug('check')				
-				
-				# is this the next qing?
-				# we test using the last_qing_id
-				if (@last_qing_id != @qing.id ? true : false)
-Rails.logger.debug('first qing')					
-					# array to temporarily store code text
-					@code_text = []
-					@last_qing_id = @qing.id					
-				
+			unless sms_codes.empty?
+					@qing = c.questioning
+					
+					# is this the next qing?
+					# we test using the last_qing_id
+					if (@last_qing_id != @qing.id ? true : false)
+						# array to temporarily store code text
+						@code_text = []
+						@last_qing_id = @qing.id					
+					
+					end
+					
+					if c.code != nil
+						@code_text << c.code + '. ' + c.option.name
+					end
+					
+					@sms_qings[@qing.id] = {:qing => @qing, :code_text => @code_text}
+					
 				end
-				
-				if c.code != nil
-					@code_text << c.code + '. ' + c.option.name
-				end
-				
-				@sms_qings[@qing.id] = {:qing => @qing, :code_text => @code_text}
-				
 			end
 		end
 	end
