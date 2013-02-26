@@ -2,24 +2,6 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  sms:
-    error:
-      system: 
-        general: "Désolé. Il y avait une erreur dans le sytème. Veuillez et recommencez votre message.  Nous avons reçu <%{message}>."
-        multiple_users: "Nous avons reçu <%{message}>."
-      form:
-        permission_denied: "Désolé. Vous n'avez pas la permission d'accéder à fiche %{form_id}.  Verifiez le numero de la fiche et recomencez votre message. Nous avons reçu <%{message}>."
-        not_found: "Désolé. Fiche %{form_id} n'etait pas trouvé.  Si vous plaît, verifiez le numéro de fiche et recomencez votre message: <%{message}>."
-        not_avail: "Désolé. Fiche %{form_id} n'etait pas disponible.  Si vous plaît, verifiez le numéro de fiche et recomencez votre message: <%{message}>."
-      message:
-        no_of_answers: "Désolé. Le nombre de réponses <%{no_responses}> ne correspond pas au nombre de questions dans la fiche <%{no_questions}>. Veuillez et recommencez votre message: <%{message}>."
-        cant_read: "Votre message ne peut pas etre lu.  Veuillez et recommencez votre message: <%{message}>."
-      response:
-        question_not_found: "Désolé. Question %{question_no} n'a pas été trouvé. Veuillez et recommencez votre message: <%{message}>."
-        not_an_integer: "Désolé.  Votre reponse à question %{question_no} <%{response}> doit etre un nombre.  Veuillez et recommencez votre message: <%{message}>."
-        not_valid: "Désolé. Vous avez une erreur dans votre message. Veuillez et recommencez votre message: <%{message}>."
-        not_valid_specific: "Désolé.  Votre reponse à question %{question_no} <%{response}> n'est pas valide.  Veuillez et recommencez votre message: <%{message}>."
-    success: "Succes! Votre message a été reçu: <%{message}>."
   activerecord:
     models:
       report/report: Report
@@ -133,3 +115,44 @@ en:
         reviewed:
           true: Yes
           false: No
+  sms:
+    instructions: 
+      form_name: "%{form_name} Form  (ID: %{form_id})"
+      title: "INSTRUCTIONS:"
+      questions_title: "QUESTIONS:"
+      message_start: "Please start your message with an exclmation mark '!;, followed by the id of your form '%{form_id}'."
+      form_id: "The form ID is '%{form_id}', so please begin your message with '!%{form_id}'."
+      question: "After the form ID, type a space. For each question write the question number followed by a period '.', followed by your answer."
+      send: "After you have finished your message, send it to the  phone number of the server that has been provided to you."
+      retry: "After you send the message, you should receive a response from the system. If you do not receive a success nor an error message, try your message again after 5 minutes, bu the second time, add ' -r' at the end of your message."
+      retry_example: "Example: '!2 1.a 2.bc 3.2 -r'"
+      question_types:
+        select_one: "Choose one option."
+        select_multiple: "Make one or more choices."
+        integer: "Answer with a number."
+      response:
+        select_one: "If the question asks you to choose one option, type the letter of your choice after the question number."
+        select_one_example: "Example: '1.b' The response to question 1 is 'b'."
+        select_multiple: "If the question asks you to make one or more choices, type the letter of each choice (without spaces) after the question number."
+        select_multiple_example: "Example: '2.bef' The response to question 2 is 'b', 'e' and 'f'."
+        number: "If the question asks you to answer with a number, type the number after the question number."
+        number_example: "Example: '3.45' he response to question 3 is 45."
+      spacing: "Separate each question with a space.  Example: '!2 1.a 2.bc 3.2'"
+    error:
+      system: 
+        general: "Sorry.  There was a system error. Check your message and try again.  We received '%{message}'."
+        multiple_users: "Sorry. There is another observer in the system with your telephone number.  Please contact your coordinator."
+      form:
+        permission_denied: "Sorry. You do not have permission to access form %{form_id}.  Verify the form ID et try again. We received '%{message}'."
+        not_found: "Sorry. Form %{form_id} wasn't found.  Please verify the form ID and try your message again.  We received '%{message}'."
+        not_avail: "Sorry. Form %{form_id} isn't available.  Please verify the form ID and try your message again.  We received '%{message}'."
+      message:
+        no_of_answers: "Sorry. The number of answers '%{no_responses}' doesn't correspond to the number of questions in the form '%{no_questions}'. Check your message and try again. '%{message}'."
+        cant_read: "Your message could not be read.  Veuillez et recommencez votre message: '%{message}'."
+      response:
+        question_not_found: "Sorry. Question %{question_no} n'a pas ete trouve. Check your message and try again. '%{message}'."
+        not_an_integer: "Sorry.  Your answer to question %{question_no} '%{response}' should be a number.  Check your message and try again. '%{message}'."
+        not_valid: "Sorry. You have an error in your message. Check your message and try again. '%{message}'."
+        not_valid_specific: "Sorry.  Your answer to question %{question_no} '%{response}' isn't valid.  Check your message and try again. '%{message}'."
+        code_not_valid: "Sorry. There was error in this part of your message '%{code}'. Check your message and try again. '%{message}'."
+    success: "Success! Your message was received. The report ID is '%{report_id}'. '%{message}'"

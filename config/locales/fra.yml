@@ -5,7 +5,7 @@ fra:
       form_name: "%{form_name} Fiche  (ID: %{form_id})"
       title: "INSTRUCTIONS:"
       questions_title: "QUESTIONS:"
-      message_start: "Si vous plaît, commencé votre réponse avec un point d'exclamation <!>, suivi par l'ID de votre fiche <%{form_id}>."
+      message_start: "Si vous plaît, commencez votre réponse avec un point d'exclamation <!>, suivi par l'ID de votre fiche <%{form_id}>."
       form_id: "L'ID (c'est le numéro de la fiche) de cette fiche est <%{form_id}>, donc commencez votre message avec <!%{form_id}>."
       question: "Après l'ID de la fiche, mettez un espace. Pour chaque question mettez le numéro de la question suivi par un point <.>, ensuite par la réponse."
       send: "À la fin de votre message, il sera question de l'envoyer au numéro de téléphone du serveur qui vous sera communiqué."
