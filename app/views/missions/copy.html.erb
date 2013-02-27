@@ -1,0 +1,10 @@
+<% @objs.each do |o| %>
+  <div style="margin-bottom: 4px">
+    <input type="checkbox" style="display: inline-block; vertical-align: top">
+    &nbsp;
+    <div style="display: inline-block">
+      <%= o.code %><br/>
+      <div style="color: #888; font-size: 90%"><%= o.name_eng %></div>
+    </div>
+  </div>
+<% end %>

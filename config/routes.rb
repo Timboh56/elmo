@@ -10,7 +10,7 @@ ELMO::Application.routes.draw do
   resources(:forms){member{post *%w(add_questions remove_questions update_ranks); get *%w(publish clone choose_questions)}}
   resources(:form_types)
   resources(:markers)
-  resources(:missions)
+  resources(:missions){collection{get 'copy'}}
   resources(:options)
   resources(:option_sets)
   resources(:password_resets)

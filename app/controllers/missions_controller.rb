@@ -42,4 +42,8 @@ class MissionsController < ApplicationController
       render(:form)
     end
   end
+  
+  def copy
+    @objs = Question.for_mission(Mission.find_by_name("Egypt 2012")).order(:code).all
+  end
 end
