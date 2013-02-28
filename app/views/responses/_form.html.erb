@@ -1,4 +1,11 @@
 <%= resp.answers.collect{|a| a.errors.full_messages.join(", ")}.join(" ") %>
+<%= content_tag(
+        :div,
+          ( "Possible duplicate responses: " + @duplicates.collect {
+            |d|  content_tag(:a, "Response " + d.id.to_s, :href => "../" + d.id.to_s + "/edit ") 
+          }.join(" ") ).html_safe,
+	      :class => "error", :style => "background-color: #ffcc33; color: #000000") if !@duplicates.empty?
+    %>
 <%= basic_form(resp) do |f|
   spec = {
     :sections => [{

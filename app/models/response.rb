@@ -65,7 +65,6 @@ class Response < ActiveRecord::Base
       Search::Qualifier.new(:label => "reviewed", :col => "responses.reviewed", :subst => {"yes" => "1", "no" => "0"}),
       Search::Qualifier.new(:label => "submitter", :col => "users.name", :assoc => :users, :partials => true),
       Search::Qualifier.new(:label => "answer", :col => "answers.value", :assoc => :answers, :partials => true, :default => true),
-      Search::Qualifier.new(:label => "signature", :col => "responses.signature"),
       Search::Qualifier.new(:label => "source", :col => "responses.source"),
       Search::Qualifier.new(:label => "date", :col => "DATE(CONVERT_TZ(responses.created_at, 'UTC', '#{Time.zone.mysql_name}'))")
     ]
@@ -113,8 +112,8 @@ class Response < ActiveRecord::Base
   end
   
   # finds all responses with duplicate hashes
-  def self.find_duplicates(signature)
-    possible_duplicates = self.where("signature = '" + signature + "' AND id != " + self.id.to_s + " ")
+  def self.find_duplicates(resp)
+    possible_duplicates = where("signature = '" + resp.signature + "' AND id != '" + resp.id.to_s + "' ")
     return possible_duplicates
   end
   
