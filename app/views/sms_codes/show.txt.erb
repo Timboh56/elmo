@@ -1,3 +1,5 @@
+<!-- TOM why all the raw calls here? raw is for escaping html. in any case, .html_safe is prefered over raw, 
+  but i don't see why you need either here -->
 <%= raw t 'sms.instructions.title' %>
 
 <%= raw t 'sms.instructions.form_id', :form_id => @form_id %>

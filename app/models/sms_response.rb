@@ -1,3 +1,4 @@
+# TOM this and all other sms-related model classes should be in the sms namespace. please read up on Rails/Ruby namespaces.
 class SmsResponse < ActiveRecord::Base
   attr_accessible :message, :response_id
   
@@ -6,6 +7,9 @@ class SmsResponse < ActiveRecord::Base
   validates(:message, :presence => true)
   validates(:response_id, :presence => true)
   	
+	# TOM this class needs to be totally redesigned i think. you should not be accessing instance variables in class methods.
+	# this is not good object oriented design and indicates something is fundamentally wrong.
+	# also definitely need a lot more comments on the methods. each method, especially in an intricate class like this, need good explanations.
 	
 	def self.message_loaded?(message)
 		# sets default message and message var
@@ -52,6 +56,7 @@ class SmsResponse < ActiveRecord::Base
 		end
 	end
 	
+	# TOM returning an instance variable from a class method?
 	def self.get_outgoing
 		@outgoing	
 	end
@@ -80,6 +85,7 @@ class SmsResponse < ActiveRecord::Base
 				@noerrors = nil
 			else
 				# no unpublished forms!
+				# TOM x == true is equivalent to just x
 				if (@form.published == true)
 					# extract the mission
 					@mission = @form.mission
@@ -89,6 +95,7 @@ class SmsResponse < ActiveRecord::Base
 					
 					# the entire message except for the flag (-r) if it exists
 					@message = result[0]
+					# TOM please be consistent with spacing between blocks of code.
 					# the code part of the message
 					message_code = result[2]
 					# the flag 

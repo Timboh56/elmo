@@ -55,6 +55,7 @@ class FormsController < ApplicationController
     
     # if form is being published, need to create its sms code
     if verb == 'publish'
+    # TOM please replace all tab characters with '  ', (two spaces)
     	create_sms_code
     end
     
@@ -192,6 +193,8 @@ class FormsController < ApplicationController
       @form_types = apply_filters(FormType)
       render(:form)
     end
+    
+    # TOM this seems like model code to me
     def create_sms_code	
 		# clears sms_codes of old data for form_id
 		SmsCode.delete_all(:form_id => @form.id)				
