@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130217153912) do
+ActiveRecord::Schema.define(:version => 20130226161123) do
 
   create_table "answers", :force => true do |t|
     t.integer  "response_id"
@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(:version => 20130217153912) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "mission_id"
+    t.string   "sms_code"
   end
 
   add_index "options", ["mission_id"], :name => "index_options_on_mission_id"
@@ -179,6 +180,7 @@ ActiveRecord::Schema.define(:version => 20130217153912) do
     t.boolean  "maxstrictly"
     t.boolean  "minstrictly"
     t.integer  "mission_id"
+    t.integer  "sms_question_no"
   end
 
   add_index "questions", ["mission_id"], :name => "index_questions_on_mission_id"
