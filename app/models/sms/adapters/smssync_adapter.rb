@@ -11,8 +11,7 @@ class Sms::Adapters::SMSSYNCAdapter < Sms::Adapters::Adapter
     "SMSSYNC"
   end
   
-  def receive (params)					
-		
+  def receive (params)						
 		# we can't do anything with @secret yet (configatron not loaded)
 		# the adapter will test the secret in get_reply			
 		@secret = params[:secret]
@@ -23,15 +22,13 @@ class Sms::Adapters::SMSSYNCAdapter < Sms::Adapters::Adapter
 		@incoming_messages << m
 		return @incoming_messages
 	end
-	
 	# smssync does not work as a broadcast service!
 	def deliver(message, options = {})
 	super		
 		return nil
 	end
 	
-	def get_reply	
-		
+	def get_reply			
 		# this is the standard output for SMSSYNC
 		# without this notification, SMSSYNC will 
 		# continue to attempt contact with the server
