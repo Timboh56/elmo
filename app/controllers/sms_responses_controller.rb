@@ -70,13 +70,8 @@ class SmsResponsesController < ApplicationController
 		end
 		
 		# iterate over every outgoing message to be delivered
-		# TOM don't need ()
-		@output = @adapter.get_reply()
-		
-		# TOM why are you rendering these if they're already delivered?
-		# TOM also no need to worry about other formats. just use whatever you need now.
-		# output could be in xml, json (depending on future adapters) in addition to txt, html 
-		# those templates not added yet!!!
-		render :template => "sms_responses/ok.#{@output[:format]}", :layout => false
+		@output = @adapter.get_reply
+
+		render @output
   	end
 end
