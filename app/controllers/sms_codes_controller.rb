@@ -6,7 +6,7 @@ class SmsCodesController < ApplicationController
   	
   	@form_id = params[:form_id]
     get_codes    
-      render
+    render
   end
  
   # TOM this definitely looks like model code. please read up on the MVC design pattern.
