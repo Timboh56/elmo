@@ -32,7 +32,7 @@
         :col => :duplicate,
         :label => "Duplicate?",
         :value => f.mode == :show ? 
-          content_tag("div", :class => "dummy"){resp.duplicate? ? "<b>Yes</b>" : "No"} : 
+          content_tag("div", :class => "dummy"){resp.duplicate? ? image_tag("/images/loader.gif", :alt => "duplicate") : "No"} : 
           f.check_box(:duplicate?)
       }].compact
     },{

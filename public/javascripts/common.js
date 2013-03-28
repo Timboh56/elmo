@@ -136,7 +136,7 @@ function redirect_to_login() {
   }
   
   Utils.clear_success_flash_after_delay = function() {
-    setTimeout(function(){$(".success").remove();}, 5000);
+   
   }
 
   Utils.clear_flash = function(params) {
