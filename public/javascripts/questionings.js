@@ -1,10 +1,3 @@
-function show_hide_option_set(question_type) {
-  show = question_type.match(/^Select/)
-  $('#option_set')[show ? 'show' : 'hide']()
-  $('#option_set_not_applicable')[!show ? 'show' : 'hide']()
-  if (!show) $('#option_set')[0].selectedIndex = 0
-}
-
 function condition_update_choices() {
   // get the op dropdown and clear it out
   var op_field = $('#questioning_condition_op')[0]
@@ -20,7 +13,7 @@ function condition_update_choices() {
   for (var op_name in condition_ops)
     if (condition_ops[op_name]["types"].indexOf(chosen_type) != -1)
       add_option(op_field, op_name, op_name);
-  
+
   var value_field = $('#questioning_condition_value')[0];
   var option_id_field = $('#questioning_condition_option_id')[0];
   // clear the dropdown
@@ -58,3 +51,42 @@ function add_option(select, text, value, selected) {
   try {select.add(opt, null);} // standards compliant; doesn't work in IE
   catch(ex) {select.add(opt);} // IE only
 }
+
+// ELMO.Questioning
+(function(ns, klass) {
+  
+  // constructor
+  ns.Questioning = klass = function() {
+    // hookup type change event and trigger immediately
+    var type_box = $('form.questioning_form .form_field#question_type_id .form_field_control select');
+    (function(_this){ type_box.change(function(e){_this.question_type_changed(e)}); })(this);
+    type_box.trigger("change");
+  }
+  
+  klass.prototype.question_type_changed = function(event) {
+    var selected_type = $(event.target).find("option:selected").text();
+    
+    // show/hide option set
+    var show_opt_set = (selected_type == "Select One" || selected_type == "Select Multiple");
+    $("form.questioning_form .form_field#option_set_id")[show_opt_set ? 'show' : 'hide']();
+
+    // reset select if hiding
+    if (!show_opt_set) 
+      $("form.questioning_form .form_field#option_set_id .form_field_control select")[0].selectedIndex = 0;
+    
+    // show/hide max/min
+    var show_max_min = (selected_type == "Decimal" || selected_type == "Integer");
+    $("form.questioning_form .form_field#minimum")[show_max_min ? 'show' : 'hide']();
+    $("form.questioning_form .form_field#maximum")[show_max_min ? 'show' : 'hide']();
+    
+    // reset boxes if hiding
+    if (!show_max_min) {
+      $(".form_field#minimum input[id$='_minimum']").val("");
+      $(".form_field#minimum input[id$='_minstrictly']").prop("checked", false);
+      $(".form_field#maximum input[id$='_maximum']").val("");
+      $(".form_field#maximum input[id$='_maxstrictly']").prop("checked", false);
+    }
+  }
+}(ELMO));
+
+$(document).ready(function() { new ELMO.Questioning(); });

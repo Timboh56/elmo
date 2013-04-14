@@ -22,23 +22,56 @@
       <td id="banner" colspan="2">
         <div id="userinfo">
           <% if current_user %>
-            Logged in as <strong><%= current_user.login %></strong> |
-            <%= link_to("Edit Profile", edit_user_path(current_user.id)) %> |
+            <%# username %>
+            Logged in as <strong><%= current_user.login %></strong> &nbsp;&bull;&nbsp;
+            
+            <%# current mission and dropdown, if there are choices %>
+            Mission:
+            <% if current_user.accessible_missions.size > 0 %>
+              <%= nice_form_for(current_user) do |f| %>
+                <% f.mode = :edit %>
+                <%= f.select(:current_mission_id, sel_opts_from_objs(current_user.accessible_missions), :include_blank => "[None]") %>
+                <%= loading_indicator(:header => true) %>
+                <%= hidden_field_tag(:changing_current_mission, 1) %>
+              <% end %>
+            <% else %>
+              <strong><%= current_mission ? current_mission.name : "None" %></strong>
+            <% end %>
+            &nbsp;&bull;&nbsp;
+            
+            <%# role %>
+            <% if current_mission %>
+              Role: <%= nn(current_user.role(current_mission)).name || "[None]" %>
+              &nbsp;&bull;&nbsp;
+            <% end %>
+            
+            <%# link to edit profile %>
+            <%= link_to("Edit Profile", edit_user_path(current_user.id)) %>
+            &nbsp;&bull;&nbsp;
+
+            <%# logout button %>
             <%= button_to("Logout", user_session_path, :method => :delete, :id => "logout_button") %>
+            
           <% else %>
-            <%= link_to("Login", new_user_session_path) %>
+            
+            <%# login link %>
+            <%= link_to("Login", login_path) %>
           <% end %>
         </div>
         <div id="title">
-          <h1><%= link_to(configatron.site_name, root_path) %></h1>
-          <%= image_tag("four-dots.png") %>
+          <h1>
+            <%= link_to(configatron.site_name, root_path) %>
+            <br/>
+            <%= image_tag("four-dots.png") %>
+          </h1>
+          <h2><%= nn(current_mission).name %></h2>
         </div>
       </td>
     </tr>
     <tr>
       <td id="nav">
         <ul>
-          <% [Response, Form, Report::Report, Option, OptionSet, FormType, User, Broadcast, Language, Setting].each do |k| %>
+          <% [Response, Form, Report::Report, Option, OptionSet, FormType, Broadcast, Setting, User, Mission].each do |k| %>
             <% if authorized?(:action => "#{k.model_name.route_key}#index") %>
               <li><%= link_to(k.model_name.human.ucwords.pluralize, send("#{k.model_name.route_key}_path")) %></li>
             <% end %>
@@ -56,8 +89,11 @@
     </tr>
     <tr>
       <td id="footer" colspan="2">
+        Time Zone: <%= Time.zone.to_s %> &nbsp;|&nbsp;
+        Outgoing SMS Provider: <%= configatron.outgoing_sms_adapter ? configatron.outgoing_sms_adapter.service_name : "[None]" %> &nbsp;|&nbsp;
         System Version: <%= configatron.system_version %>
         <% if Rails.env == "development" %>
+          &nbsp;&nbsp;
           <div id="dev_mode_warning">Development Mode</div>
         <% end %>
       </td>

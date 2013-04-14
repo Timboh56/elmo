@@ -17,10 +17,19 @@ li { margin-bottom: 5px; }
 table { border-collapse: collapse; }
 td { vertical-align: top; }
 
+input[type="radio"], input[type="checkbox"] {                         
+  border: 0px !important;
+  background-color: transparent;
+}
+
 /* multi-purpose */
 div.subtitle { margin: -10px 0 10px 0; color: #888; }
 div.tip { margin-bottom: 10px; width: 800px; }
 div.important { font-weight: bold; color: Black; }
+div.boilerplate { display: none; }
+div.dialog { position: absolute; background-color: white; border: 1px solid #555; padding: 10px; }
+div.dialog h2 { margin: 0 0 10px 0; }
+br.clearer { clear: both; }
 
 /* loading indicator */
 div.loader { background: url('/images/loader.gif') no-repeat; padding-left: 20px; }
@@ -33,17 +42,30 @@ div.reqd_sym { display: inline; font-weight: bold; color: #d02000; font-size: 12
 table.form td.name { min-width: 75px; }
 
 /* forms (newer) */
-div.form_field { float: left; border-top: 1px solid #ddd; padding: 5px 0 5px 0; }
-div.form_field label { float: left; width: 150px; }
-div.form_field div.form_field_control { float: left; min-width: 300px; min-height: 26px; position: relative; }
-div.form_field div.form_field_control input { width: 240px; }
+div.form_field > *, div.form_field > .field_with_errors > * { vertical-align: top; padding: 5px 0; }
+div.form_field label.main, div.form_field div.form_field_control { border-top: 1px solid #ddd; }
+div.form_field label.main { display: inline-block; width: 150px; padding-right: 10px; }
+div.form_field div.form_field_control { display: inline-block; width: 350px; min-height: 26px; position: relative; }
+div.form_field div.form_field_control input.text { width: 240px; }
 div.form_field div.form_field_control input.radio { width: 15px; }
-div.form_field div.form_field_details { float: right; width: 300px; position: relative; font-size: 90%; }
-div.form_field div.form_field_details span.translation_missing { display: none; }
+div.form_field div.form_field_details { display: inline-block; width: 290px; position: relative; font-size: 90%; 
+  background-color: #e4eeff; padding: 5px; margin: 0 0 5px 5px; }
+div.form_field div.form_field_details p { padding: 0; margin: 0; }
 div.form_field div.space_line { clear: both; margin: 0; padding: 0; width: auto; }
-div.dummy, span.dummy { font-weight: bold; }
-div.dummy_checkbox { float: left; width: 15px; font-weight: bold; }
-input.submit { float: left; font-weight: bold; font-size: 120%; padding: 5px 15px; margin: 0 5px 0 0; }
+div.dummy, span.dummy { font-weight: bold; display: inline; }
+div.dummy_checkbox { height: 12px; width: 12px; text-align: center; font-weight: bold; border: 1px solid #888; display: inline; }
+div.form_buttons { clear: both; padding-top: 10px; }
+div.form_buttons br { clear: both; }
+div.form_buttons input.submit { float: left; font-weight: bold; font-size: 120%; padding: 5px 15px; margin: 0 5px 0 0; }
+
+/* collection form */
+div.collection_form div.item { margin-bottom: 3px; }
+
+/* top links */
+div.tip a, div.tip input[type='submit'] {
+  display: inline-block;
+  padding-right: 10px;
+}
 
 /* index tables */
 table.index_table th, table.form th { text-align: left; color: #444; background-color: #ddd; 
@@ -67,9 +89,9 @@ div.compact_error { color: #d02000; font-weight: bold; }
 div.field_with_errors { display: inline; }
 
 /* search form */
-form.new_search_search, form.edit_search_search { margin-bottom: 10px; }
-form.new_search_search #search_search_str, form.edit_search_search #search_search_str { width: 300px; }
-#search_examples { margin-top: 2px; color: #666; }
+form.search_form { margin-bottom: 10px; }
+form.search_form input#search_str { width: 300px; }
+form.search_form #search_examples { margin-top: 2px; color: #666; }
 
 /* welcome */
 .welcome_index div.block { float: left; background-color: #eee; width: 150px; height: 225px; padding: 10px; margin: 0 20px 20px 0; }
@@ -83,35 +105,33 @@ form.new_search_search #search_search_str, form.edit_search_search #search_searc
 .welcome_index div.block li { line-height: 17px; }
 .welcome_index div.block li small { color: #888; font-size: 8pt; }
 .welcome_index div.block li em { font-style: normal; font-size: 12pt; font-weight: bold; }
-.welcome_index div.block select { width: 110px;  }
+.welcome_index div.block select { width: 140px; }
 .welcome_index div.block input { font-size: 8pt; width: 30px; }
-
-/* language listing */
-#languages_index table td.name_col { width: 150px; }
 
 /* place map */
 #map_canvas { width: 600px; height: 400px; }
 
 /* response index */
 .responses_index form#form_chooser { display: inline; }
+.responses_index form#form_chooser input, .responses_index form#form_chooser select { margin-left: 5px; }
 
 /* response edit */
 .responses_edit input.qtype_integer, .responses_new input.qtype_integer { width: 100px; }
 .responses_edit input.qtype_decimal, .responses_new input.qtype_decimal { width: 100px; }
-.responses_edit textarea.qtype_long_text, .responses_new textarea.qtype_long_text { width: 400px; height: 100px; }
-.responses_edit table.answers td.name, .responses_new table.answers td.name, .responses_show table.answers td.name { width: 300px; }
-.responses_edit input.submit { float: left; margin-right: 10px; }
+.responses_edit textarea.qtype_long_text, .responses_new textarea.qtype_long_text { width: 340px; height: 100px; }
+.responses_edit input.qtype_location, .responses_new input.qtype_location { width: 200px; }
+.responses_edit label.main, .responses_new label.main, .responses_show label.main { width: 300px !important; }
+a.edit_location_link img { vertical-align: bottom; }
 
 /* question show/edit */
-.questionings_edit textarea.name_hint, .questionings_new textarea.name_hint,
-.questions_edit textarea.name_hint, .questions_new textarea.name_hint 
-  { width: 450px; height: 30px; }
-.questionings_show td.value, .questions_show td.value { width: 300px; }
-.questionings_edit #questioning_condition_value_box, .questionings_new #questioning_condition_value_box { width: 150px; }
-.questionings_show tr#condition_row td.value .dummy { display: inline; }
+form.questioning_form .form_field_control { width: 475px !important; }
+form.questioning_form .form_field.name_hint textarea { width: 400px; height: 30px; }
+form.questioning_form .form_field#condition #questioning_condition_value { width: 110px; }
+form.questioning_form .form_field#condition_row .dummy { display: inline; }
+form.questioning_form input#questioning_question_minimum, form.questioning_form input#questioning_question_maximum { width: 100px; } 
 
 /* question index/choose */
-.questions_index .name_col, .questions_choose .name_col { width: 400px; }
+.questions_choose .name_col { width: 400px; }
 
 /* option edit */
 .options_edit td.value input#option_value, .options_new td.value input#option_value { width: 100px; }
@@ -124,49 +144,40 @@ form.new_search_search #search_search_str, form.edit_search_search #search_searc
 
 /* broadcasts */
 input#broadcast_subject { width: 300px; }
-textarea#broadcast_body { width: 400px; height: 200px; }
-.broadcasts_show #send_errors_row td.value { color: #d02000; font-weight: bold; }
+textarea#broadcast_body { width: 300px; height: 170px; }
+.broadcasts_show #send_errors div.form_field_control { color: #d02000; font-weight: bold; }
+.broadcasts_show #send_errors div.form_field_control p { margin: 0; }
 
 /* form edit */
 .forms_edit td.name_col, .forms_show td.name_col { width: 500px; }
 .forms_edit td.rank_col input { width: 25px; }
 .forms_edit #save_ranks_button { margin-top: -15px; }
 
+/* form choose questions */
+.forms_choose_questions div.question_form { display: none; }
+
 /* user login instructions */
 #login_instructions td.name { width: 100px; }
 #login_instructions td.value { font-weight: bold; width: 300px; }
 
 /* user edit */
-.users_edit #user_notes, .users_new #user_notes { width: 300px; height: 100px; }
-.users_edit #user_device, .users_new #user_device { width: 100px; }
+form.user_form div.form_field_control { width: 410px !important; }
+form.user_form input#user_login { width: 150px; }
+form.user_form input#login_suggest_button { width: 75px; }
+form.user_form textarea#user_notes { width: 240px; height: 100px; }
 
 /* user batches */
-.user_batches_new #user_batch_users { width: 350px; height: 200px; margin-right: 20px; }
+.user_batches_new #user_batch_users { width: 500px; height: 200px; margin-right: 20px; }
+.user_batches_new div.form_field_control { width: 525px !important; }
 .user_batches_new div.form_field label { width: 75px; }
 
 /* report index */
 .report_reports_index .title_col { min-width: 200px; }
 
-/* report form */
-td#report_form { position: relative; z-index: 2; padding-right: 10px; }
-td#report_form #report_report_filter_attributes_str { width: 240px; }
-td#report_form div#search_examples { display: none; }
-td#report_form div.help { float: left; width: 260px; clear: left; color: #666; line-height: 12pt; display: none; }
-td#report_form div#top_help { margin-bottom: 3px; }
-td#report_form div#bottom_help { margin-top: 6px; }
-td#report_form div.form_field { width: 260px; clear: left; }
-td#report_form label { display: block; color: #666; font-size: 8pt; float: none; }
-td#report_form div.form_field_control { min-height: 0; float: none; }
-td#report_form div.form_field_details { float: right; width: 200px; display: none; color: #666; }
-td#report_form div#required_tip { display: none; }
-td#report_form h3 { margin-bottom: 10px; }
-td#report_form input.submit { font-size: 8pt; padding: 4px; margin-top: 5px; display: block; float: left;  }
-td#report_form div.loader { float: left; margin-top: 8px; }
-td#report_form a#show_help { display: block; margin-bottom: 3px; float: left; }
-td#report_form div.submit_row { clear: left; }
-td#report_form #fields div.form_field_control a { font-size: 90%; }
-
-/* report table */
+/* report info & body */
+div#report_info div { display: inline-block; border-left: 1px solid #ccc; padding: 0 10px; }
+div#report_info div:first-child { border: none; padding-left: 0; }
+div#report_main { display: inline-block; }
 div#report_body div#row_count { margin-bottom: 5px; }
 div#report_body table { }
 div#report_body table td, div#report_body table th { padding: 2px; border: 1px solid #ddd; }
@@ -183,3 +194,28 @@ div#report_body th.col_grouping_label { text-align: center; }
 
 /* form type index */
 .form_types_index .name_col { min-width: 100px; }
+
+/* location picker */
+div.location_picker { width: 900px; height: 500px; }
+div.location_picker div.map_canvas { width: 600px; height: 440px; border: 1px solid #ccc; float: left; margin-right: 10px; }
+div.location_picker span.cur_lat_lng { font-weight: bold; }
+div.location_picker form.location_search { float: left; width: 275px; }
+div.location_picker form.location_search input.query { width: 250px; margin-bottom: 10px; color: #888; font-style: italic; }
+div.location_picker form.location_search div.results a { display: block; margin-bottom: 8px; }
+
+/* missions */
+.missions_index .name_col { width: 225px; }
+
+/* settings */
+form.setting_form #tableau_sql .form_field_control pre { width: 325px; height: 70px; overflow: auto; border: 1px solid #ccc; margin: 0 0 3px 0; }
+form.setting_form #tableau_sql .form_field_control a { font-size: 9pt; }
+
+/* embedded fonts */
+@charset "UTF-8";
+@font-face {
+  font-family: 'fontello';
+  src: url("/fonts/fontello.eot");
+  src: url("/fonts/fontello.eot?#iefix") format('embedded-opentype'), url("/fonts/fontello.woff") format('woff'), url("/fonts/fontello.ttf") format('truetype'), url("/fonts/fontello.svg#fontello") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

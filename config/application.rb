@@ -13,14 +13,14 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-module CommandCenter
+module ELMO
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
+    # add concerns folders to autoload paths
+    config.autoload_paths += ["#{config.root}/app/controllers/concerns", "#{config.root}/app/models/concerns"]
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -36,7 +36,6 @@ module CommandCenter
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
@@ -50,11 +49,13 @@ module CommandCenter
     # set up preferred geocoder
     configatron.geocoder = Configatron::Delayed.new{GoogleGeocoder}
     
-    # site name
-    configatron.site_name = "ELMO"
+    # regular expressions
+    configatron.lat_lng_regexp = /^(-?\d+(\.\d+)?)\s*[,;:\s]\s*(-?\d+(\.\d+)?)/
+    
+    # google map api
+    configatron.map_api_url = "https://maps.googleapis.com/maps/api/js?sensor=false"
     
     # SMS broadcast settings
-    configatron.outgoing_sms_adapter = Configatron::Delayed.new{IntelliSmsAdapter}
     configatron.broadcast_tag = "[TCC-Broadcast]"
   end
 end

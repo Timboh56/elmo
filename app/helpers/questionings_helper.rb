@@ -1,19 +1,3 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 module QuestioningsHelper
   def format_questionings_field(qing, field)
     case field
@@ -31,7 +15,7 @@ module QuestioningsHelper
   def questionings_index_links(qings)
     links = []
     if controller.action_name == "edit"
-      links << link_to("Add questions", choose_questions_path(:form_id => @form.id))
+      links << link_to("Add questions", choose_questions_form_path(@form))
       if qings.size > 0
         links << batch_op_link(:name => "Remove selected",
           :confirm => "Are you sure you want to remove these ### question(s) from the form?",

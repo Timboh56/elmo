@@ -1,23 +1,7 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class BroadcastsController < ApplicationController
   
   def index
-    @broadcasts = load_objects_with_subindex(Broadcast)
+    @broadcasts = apply_filters(Broadcast)
   end
   
   def new
@@ -35,8 +19,19 @@ class BroadcastsController < ApplicationController
     raise "No valid users given." if users.empty?
     
     # create a new Broadcast
-    @broadcast = Broadcast.new(:recipients => users)
+    @broadcast = Broadcast.for_mission(current_mission).new(:recipients => users)
+
+    begin
+      # get credit balance
+      @balance = Smser.check_balance
+    rescue NotImplementedError
+      # don't need to do anything here
+    rescue
+      # log all other errors
+      logger.error("SMS balance request error: #{$!}")
+    end
     
+<<<<<<< HEAD
     begin
     
       # get credit balance
@@ -58,10 +53,18 @@ class BroadcastsController < ApplicationController
   
   def show
     @broadcast = Broadcast.find(params[:id]) 
+=======
+    render(:form)
+  end
+  
+  def show
+    @broadcast = Broadcast.find(params[:id])
+    render(:form)
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
   end
   
   def create
-    @broadcast = Broadcast.new(params[:broadcast])
+    @broadcast = Broadcast.for_mission(current_mission).new(params[:broadcast])
     if @broadcast.save
       if @broadcast.send_errors
         flash[:error] = "Broadcast was sent, but with some errors (see below)."
@@ -70,13 +73,16 @@ class BroadcastsController < ApplicationController
       end
       redirect_to(broadcast_path(@broadcast))
     else
-      render_new
+      render(:form)
     end
   end
+<<<<<<< HEAD
   
   private
     def render_new
       @title = "Send Broadcast"
       render(:new)
     end
+=======
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
 end

@@ -1,25 +1,9 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class Questioning < ActiveRecord::Base
-  belongs_to(:form)
-  belongs_to(:question, :autosave => true)
-  has_many(:answers, :dependent => :destroy)
-  has_one(:condition, :autosave => true, :dependent => :destroy, :validate => false)
-  has_many(:referring_conditions, :class_name => "Condition", :foreign_key => "ref_qing_id", :dependent => :destroy)
+  belongs_to(:form, :inverse_of => :questionings, :counter_cache => true)
+  belongs_to(:question, :autosave => true, :inverse_of => :questionings)
+  has_many(:answers, :dependent => :destroy, :inverse_of => :questioning)
+  has_one(:condition, :autosave => true, :dependent => :destroy, :validate => false, :inverse_of => :questioning)
+  has_many(:referring_conditions, :class_name => "Condition", :foreign_key => "ref_qing_id", :dependent => :destroy, :inverse_of => :ref_qing)
   
   before_create(:set_rank)
   before_destroy(:check_assoc)
@@ -28,8 +12,8 @@ class Questioning < ActiveRecord::Base
   
   alias :old_condition= :condition=
   
-  def self.new_with_question(params = {})
-    qing = new(params.merge(:question => Question.new))
+  def self.new_with_question(mission, params = {})
+    qing = new(params.merge(:question => Question.for_mission(mission).new))
   end
 
   # clones a set of questionings, including their conditions
@@ -86,11 +70,6 @@ class Questioning < ActiveRecord::Base
     symbol.match(/^((name|hint)_([a-z]{3})(=?)|code=?|option_set_id=?|question_type_id=?)(_before_type_cast)?$/)
   end
   
-  def update_rank(new_rank)
-    self.rank = new_rank
-    save
-  end
-  
   def has_condition?; !condition.nil?; end
   
   def condition=(c)
@@ -102,6 +81,13 @@ class Questioning < ActiveRecord::Base
     else
       condition ? condition.attributes = c : build_condition(c.merge(:questioning => self))
     end
+  end
+  
+  def odk_constraint
+    exps = []
+    exps << ". #{question.minstrictly ? '>' : '>='} #{question.minimum}" if question.minimum
+    exps << ". #{question.maxstrictly ? '<' : '<='} #{question.maximum}" if question.maximum
+    "(" + exps.join(" and ") + ")"
   end
   
   def get_or_init_condition

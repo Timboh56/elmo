@@ -1,43 +1,43 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class UsersController < ApplicationController
   def index
-    @users = load_objects_with_subindex(User)
+    @users = apply_filters(User.includes(:missions))
   end
   def new
-    @user = User.active_english.new
+    @user = User.new
+    render_form
   end
   def edit
     @user = User.find(params[:id])
     @title = "Edit Profile" if @user == current_user
+    render_form
   end
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(params[:user])
-      if @user == current_user
-        flash[:success] = "Profile updated successfully."
-        redirect_to(:action => :edit)
-      else
-        flash[:success] = "User updated successfully."
-        @user.reset_password_if_requested
-        handle_printable_instructions
-      end
+    
+    # if this was just the current_mission form, update and redirect back to referrer
+    if params[:changing_current_mission]
+      # update the user's mission
+      @user.current_mission_id = params[:user][:current_mission_id]
+      @user.save(:validate => false)
+
+      # update the settings using the new mission
+      Setting.copy_to_config(@user.current_mission)
+      
+      # redirect back to the referrer
+      redirect_to(request.referrer)
     else
-      render(:action => :edit)
+      if @user.update_attributes(params[:user])
+        if @user == current_user
+          flash[:success] = "Profile updated successfully."
+          redirect_to(:action => :edit)
+        else
+          flash[:success] = "User updated successfully."
+          @user.reset_password_if_requested
+          handle_printable_instructions
+        end
+      else
+        render_form
+      end
     end
   end
   def create
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
       flash[:success] = "User created successfully."
       handle_printable_instructions
     else
-      render(:action => :new)
+      render_form
     end
   end
   def destroy
@@ -78,5 +78,16 @@ class UsersController < ApplicationController
       else
         redirect_to(:action => :index)
       end
+    end
+    
+    def render_form
+      # create a blank mission assignment with the appropriate user_id for the boilerplate, but don't add it to the collection
+      @blank_assignment = Assignment.new(:active => true, :user_id => current_user.id)
+      
+      # get assignable missons and roles for this user
+      @assignable_missions = Permission.assignable_missions(current_user)
+      @assignable_roles = Permission.assignable_roles(current_user)
+      
+      render(:form)
     end
 end

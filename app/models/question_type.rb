@@ -1,24 +1,8 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 require 'seedable'
 class QuestionType < ActiveRecord::Base
   include Seedable
   
-  has_many(:questions)
+  has_many(:questions, :inverse_of => :type)
   
   default_scope(order("long_name"))
   
@@ -35,10 +19,7 @@ class QuestionType < ActiveRecord::Base
     seed(:name, :name => "date", :long_name => "Date", :odk_name => "date", :odk_tag => "input")
     seed(:name, :name => "time", :long_name => "Time", :odk_name => "time", :odk_tag => "input")
   end
-  
-  def self.select_options
-    all.collect{|qt| [qt.long_name, qt.id]}
-  end
+
   def numeric?
     name == "integer" || name == "decimal"
   end

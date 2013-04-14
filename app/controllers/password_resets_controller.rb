@@ -1,19 +1,3 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class PasswordResetsController < ApplicationController
   
   before_filter(:load_user_using_perishable_token, :only => [:edit, :update])
@@ -22,6 +6,7 @@ class PasswordResetsController < ApplicationController
     @title = "Reset Password"
   end  
 
+  # when the user returns and enters their new password
   def edit
     @title = "Reset Password"
   end
@@ -31,7 +16,7 @@ class PasswordResetsController < ApplicationController
     if @user  
       @user.deliver_password_reset_instructions!  
       flash[:success] = "Instructions to reset your password have been emailed to you. Please check your email."  
-      redirect_to(root_url)
+      redirect_to(login_path)
     else  
       flash[:error] = "No user was found with that email address"  
       redirect_to(:action => :new)
@@ -42,10 +27,18 @@ class PasswordResetsController < ApplicationController
     User.ignore_blank_passwords = false
     @user.password = params[:user][:password]
     @user.password_confirmation = params[:user][:password_confirmation]
+    
     if @user.save
-      flash[:success] = "Password successfully updated"  
       User.ignore_blank_passwords = true
-      redirect_to(root_url)
+
+      # if we get this far, the user has been logged in
+      # so do post login housekeeping
+      return unless post_login_housekeeping
+
+      flash[:success] = "Password successfully updated."
+      
+      # use redirect_back_or_default to preserve the original path, if appropriate
+      redirect_back_or_default(root_url)
     else
       @title = "Reset Password"
       @user.password = nil
@@ -56,13 +49,13 @@ class PasswordResetsController < ApplicationController
 
   private  
     def load_user_using_perishable_token
-      @user = User.find_by_perishable_token(params[:id])  
+      @user = User.find_using_perishable_token(params[:id])  
       unless @user
         flash[:error] = "We're sorry, but we could not locate your account. " +  
           "If you are having issues try copying and pasting the URL " +  
           "from your email into your browser or restarting the " +  
           "reset password process."  
-        redirect_to(root_url)
+        redirect_to(login_url)
       end
     end
 end

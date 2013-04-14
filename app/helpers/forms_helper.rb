@@ -1,19 +1,3 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 module FormsHelper
   def forms_index_links(forms)
     [link_to_if_auth("Create Form", new_form_path, "forms#create")]
@@ -26,11 +10,11 @@ module FormsHelper
   def format_forms_field(form, field)
     case field
     when "type" then form.type.name
-    when "questions" then form.questions.size
+    when "questions" then form.questionings_count
     when "last_modified" then form.updated_at.to_s(:std_datetime)
     when "responses"
-      form.responses.size == 0 ? 0 :
-        link_to(form.responses.size, start_search_searches_path(:str => "formname:\"#{form.name}\"", :class_name => "Response"))
+      form.responses_count == 0 ? 0 :
+        link_to(form.responses_count, responses_path(:search => "formname:\"#{form.name}\""))
     when "downloads" then form.downloads || 0
     when "published?" then form.published? ? "Yes" : "No"
     when "actions"
@@ -51,5 +35,14 @@ module FormsHelper
       (action_links + publish_link + clone_link + print_link + loading_indicator(:id => form.id, :floating => true)).html_safe
     else form.send(field)
     end
+  end
+  
+  # given a Questioning object, builds an odk <input> tag
+  # calls the provided block to get the tag content
+  def odk_input_tag(qing, &block)
+    opts = {}
+    opts[:ref] = "/data/#{qing.question.odk_code}"
+    opts[:appearance] = "tall" if qing.question.type.name == "long_text"
+    content_tag(qing.question.type.odk_tag, opts, &block)
   end
 end

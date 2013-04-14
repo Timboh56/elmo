@@ -1,46 +1,54 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class FormsController < ApplicationController
+  # in the choose_questions action we have a question form so we need this
+  include QuestionFormable  
+  
   def index
-    if request.format.xml?
-      @forms = Form.published
-    else
-      @forms = load_objects_with_subindex(Form)
+    respond_to do |format|
+      # render normally if html
+      format.html do
+        @forms = apply_filters(Form).with_form_type.all
+        render(:index)
+      end
+      
+      # get only published forms and render openrosa if xml requested
+      format.xml do
+        @forms = restrict(Form).published.with_form_type
+        render_openrosa
+      end
     end
-    render_appropriate_format
   end
+  
   def new
-    @form = Form.new
-    render_and_setup("create")
+    @form = Form.for_mission(current_mission).new
+    render_form
   end
+  
   def edit
     @form = Form.with_questions.find(params[:id])
-    render_and_setup("update")
+    render_form
   end
+  
   def show
     @form = Form.with_questions.find(params[:id])
+
+    # add to download count if xml
     @form.add_download if request.format.xml? 
-    render_appropriate_format
+    
+    respond_to do |format|
+      # for html, render the printable partial if requested, otherwise render the form
+      format.html{params[:print] ? render_printable : render_form}
+      
+      # for xml, render openrosa
+      format.xml{render_openrosa}
+    end
   end
+  
   def destroy
     @form = Form.find(params[:id])
     begin flash[:success] = @form.destroy && "Form deleted successfully." rescue flash[:error] = $!.to_s end
     redirect_to(:action => :index)
   end
+  
   def publish
     @form = Form.find(params[:id])
     verb = @form.published? ? "unpublish" : "publish"
@@ -54,6 +62,21 @@ class FormsController < ApplicationController
     # redirect to form edit
     redirect_to(:action => :index)
   end
+  
+  # GET /forms/:id/choose_questions
+  # show the form to either choose existing questions or create a new one to add
+  def choose_questions
+    @form = Form.find(params[:id])
+    @title = "Adding Questions to Form: #{@form.name}"
+    
+    # get questions for choice list
+    @questions = apply_filters(Question.not_in_form(@form))
+    
+    # setup new questioning for use with the questioning form
+    @qing = init_qing(:form_id => @form.id)
+    setup_qing_form_support_objs
+  end
+  
   def add_questions
     # load the form
     @form = Form.find(params[:id])
@@ -75,6 +98,8 @@ class FormsController < ApplicationController
     # redirect to form edit
     redirect_to(edit_form_path(@form))
   end
+  
+  
   def remove_questions
     # load the form
     @form = Form.find(params[:id])
@@ -90,19 +115,11 @@ class FormsController < ApplicationController
     # redirect to form edit
     redirect_to(edit_form_path(@form))
   end
+  
   def update_ranks
-    @form = Form.find(params[:id], :include => {:questionings => :condition})
-    begin
-      # build hash of questioning ids to ranks
-      new_ranks = {}; params[:rank].each_pair{|id, rank| new_ranks[id] = rank}
-      # update
-      @form.update_ranks(new_ranks)
-      flash[:success] = "Ranks updated successfully."
-    rescue
-      flash[:error] = "There was a problem updating the ranks (#{$!.to_s})."
-    end
     redirect_to(edit_form_path(@form))
   end
+  
   def clone
     @form = Form.find(params[:id])
     begin
@@ -116,34 +133,57 @@ class FormsController < ApplicationController
   end
   
   def create; crupdate; end
+  
   def update; crupdate; end
+  
   private
+  
     def crupdate
       action = params[:action]
-      @form = action == "create" ? Form.new : Form.find(params[:id])
+      @form = action == "create" ? Form.for_mission(current_mission).new : Form.find(params[:id], :include => {:questionings => :condition})
+      
       begin
-        @form.update_attributes!(params[:form])
+        # save basic attribs
+        @form.attributes = params[:form]
+        
+        # update ranks if provided
+        if params[:rank]
+          # build hash of questioning ids to ranks
+          new_ranks = {}; params[:rank].each_pair{|id, rank| new_ranks[id] = rank}
+          
+          # update (possibly raising condition ordering error)
+          @form.update_ranks(new_ranks)
+        end
+        
+        # save everything and redirect
+        @form.save!
         flash[:success] = "Form #{action}d successfully."
         redirect_to(edit_form_path(@form))
+
+      # handle problem with conditions
+      rescue ConditionOrderingError
+        @form.errors.add(:base, "The new rankings invalidate one or more conditions")
+        render_form
+      
+      # handle other validation errors  
       rescue ActiveRecord::RecordInvalid
-        render_and_setup(action)
+        render_form
       end
     end
-    def render_appropriate_format
-      respond_to do |format|
-        format.html do
-          if params[:print]
-            render(:partial => "printable", :layout => false, :locals => {:form => @form})
-          end
-        end
-        format.xml do
-          render(:content_type => "text/xml")
-          response.headers['X-OpenRosa-Version'] = "1.0"
-        end
-      end
+    
+    # adds the appropriate headers for openrosa content
+    def render_openrosa
+      render(:content_type => "text/xml")
+      response.headers['X-OpenRosa-Version'] = "1.0"
     end
-    def render_and_setup(action)
-      @title = action == "create" ? "Create Form" : "Edit Form: #{@form.name}"
-      render(:action => action == "create" ? :new : :edit)
+    
+    # renders the printable partial
+    def render_printable
+      render(:partial => "printable", :layout => false, :locals => {:form => @form})
+    end
+    
+    def render_form
+      @form_types = apply_filters(FormType)
+      render(:form)
     end
 end

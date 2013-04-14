@@ -1,30 +1,20 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class Answer < ActiveRecord::Base
-  belongs_to(:questioning)
-  belongs_to(:option)
-  belongs_to(:response)
-  has_many(:choices, :dependent => :destroy)
+  include ActionView::Helpers::NumberHelper
+
+  # a flag set by javascript on the client side indicating whether the answer is relevant based on any conditions
+  attr_writer(:relevant)
+
+  belongs_to(:questioning, :inverse_of => :answers)
+  belongs_to(:option, :inverse_of => :answers)
+  belongs_to(:response, :inverse_of => :answers)
+  has_many(:choices, :dependent => :destroy, :inverse_of => :answer)
   
   before_validation(:clean_locations)
   before_save(:round_ints)
   before_save(:blanks_to_nulls)
   
   validates(:value, :numericality => true, :if => Proc.new{|a| a.numeric? && !a.value.blank?})
+  validate(:min_max)
   validate(:required)
 
   # creates a new answer from a string from odk
@@ -58,7 +48,7 @@ class Answer < ActiveRecord::Base
   def choice_for(option)
     choice_hash[option]
   end
-    
+  
   def choice_hash(options = {})
     if !@choice_hash || options[:rebuild]
       @choice_hash = {}; choices.each{|c| @choice_hash[c.option] = c}
@@ -73,7 +63,7 @@ class Answer < ActiveRecord::Base
       if c = choice_for(o)
         c.checked = true
       else
-        c = choices.new(:option_id => o.id, :checked => false)
+        c = choices.new(:option => o, :checked => false)
       end
       c
     end
@@ -84,7 +74,7 @@ class Answer < ActiveRecord::Base
     submitted = params.values.collect{|p| p[:checked] == '1' ? Choice.new(p) : nil}.compact
     
     # copy new choices into old objects, creating or deleting if necessary
-    choices.match(submitted, Proc.new{|c| c.option_id}) do |orig, subd|
+    choices.compare_by_element(submitted, Proc.new{|c| c.option_id}) do |orig, subd|
       # if both exist, do nothing
       # if submitted is nil, destroy the original
       if subd.nil?
@@ -108,12 +98,24 @@ class Answer < ActiveRecord::Base
   def numeric?; question.type.numeric?; end
   def integer?; question.type.integer?; end
   def options; question.options; end
-  def select_options; question.select_options; end
+  
+  # relevant defaults to true until set otherwise
+  def relevant?
+    @relevant.nil? ? true : @relevant
+  end
+  
+  # convert to boolean
+  def relevant=(r)
+    @relevant = (r == "true")
+  end
+
+  # alias
+  def relevant; relevant?; end
   
   private
     def required
-      if required? && !hidden? && value.blank? && time_value.blank? && date_value.blank? && datetime_value.blank? && 
-        option_id.nil? && !can_have_choices? && questioning.condition.nil?
+      if required? && !hidden? && relevant? && !can_have_choices? &&
+        value.blank? && time_value.blank? && date_value.blank? && datetime_value.blank? && option_id.nil? 
           errors.add(:base, "This question is required")
       end
     end
@@ -125,10 +127,19 @@ class Answer < ActiveRecord::Base
       self.value = nil if value.blank?
       return true
     end
+    def min_max
+      val_f = value.to_f
+      if question.maximum && (val_f > question.maximum || question.maxstrictly && val_f == question.maximum) ||
+         question.minimum && (val_f < question.minimum || question.minstrictly && val_f == question.minimum)
+           errors.add(:base, question.min_max_error_msg)
+      end
+    end                 
     def clean_locations
-      if location?
-        if value.match(/^(-?\d+(\.\d+)?)\s*[,;:\s]\s*(-?\d+(\.\d+)?)/)
-          self.value = "#{$1} #{$3}".strip
+      if location? && !value.blank?
+        if value.match(configatron.lat_lng_regexp)
+          lat = number_with_precision($1.to_f, :precision => 6)
+          lng = number_with_precision($3.to_f, :precision => 6)
+          self.value = "#{lat} #{lng}"
         else
           self.value = ""
         end

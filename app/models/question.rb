@@ -1,43 +1,29 @@
+require 'mission_based'
 require 'translatable'
-
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class Question < ActiveRecord::Base
+  include MissionBased
   include Translatable
   
-  belongs_to(:type, :class_name => "QuestionType", :foreign_key => :question_type_id)
-  belongs_to(:option_set, :include => :options)
+  belongs_to(:type, :class_name => "QuestionType", :foreign_key => :question_type_id, :inverse_of => :questions)
+  belongs_to(:option_set, :include => :options, :inverse_of => :questions)
   has_many(:translations, :class_name => "Translation", :foreign_key => :obj_id, 
-    :conditions => "translations.class_name='Question'", :autosave => true, :dependent => :destroy)
-  has_many(:questionings, :dependent => :destroy, :autosave => true)
+    :conditions => {:class_name => "Question"}, :autosave => true, :dependent => :destroy)
+  has_many(:questionings, :dependent => :destroy, :autosave => true, :inverse_of => :question)
   has_many(:answers, :through => :questionings)
   has_many(:referring_conditions, :through => :questionings)
   has_many(:forms, :through => :questionings)
 
-  validates(:code, :presence => true, :uniqueness => true)
+  validates(:code, :presence => true)
   validates(:code, :format => {:with => /^[a-z][a-z0-9]{1,19}$/i}, :if => Proc.new{|q| !q.code.blank?})
   validates(:type, :presence => true)
   validates(:option_set_id, :presence => true, :if => Proc.new{|q| q.is_select?})
   validates(:english_name, :presence => true)
   validate(:integrity)
-    
+
   before_destroy(:check_assoc)
   
   default_scope(order("code"))
+  scope(:select_types, includes(:type).where(:"question_types.name" => %w(select_one select_multiple)))
   
   self.per_page = 100
   
@@ -47,15 +33,10 @@ class Question < ActiveRecord::Base
       where("(questions.id not in (select question_id from questionings where form_id='#{form.id}'))")
   end
   
-  def self.select_options_by_code(questions = nil)
-    questions ||= all
-    questions.collect{|q| [q.code, q.id]}
-  end
-  
   def method_missing(*args)
     # enable methods like name_fra and hint_eng, etc.
     if args[0].to_s.match(/^(name|hint)_([a-z]{3})(_before_type_cast)?(=?)$/)
-      send("#{$1}#{$4}", Language.by_code($2), *args[1..2])
+      send("#{$1}#{$4}", $2, *args[1..2])
     else
       super
     end
@@ -108,6 +89,18 @@ class Question < ActiveRecord::Base
     questionings.collect{|qing| qing.id}
   end
   
+  def min_max_error_msg
+    return nil unless minimum || maximum
+    clauses = []
+    clauses << "greater than #{minstrictly ? '' : 'or equal to '}#{minimum}" if minimum
+    clauses << "less than #{maxstrictly ? '' : 'or equal to '}#{maximum}" if maximum
+    "Value must be #{clauses.join(' and ')}."
+  end
+  
+  def as_json(options = {})
+    {:id => id, :code => code, :type => type.name, :form_ids => forms.collect{|f| f.id}.sort}
+  end
+  
   private
     def integrity
       # error if type or option set have changed and there are answers or conditions
@@ -127,5 +120,8 @@ class Question < ActiveRecord::Base
       unless questionings.empty?
         raise("You can't delete question '#{code}' because it is included in at least one form")
       end
+    end
+    def name_unique_per_mission
+      errors.add(:name, "must be unique") if self.class.for_mission(mission).where("code = ? AND id != ?", code, id).count > 0
     end
 end

@@ -89,7 +89,6 @@ function batch_submit(options) {
   }
 }
 
-// TODO: MOVE TO PROPER FILE
 function suggest_login() {
 	var name = $('#user_name').val();
 	var m, login;
@@ -154,8 +153,63 @@ function redirect_to_login() {
   // runs a jquery ajax request but substitutes a method that checks for session timeout
   Utils.ajax_with_session_timeout_check = function(params) {
     var old_error_func = params.error;
-    params.error = function(jqXHR) { check_login_required(jqXHR.responseText) || old_error_func && old_error_func(); };
+    params.error = function(jqXHR, status, error) { check_login_required(jqXHR.responseText) || old_error_func && old_error_func(jqXHR, status, error); };
     $.ajax(params);
   }
   
+  // adds a name/value pair (e.g. "foo=bar") to a url; checks if there is already a query string
+  Utils.add_url_param = function(url, param) {
+    return url + (url.indexOf("?") == "-1" ? "?" : "&") + param;
+  }
+  
 }(Utils = {}));
+
+// JQUERY PLUGINS
+jQuery.fn.selectText = function(){
+    var doc = document
+        , element = this[0]
+        , range, selection
+    ;
+    if (doc.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToElementText(element);
+        range.select();
+    } else if (window.getSelection) {
+        selection = window.getSelection();        
+        range = document.createRange();
+        range.selectNodeContents(element);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+};
+
+// IE 8 indexOf fix
+if (!Array.prototype.indexOf)
+{
+  Array.prototype.indexOf = function(elt /*, from*/)
+  {
+    var len = this.length >>> 0;
+
+    var from = Number(arguments[1]) || 0;
+    from = (from < 0)
+         ? Math.ceil(from)
+         : Math.floor(from);
+    if (from < 0)
+      from += len;
+
+    for (; from < len; from++)
+    {
+      if (from in this &&
+          this[from] === elt)
+        return from;
+    }
+    return -1;
+  };
+}
+
+// IE 8 console fix
+if (typeof console == "undefined") {
+    window.console = {
+        log: function () {}
+    };
+}

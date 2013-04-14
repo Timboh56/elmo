@@ -1,27 +1,35 @@
-<tr class="rowbg<%= (answer_counter + 1) % 2 %>">
-  <td class="name">
-    <%= answer.question_name || "[No Name]" %>
-    <%= reqd_sym(answer.required?) %>
-  </td>
-  <td class="value">
+<div class="form_field qtype_<%= answer.question_type_name %>" id="qing_<%= answer.questioning_id %>">
+  <label class="main"><%= answer.question_name || "[No Name]" %> <%= reqd_sym(answer.required?) %>
+  </label><div class="form_field_control">
     <%= fields_for('response[all_answers][]', answer) do |f| %>
-      <% f.mode = controller.action_name.to_sym %>
-      <%= render("layouts/object_errors", :object => answer, :compact => true) %>
+      <% f.mode = form_mode %>
+      <%= render("layouts/object_errors", :object => answer, :compact => true) unless answer.errors.empty? %>
       <%= f.hidden_field(:response_id, :index => answer_counter) %>
       <%= f.hidden_field(:questioning_id, :index => answer_counter) %>
+      <%= f.hidden_field(:relevant, :class => "relevant", :index => answer_counter) %>
       <% case type = answer.question_type_name %>
-      <% when "location", "address", "text", "integer", "decimal" %>
+      <% when "address", "text", "integer", "decimal" %>
         <%= f.text_field(:value, :class => "qtype_#{type}", :index => answer_counter) %>
+      <% when "location" %>
+        <%= f.text_field(:value, :class => "qtype_location", :index => answer_counter) %>
+        <%= link_to(action_icon("edit"), "#", :class => "edit_location_link") if f.mode != :show %>
       <% when "long_text" %>
         <%= f.text_area(:value, :class => "qtype_#{type}", :index => answer_counter) %>
       <% when "select_one" %>
-        <%= f.select(:option_id, answer.select_options, {:include_blank => true}, :index => answer_counter) %>
+        <%= f.select(:option_id, answer.question.select_options, {:include_blank => true}, :index => answer_counter) %>
       <% when "select_multiple" %>
         <%= render(:partial => "choice", :locals => {:answer_counter => answer_counter}, :collection => answer.all_choices) %>
       <% when "datetime", "date", "time" %>
         <%= f.send("#{type}_select", :"#{type}_value", :include_blank => true, :index => answer_counter) %>
       <% end %>
     <% end %>
-  </td>
-  <td class="details"><%= answer.question_hint %></div>
-</tr>
+    <% if cond = answer.questioning.condition %>
+      <script type="text/javascript">
+        ELMO.Response.conditions.push(new ELMO.Condition(<%= cond.to_json.html_safe %>));
+      </script>
+    <% end %>
+  </div>
+  <% unless answer.question_hint.empty? %>
+    <div class="form_field_details"><%= answer.question_hint %></div>
+  <% end %>
+</div>

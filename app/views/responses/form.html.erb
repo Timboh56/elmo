@@ -1,0 +1,35 @@
+<% content_for(:per_page_js){javascript_include_tag("response", "location_picker", "google_geocoder", 
+  "dialog", "condition", "time_form_field", configatron.map_api_url)} %>
+
+<%= render("layouts/location_picker") %>
+
+<%= flash_and_form_errors(@response) %>
+
+<% @response.answers.collect{|a| a.errors.full_messages.join(", ")}.join(" ") %>
+
+<%= nice_form_for(@response) do |f| %>
+
+  <%= form_field(f, :form_id, :type => :hidden) %>
+  
+  <%# determine whether/how to show the user box %>
+  <%= form_field(f, :user_id, :type => :select, :required => true, :options => sel_opts_from_objs(@possible_submitters), 
+    :force_show_mode => !@can_choose_submitter) %>
+
+  <% unless f.mode == :new %>
+  
+    <%= form_field(f, :source) if f.mode == :show %>
+
+    <%# determine whether/how to show the reviewed box %>
+    <%= form_field(f, :reviewed, :type => :check_box, :force_show_mode => !@can_mark_reviewed) %>
+
+  <% end %>  
+  
+  <%= render(:partial => "answer", :collection => @response.all_answers) %>
+  
+  <%= form_buttons do %>
+    <%= form_submit_button(f, :label => "Save", :multiple => true) %>
+    <%= form_submit_button(f, :label => "Save and Mark as Reviewed", :name => "commit_and_mark_reviewed", 
+      :multiple => true) if @can_mark_reviewed %>
+  <% end %>
+  
+<% end %>

@@ -1,31 +1,16 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
+require 'seedable'
 class User < ActiveRecord::Base
   include Seedable
 
   attr_writer(:reset_password_method)
   
-  belongs_to(:role)
-  belongs_to(:language)
-  belongs_to(:location)
-  before_validation(:clean_fields)
-  before_destroy(:check_assoc)
-  has_many(:responses)
-  has_many(:broadcast_addressings)
+  has_many(:responses, :inverse_of => :user)
+  has_many(:broadcast_addressings, :inverse_of => :user)
+  has_many(:assignments, :autosave => true, :dependent => :destroy, :validate => true, :inverse_of => :user)
+  has_many(:missions, :through => :assignments, :order => "missions.created_at DESC")
+  belongs_to(:current_mission, :class_name => "Mission")
+  
+  accepts_nested_attributes_for(:assignments, :allow_destroy => true)
   
   acts_as_authentic do |c| 
     c.disable_perishable_token_maintenance = true
@@ -36,25 +21,24 @@ class User < ActiveRecord::Base
     c.merge_validates_format_of_email_field_options(:allow_blank => true)
     c.merge_validates_uniqueness_of_email_field_options(:unless => Proc.new{|u| u.email.blank?})
   end
+
+  before_validation(:clean_fields)
+  before_destroy(:check_assoc)
   
   validates(:name, :presence => true)
-  validates(:role_id, :presence => true)
-  validates(:language_id, :presence => true)
   validate(:phone_length_or_empty)
   validate(:must_have_password_reset_on_create)
   validate(:password_reset_cant_be_email_if_no_email)
+  validate(:no_duplicate_assignments)
+  validate(:must_have_assignments_if_not_admin)
+  validate(:ensure_current_mission_is_valid)
   
-  default_scope(includes(:language, :role).order("users.name"))
-  scope(:active_english, includes(:language).where(:active => true).where("languages.code" => "eng"))
-  scope(:observers, includes(:role).where("roles.name = 'observer'"))
+  default_scope(order("users.name"))
+  scope(:assigned_to, lambda{|m| where("users.id IN (SELECT user_id FROM assignments WHERE mission_id = ?)", m.id)})
   
   # we want all of these on one page for now
   self.per_page = 1000000
 
-  def self.select_options
-    all.collect{|u| [u.name, u.id]}
-  end
-  
   def self.new_with_login_and_password(params)
     u = new(params)
     u.reset_password
@@ -77,22 +61,38 @@ class User < ActiveRecord::Base
     else
       l = name.gsub(/[^a-z0-9\.]/i, "")
     end
-    l[0,10].downcase
+
+    # convert to lowercase
+    suggestion = l[0,10].downcase
+    
+    # if this login is taken, add a number to the end
+    if find_by_login(suggestion)
+      
+      # get suffixes of all logins with same prefix
+      suffixes = where("login LIKE '#{suggestion}%'").all.collect{|u| u.login[suggestion.length..-1].to_i}
+      
+      # get max suffix (skip 1 if necessary)
+      suffix = suffixes.max + 1
+      suffix = 2 if suffix <= 1
+      
+      # apply suffix
+      suggestion += suffix.to_s
+    end
+    
+    suggestion
   end
   
   def self.search_qualifiers
     [
       Search::Qualifier.new(:label => "name", :col => "users.name", :default => true, :partials => true),
       Search::Qualifier.new(:label => "login", :col => "users.login", :default => true),
-      Search::Qualifier.new(:label => "language", :col => "languages.code", :assoc => :languages),
-      Search::Qualifier.new(:label => "role", :col => "roles.name", :assoc => :roles),
       Search::Qualifier.new(:label => "email", :col => "users.email", :partials => true),
       Search::Qualifier.new(:label => "phone", :col => "users.phone", :partials => true)
     ]
   end
 
   def self.search_examples
-    ["pinchy lombard", 'role:observer', "language:english", "phone:+44"]
+    ["pinchy lombard", "phone:+44"]
   end
   
   def reset_password
@@ -125,6 +125,7 @@ class User < ActiveRecord::Base
       reset_password and save
     end
     if reset_password_method == "email"
+      # only send intro if he/she has never logged in
       (login_count || 0) > 0 ? deliver_password_reset_instructions! : deliver_intro!
     end
   end
@@ -138,8 +139,45 @@ class User < ActiveRecord::Base
   def can_get_sms?; !(phone.blank? && phone2.blank?) end
   def can_get_email?; !email.blank?; end
   
-  def is_observer?; role ? role.is_observer? : false; end
-  def is_admin?; role ? role.is_admin? : false; end
+  def assignments_by_mission
+    @assignments_by_mission ||= Hash[*assignments.collect{|a| [a.mission, a]}.flatten]
+  end
+  
+  def latest_mission
+    missions.first
+  end
+  
+  # gets the user's role for the given mission
+  # returns nil if the user is not assigned to the mission
+  def role(mission)
+    nn(assignments_by_mission[mission]).role
+  end
+  
+  # returns all missions that the user has access to
+  def accessible_missions
+    @accessible_missions ||= Permission.restrict(Mission, :user => self)
+  end
+  
+  # tests if user can access the given mission
+  def can_access_mission?(mission)
+    accessible_missions.include?(mission)
+  end
+  
+  # determines if the user's role for the given mission is as an observer
+  def observer?(mission)
+    (r = role(mission)) ? r.observer? : false
+  end
+  
+  # if user has no current mission, choose one (if assigned to any)
+  def set_current_mission
+    # ensure no current mission set if the user has no assignments
+    if assignments.active.empty?
+      update_attributes(:current_mission_id => nil) 
+    # else if user has no current mission, pick one
+    elsif current_mission.nil?
+      update_attributes(:current_mission_id => assignments.active.sorted_recent_first.first.mission_id)
+    end
+  end
   
   private
     def clean_fields
@@ -157,13 +195,12 @@ class User < ActiveRecord::Base
     def check_assoc
       # Can't delete users with related responses.
       unless responses.empty?
-        raise("You can't delete #{name} because he/she has associated responses." +
-          (active? ? " You could set him/her to inactive instead." : ""))
+        raise "You can't delete #{name} because he/she has associated responses."
       end
     end
     
     def must_have_password_reset_on_create
-      if new_record? && password.blank? && reset_password_method == "dont"
+      if new_record? && reset_password_method == "dont"
         errors.add(:base, "You must choose a password creation method")
       end
     end
@@ -173,5 +210,20 @@ class User < ActiveRecord::Base
         verb = new_record? ? "send" : "reset"
         errors.add(:base, "You can't #{verb} password by email because you didn't specify an email address.")
       end
+    end
+    
+    def no_duplicate_assignments
+      errors.add(:base, "There are duplicate assignments.") if Assignment.duplicates?(assignments)
+    end
+    
+    def must_have_assignments_if_not_admin
+      if !admin? && assignments.reject{|a| a.marked_for_destruction?}.empty?
+        errors.add(:assignments, "can't be empty if not admin")
+      end
+    end
+    
+    # if current mission is not accessible, set to nil
+    def ensure_current_mission_is_valid
+      self.current_mission_id = nil if !current_mission_id.nil? && !Permission.user_can_access_mission(self, current_mission)
     end
 end

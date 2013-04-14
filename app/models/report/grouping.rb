@@ -1,47 +1,40 @@
-class Report::Grouping < ActiveRecord::Base
+class Report::Grouping
   
-  # returns a combined set of select options for both answer and attrib groupings
-  def self.select_options
-    [Report::ByAttribGrouping, Report::ByAnswerGrouping].map{|k| [k.select_group_name, k.select_options]}
+  def initialize(calculation, rank)
+    @calculation = calculation
+    @rank = rank
   end
   
-  def self.construct(attribs)
-    return nil if attribs[:form_choice].blank?
-    raise "Invalid grouping choice" unless attribs[:form_choice].match(/(by_answer|by_attrib)_(\d+)/)
-    class_name = "Report::#{$1.camelize}Grouping"
-    id = $2
-    eval(class_name).new(:assoc_id => id)
+  def apply(rel)
+    prefix = @rank.to_s[0,3]
+
+    # get fragments
+    @calculation.table_prefix = prefix
+    name_expr = @calculation.name_expr
+    value_expr = @calculation.value_expr
+    where_expr = @calculation.where_expr
+    type_expr = @calculation.data_type_expr
+    sort_expr = @calculation.sort_expr
+    
+    # add select, where, and group
+    rel = rel.select("#{name_expr.sql} AS #{prefix}_name")
+    rel = rel.select("#{value_expr.sql} AS #{prefix}_value")
+    rel = rel.select("#{type_expr.sql} AS #{prefix}_type")
+    rel = rel.where(where_expr.sql)
+    rel = rel.group(name_expr.sql)
+    rel = rel.group(value_expr.sql)
+    rel = rel.group(type_expr.sql)
+    
+    # add order
+    rel = rel.order(sort_expr.sql) if sort_expr
+    
+    # add joins, with label as prefix
+    rel = rel.joins(Report::Join.list_to_sql(@calculation.joins, prefix))
+    
+    return rel
   end
   
-  # gets and sorts the full set header hashes based on the returned report results
-  def headers(results)
-    results.collect do |row|
-      name = cast_header(row[sql_col_name])
-      {
-        :name => name,
-        :value => row[value_col_name] || name,
-        :key => name
-      }
-    end.uniq.sort_by{|x| x[:value] || ""}
-  end
-  
-  def value_col_name
-    "#{sql_col_name}_value"
-  end
-  
-  def key(result_row)
-    cast_header(result_row[sql_col_name])
-  end
-  
-  def title
-    to_s
-  end
-  
-  def cast_header(value)
-    if value.is_a?(Mysql::Time)
-      value.to_s.gsub(" 00:00:00", "") 
-    else
-      value
-    end
+  def header_title
+    @calculation.header_title
   end
 end

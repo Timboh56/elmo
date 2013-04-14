@@ -1,44 +1,41 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
+require 'mission_based'
 class OptionSet < ActiveRecord::Base
-  has_many(:option_settings, :dependent => :destroy, :autosave => true)
+  include MissionBased
+
+  has_many(:option_settings, :dependent => :destroy, :autosave => true, :inverse_of => :option_set)
   has_many(:options, :through => :option_settings)
-  has_many(:questions)
+  has_many(:questions, :inverse_of => :option_set)
   has_many(:questionings, :through => :questions)
   
-  validates(:name, :presence => true, :uniqueness => true)
+  validates(:name, :presence => true)
   validates(:ordering, :presence => true)
   validates_associated(:option_settings)
   validate(:at_least_one_option)
   validate(:unique_values)
+  validate(:name_unique_per_mission)
   
   before_destroy(:check_assoc)
   
   default_scope(order("name"))
+  scope(:for_index, includes(:questions, :options, {:questionings => :form}))
   
   self.per_page = 100
 
-  def self.select_options
-    all.collect{|os| [os.name, os.id]}
+  # creates a simple yes/no/na option set
+  def self.create_default(mission)
+    options = Option.create_simple_set(%w(Yes No N/A), mission)
+    set = OptionSet.new(:name => "Yes/No/NA", :ordering => "value_asc", :mission => mission)
+    options.each{|o| set.option_settings.build(:option_id => o.id)}
+    set.save!
   end
-  
+
   def self.orderings
     [{:code => "value_asc", :name => "Value Low to High", :sql => "value asc"},
      {:code => "value_desc", :name => "Value High to Low", :sql => "value desc"}]
+  end
+  
+  def self.ordering_select_options
+    orderings.collect{|o| [o[:name], o[:code]]}
   end
   
   def sorted_options
@@ -50,10 +47,10 @@ class OptionSet < ActiveRecord::Base
     !questionings.detect{|qing| qing.published?}.nil?
   end
   
-  # finds or initializes an option_setting for every option in the database (never meant to be saved)
-  def all_option_settings
+  # finds or initializes an option_setting for every option in the database for current mission (never meant to be saved)
+  def all_option_settings(options)
     # make sure there is an associated answer object for each questioning in the form
-    Option.all.collect{|o| option_setting_for(o) || option_settings.new(:option_id => o.id, :included => false)}
+    options.collect{|o| option_setting_for(o) || option_settings.new(:option_id => o.id, :included => false)}
   end
   
   def all_option_settings=(params)
@@ -61,7 +58,7 @@ class OptionSet < ActiveRecord::Base
     submitted = params.values.collect{|p| p[:included] == '1' ? OptionSetting.new(p) : nil}.compact
     
     # copy new choices into old objects, creating or deleting if necessary
-    option_settings.match(submitted, Proc.new{|os| os.option_id}) do |orig, subd|
+    option_settings.compare_by_element(submitted, Proc.new{|os| os.option_id}) do |orig, subd|
       # if both exist, do nothing
       # if submitted is nil, destroy the original
       if subd.nil?
@@ -83,6 +80,10 @@ class OptionSet < ActiveRecord::Base
     @option_setting_hash ||= Hash[*option_settings.collect{|os| [os.option, os]}.flatten]
   end
   
+  def as_json(options = {})
+    Hash[*%w(id name ordering).collect{|k| [k, self.send(k)]}.flatten]
+  end
+  
   private
     def at_least_one_option
       errors.add(:base, "You must choose at least one option.") if option_settings.empty?
@@ -94,9 +95,11 @@ class OptionSet < ActiveRecord::Base
     end
     def unique_values
       values = option_settings.map{|o| o.option.value}
-      Rails.logger.info(values)
       if values.uniq.size != values.size
         errors.add(:base, "Two or more of the options you've chosen have the same numeric value.")
       end
+    end
+    def name_unique_per_mission
+      errors.add(:name, "must be unique") if self.class.for_mission(mission).where("name = ? AND id != ?", name, id).count > 0
     end
 end

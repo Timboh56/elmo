@@ -1,19 +1,3 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class UserSessionsController < ApplicationController
   
   def new
@@ -22,6 +6,7 @@ class UserSessionsController < ApplicationController
   end
   
   def create
+<<<<<<< HEAD
     @captcha = false
     # if IP has not been logged yet, or this is the first attempt to login from the user..
     ip = request.env['REMOTE_ADDR'].to_s
@@ -49,6 +34,21 @@ class UserSessionsController < ApplicationController
       else
         flash[:error] = @user_session.errors.full_messages.join(",")
       end
+=======
+    # reset the session for security purposes
+    reset_session_preserving_return_to
+    
+    @user_session = UserSession.new(params[:user_session])
+    
+    # if the save is successful, the user is logged in automatically
+    if @user_session.save
+      
+      # do post login housekeeping
+      return unless post_login_housekeeping
+      
+      flash[:success] = "Login successful"
+      redirect_back_or_default(root_path)
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
     else
       
       # if current time is more than 30 minutes since the IP was locked for the captcha, reset number of login attempts
@@ -94,8 +94,7 @@ class UserSessionsController < ApplicationController
     @user_session = UserSession.find  
     @user_session.destroy
     forget_location
-    Subindex.clear_all(session)
-    redirect_to(:action => :logged_out)
+    redirect_to(logged_out_path)
   end
   
   def logged_out

@@ -1,20 +1,34 @@
 function broadcast_medium_changed() { 
   var select = $('#broadcast_medium')[0];
+<<<<<<< HEAD
   var selected = select.options[select.selectedIndex].value
+=======
+  var selected = select.options[select.selectedIndex].value;
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
   var sms_possible = selected != "email_only" && selected != "";
 
   // hide/show char limit and subject
   if (sms_possible) {
     $('#char_limit').show();
-    $('#which_phone_row').show();
+    $('div#which_phone').show();
     broadcast_update_char_limit();
+<<<<<<< HEAD
     $('#subject_row').hide();  
     $('#sms_balance').show(); 
+=======
+    $('div#subject').hide();
+    $('.form_field#balance').show();
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
   } else {
-    $('#which_phone_row').hide();
+    $('div#which_phone').hide();
     $('#char_limit').hide();
+<<<<<<< HEAD
     $('#sms_balance').hide();
     $('#subject_row').show();
+=======
+    $('div#subject').show();
+    $('.form_field#balance').hide();
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
   }
 }
 
@@ -29,7 +43,11 @@ function broadcast_update_char_limit() {
   }
 }
 
+<<<<<<< HEAD
 
 $.ready(broadcast_medium_changed);       
 
                                                                                  
+=======
+$(document).ready(function() { $("#broadcast_medium").change(broadcast_medium_changed); $("#broadcast_medium").trigger("change"); })
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05

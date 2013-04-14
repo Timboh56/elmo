@@ -1,21 +1,8 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
+require 'mission_based'
 class Broadcast < ActiveRecord::Base
-  has_many(:broadcast_addressings)
+  include MissionBased
+
+  has_many(:broadcast_addressings, :inverse_of => :broadcast)
   has_many(:recipients, :through => :broadcast_addressings, :source => :user)
   
   validates(:recipients, :presence => true)
@@ -71,7 +58,7 @@ class Broadcast < ActiveRecord::Base
     # send smses
     begin
       Smser.deliver(smsees, which_phone, "#{configatron.broadcast_tag} #{body}") unless smsees.empty?
-    rescue
+    rescue Sms::Error
       # one error per line
       $!.to_s.split("\n").each{|e| add_send_error("SMS Error: #{e}")}
     end

@@ -8,3 +8,5 @@ config/database.yml
 vendor/
 TODO
 .sass-cache/
+TESTING
+railsenv

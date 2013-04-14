@@ -1,30 +1,15 @@
+require 'mission_based'
 require 'translatable'
-
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class Option < ActiveRecord::Base
+  include MissionBased
   include Translatable
   
   has_many(:option_sets, :through => :option_settings)
-  has_many(:option_settings)
+  has_many(:option_settings, :inverse_of => :option)
   has_many(:translations, :class_name => "Translation", :foreign_key => :obj_id, 
-    :conditions => "translations.class_name='Option'", :autosave => true, :dependent => :destroy)
-  has_many(:answers)
-  has_many(:choices)
+    :conditions => {:class_name => "Option"}, :autosave => true, :dependent => :destroy)
+  has_many(:answers, :inverse_of => :option)
+  has_many(:choices, :inverse_of => :option)
   
   validates(:value, :presence => true)
   validates(:value, :numericality => true, :if => Proc.new{|o| !o.value.blank?})
@@ -38,10 +23,17 @@ class Option < ActiveRecord::Base
   
   self.per_page = 100
 
+  # creates a set of options with the given English names and mission
+  def self.create_simple_set(names, mission)
+    options = []
+    names.each_with_index{|n, idx| options << create(:name_eng => n, :mission => mission, :value => idx + 1)}
+    options
+  end
+  
   def method_missing(*args)
     # enable methods like name_fra and hint_eng, etc.
     if args[0].to_s.match(/^(name)_([a-z]{3})(_before_type_cast)?(=?)$/)
-      send("#{$1}#{$4}", Language.by_code($2), *args[1..2])
+      send("#{$1}#{$4}", $2, *args[1..2])
     else
       super
     end

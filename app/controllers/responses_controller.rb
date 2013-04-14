@@ -1,19 +1,3 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class ResponsesController < ApplicationController
   def create
     # if this is a submission from ODK collect
@@ -24,13 +8,10 @@ class ResponsesController < ApplicationController
       elsif upfile = params[:xml_submission_file]
         begin
           contents = upfile.read
-          Rails.logger.debug("Form data: " + contents)
-          Response.create_from_xml(contents, current_user)
+          Response.create_from_xml(contents, current_user, current_mission)
           render(:nothing => true, :status => 201)
-        rescue ArgumentError, ActiveRecord::RecordInvalid
-          msg = "Form submission error: #{$!.to_s}"
-          Rails.logger.error(msg)
-          render(:nothing => true, :status => 500)
+        rescue ArgumentError
+          render(:nothing => true, :status => 404)
         end
       end
     else
@@ -41,42 +22,42 @@ class ResponsesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @responses = load_objects_with_subindex(Response)
-        @js << "responses_index"
+        params[:page] ||= 1
+        @responses = apply_filters(Response).all
+        @pubd_forms = restrict(Form).published.with_form_type
         render(:partial => "table_only", :locals => {:responses => @responses}) if ajax_request?
       end
       format.csv do
-        require 'fastercsv'
-        @subindex = Subindex.find_and_update(session, current_user, "Response", nil)
+        # get the response, for export, but not paginated
+        @responses = Response.for_export(apply_filters(Response, :pagination => false))
 
-        rel = Response
-        
-        # apply search (if any)
-        rel = @subindex.search.apply(rel)
-        
-        # restrict permissions
-        rel = Permission.restrict(rel, :user => current_user, :controller => "responses", :action => "index")
-        
-        @responses = Response.for_export(rel)
         # render the csv
-        render_csv("responses-#{Time.zone.now.to_s(:filename_datetime)}")
+        render_csv("Responses")
       end
     end
   end
   
   def new
-    form = Form.find(params[:form_id]) rescue nil
-    flash[:error] = "You must choose a form to edit." and redirect_to(:action => :index) unless form
-    @resp = Response.new(:form => form)
+    form = Form.with_questions.find(params[:form_id])
+    flash[:error] = "You must choose a form to edit." and return redirect_to(:action => :index) unless form
+    @response = Response.for_mission(current_mission).new(:form => form)
+    render_form
   end
   
+<<<<<<< HEAD
   def edit    
     @resp = Response.find_eager(params[:id])
     @duplicates = Response.find_duplicates(@resp)
+=======
+  def edit
+    @response = Response.find_eager(params[:id])
+    render_form
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
   end
   
   def show
-    @resp = Response.find_eager(params[:id])
+    @response = Response.find_eager(params[:id])
+    render_form
   end
   
   def update
@@ -84,8 +65,8 @@ class ResponsesController < ApplicationController
   end
   
   def destroy
-    @resp = Response.find(params[:id])
-    begin flash[:success] = @resp.destroy && "Response deleted successfully." rescue flash[:error] = $!.to_s end
+    @response = Response.find(params[:id])
+    begin flash[:success] = @response.destroy && "Response deleted successfully." rescue flash[:error] = $!.to_s end
     redirect_to(:action => :index)
   end
   
@@ -100,20 +81,32 @@ class ResponsesController < ApplicationController
       params[:response][:reviewed] = true if params[:commit_and_mark_reviewed]
       
       # find or create the response
-      @resp = action == "create" ? Response.new : Response.find(params[:id])
+      @response = action == "create" ? Response.for_mission(current_mission).new : Response.find_eager(params[:id])
       # set user_id if this is an observer
-      @resp.user = current_user if current_user.is_observer?
+      @response.user = current_user if current_user.observer?(current_mission)
       # try to save
       begin
+<<<<<<< HEAD
         @resp.update_attributes!(params[:response])
         
         @duplicates = Response.find_duplicates(@resp)
         !@duplicates.nil? ? @resp.update_attributes!("duplicate" => 1) : @resp.update_attributes!("duplicate" => 0) 
         @resp.update_attributes!(params[:response])
+=======
+        @response.update_attributes!(params[:response])
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
         flash[:success] = "Response #{action}d successfully."
         redirect_to(:action => :index)
       rescue ActiveRecord::RecordInvalid
-        render(:action => action == "create" ? :new : :edit)
+        render_form
       end
+    end
+    
+    def render_form
+      @possible_submitters = restrict(User.assigned_to(current_mission))
+      @can_mark_reviewed = Permission.can_mark_form_reviewed?(current_user, current_mission)
+      @can_choose_submitter = Permission.can_choose_form_submitter?(current_user, current_mission)
+      @response.user_id = current_user.id unless @can_choose_submitter || params[:action] != "new"
+      render(:form)
     end
 end

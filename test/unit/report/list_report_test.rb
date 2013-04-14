@@ -1,35 +1,76 @@
-require 'test/test_helper'
-require 'test/unit/report/report_test_helper'
+require 'test_helper'
 
 class Report::ListReportTest < ActiveSupport::TestCase
-  include ReportTestHelper
-  
   setup do
     prep_objects
   end
+
+  test "basic list" do
+    
+    create_question(:code => "Inty", :type => "integer")
+    create_question(:code => "State", :type => "text")
+    create_response(:source => "odk", :answers => {:State => "ga", :Inty => 10})
+    create_response(:source => "web", :answers => {:State => "ga", :Inty => 3})
+    create_response(:source => "web", :answers => {:State => "al", :Inty => 5})
+    
+    report = create_report("List", :calculations_attributes => [
+      {:rank => 1, :type => "Report::IdentityCalculation", :attrib1_name => "submitter"},
+      {:rank => 2, :type => "Report::IdentityCalculation", :question1_id => @questions[:Inty].id},
+      {:rank => 3, :type => "Report::IdentityCalculation", :question1_id => @questions[:State].id},
+      {:rank => 4, :type => "Report::IdentityCalculation", :attrib1_name => "source"}
+    ])        
+    
+    assert_report(report, %w( Submitter  Inty  State   Source ),
+                          %w( Test       10    ga      odk    ),
+                          %w( Test       3     ga      web    ),
+                          %w( Test       5     al      web    ))
+  end
   
-  test "one attrib only" do
-    create_response(:source => "web")
-    create_response(:source => "odk")
-    create_response(:source => "odk")
-    
-    r = create_report(:agg => "List",
-      :fields => [Report::Field.new(:attrib => Report::ResponseAttribute.find_by_name("Source"))])
-    
-    assert_report(r, %w(Source), %w(web), %w(odk), %w(odk))
-  end
+  test "list with select one" do
 
-  test "one attrib and one question" do
-    q = create_question(:code => "num0", :type => "decimal")
-    r = create_response(:source => "web", :answers => {:num0 => "1.1"})
-    create_response(:source => "odk", :answers => {:num0 => "4.7"})
-    create_response(:source => "odk", :answers => {:num0 => "5.2"})
+    create_opt_set(%w(Yes No))
+    create_question(:code => "Inty", :type => "integer")
+    create_question(:code => "State", :type => "text")
+    create_question(:code => "Happy", :type => "select_one")
+    create_response(:source => "odk", :answers => {:State => "ga", :Inty => 10, :Happy => "Yes"})
+    create_response(:source => "web", :answers => {:State => "ga", :Inty => 3, :Happy => "No"})
+    create_response(:source => "web", :answers => {:State => "al", :Inty => 5, :Happy => "No"})
     
-    r = create_report(:agg => "List",
-      :fields => [Report::Field.new(:attrib => Report::ResponseAttribute.find_by_name("Source")),
-        Report::Field.new(:question => q)])
+    report = create_report("List", :calculations_attributes => [
+      {:rank => 1, :type => "Report::IdentityCalculation", :attrib1_name => "submitter"},
+      {:rank => 2, :type => "Report::IdentityCalculation", :question1_id => @questions[:Inty].id},
+      {:rank => 3, :type => "Report::IdentityCalculation", :question1_id => @questions[:State].id},
+      {:rank => 4, :type => "Report::IdentityCalculation", :attrib1_name => "source"},
+      {:rank => 5, :type => "Report::IdentityCalculation", :question1_id => @questions[:Happy].id}
+    ])        
     
-    assert_report(r, %w(Source num0), %w(web 1.1), %w(odk 4.7), %w(odk 5.2))
+    assert_report(report, %w( Submitter  Inty  State   Source  Happy ),
+                          %w( Test       10    ga      odk     Yes   ),
+                          %w( Test       3     ga      web     No    ),
+                          %w( Test       5     al      web     No    ))
   end
-
+  
+  test "grouped and list reports using same attrib" do
+    
+    create_question(:code => "Inty", :type => "integer")
+    create_response(:answers => {:Inty => 10})
+    create_response(:answers => {:Inty => 3})
+    
+    report = create_report("List", :calculations_attributes => [
+      {:rank => 1, :type => "Report::IdentityCalculation", :attrib1_name => "submitter"},
+    ])        
+    
+    assert_report(report, %w( Submitter ),
+                          %w( Test      ),
+                          %w( Test      ))
+                          
+    report = create_report("GroupedTally", :calculations_attributes => [
+      {:rank => 1, :type => "Report::IdentityCalculation", :attrib1_name => "submitter"}
+    ])
+    
+    assert_report(report, %w(      Tally TTL ),
+                          %w( Test     2   2 ),
+                          %w( TTL      2   2 ))
+    
+  end
 end

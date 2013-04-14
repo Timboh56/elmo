@@ -1,12 +1,10 @@
-<% content_for(:per_page_js){javascript_include_tag("responses_index")} %>
+<% content_for(:per_page_js){javascript_include_tag("responses", "search_form")} %>
 
 <%= flash_and_form_errors %>
 
-<%= render("searches/form", :search => @subindex.search) %>
+<%= render("searches/form", :search => @search) %>
 
 <%= index_table(Response, @responses) %>
-
-<audio id="new_arrival_sound" src="/sounds/ship-bell.mp3"></audio>
 
 <script type="text/javascript">
   // set id of latest response

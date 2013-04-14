@@ -1,24 +1,11 @@
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class Smser
   
+<<<<<<< HEAD
   # get adapter from settings
   $adapter = configatron.outgoing_sms_adapter
   
+=======
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
   def self.deliver(recips, which_phone, msg)
     
     # get numbers
@@ -27,12 +14,28 @@ class Smser
     numbers += recips.collect{|u| u.phone2} if %w(alternate_only both).include?(which_phone)
     numbers.compact!
     
+    # build the sms
+    message = Sms::Message.new(:direction => :outgoing, :to => numbers, :body => msg)
+    
     # deliver
+<<<<<<< HEAD
     $adapter.deliver(numbers, msg)
   end
   
   # check_balance uses the Intellisms adapter to retrieve the SMS balance
   def self.check_balance()
     return $adapter.check_balance()
+=======
+    configatron.outgoing_sms_adapter.deliver(message)
+  end
+  
+  # check_balance uses the outgoing adapter to retrieve the SMS balance
+  def self.check_balance
+    configatron.outgoing_sms_adapter.check_balance
+  end
+  
+  def self.outgoing_service_name
+    configatron.outgoing_sms_adapter.service_name
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
   end
 end

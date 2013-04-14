@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ELMO - Secure, robust, and versatile data collection.
 # Copyright 2011 The Carter Center
 #
@@ -15,6 +16,9 @@
 # along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
 # 
 class UserSession < Authlogic::Session::Base  
+=======
+class UserSession < Authlogic::Session::Base
+>>>>>>> 91db4a5e0e6c76c8de6e056acea8623922590e05
   # only session related configuration goes here, see documentation for sub modules of Authlogic::Session
   # other config goes in acts_as block
   logout_on_timeout(true)

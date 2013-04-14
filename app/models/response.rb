@@ -1,26 +1,12 @@
+require 'mission_based'
 require 'xml'
-
-# ELMO - Secure, robust, and versatile data collection.
-# Copyright 2011 The Carter Center
-#
-# ELMO is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# ELMO is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with ELMO.  If not, see <http://www.gnu.org/licenses/>.
-# 
 class Response < ActiveRecord::Base
-  belongs_to(:form)
+  include MissionBased
+
+  belongs_to(:form, :inverse_of => :responses, :counter_cache => true)
   has_many(:answers, :include => :questioning, :order => "questionings.rank", 
-    :autosave => true, :validate => false, :dependent => :destroy)
-  belongs_to(:user)
+    :autosave => true, :validate => false, :dependent => :destroy, :inverse_of => :response)
+  belongs_to(:user, :inverse_of => :responses)
   
   # before_save hashAnswers and set Response.hash to the hash
   before_save :hash_answers
@@ -44,9 +30,9 @@ class Response < ActiveRecord::Base
   def self.find_eager(id)
     includes([:form, {:answers => 
       {
-        :choices => {:option => :translations}, 
+        :choices => {:option => :translations},
         :option => :translations, 
-        :questioning => {:question => [:type, :translations, {:option_set => {:options => :translations}}]}
+        :questioning => [:condition, {:question => [:type, :translations, {:option_set => {:options => :translations}}]}]
       }
     }]).find(id)
   end
@@ -60,31 +46,45 @@ class Response < ActiveRecord::Base
   # and whether they are searchable by a regular expression
   def self.search_qualifiers
     [
-      Search::Qualifier.new(:label => "formname", :col => "forms.name", :assoc => :forms),
-      Search::Qualifier.new(:label => "formtype", :col => "form_types.name", :assoc => :form_types),
+      Search::Qualifier.new(:label => "form", :col => "forms.name", :assoc => :forms),
+      Search::Qualifier.new(:label => "form-type", :col => "form_types.name", :assoc => :form_types),
       Search::Qualifier.new(:label => "reviewed", :col => "responses.reviewed", :subst => {"yes" => "1", "no" => "0"}),
       Search::Qualifier.new(:label => "submitter", :col => "users.name", :assoc => :users, :partials => true),
-      Search::Qualifier.new(:label => "answer", :col => "answers.value", :assoc => :answers, :partials => true, :default => true),
       Search::Qualifier.new(:label => "source", :col => "responses.source"),
-      Search::Qualifier.new(:label => "date", :col => "DATE(CONVERT_TZ(responses.created_at, 'UTC', '#{Time.zone.mysql_name}'))")
+      Search::Qualifier.new(:label => "date", :col => "DATE(CONVERT_TZ(responses.created_at, 'UTC', '#{Time.zone.mysql_name}'))"),
+
+      # this qualifier matches responses that have answers to questions with the given option set
+      Search::Qualifier.new(:label => "option-set", :col => "option_sets.name", :assoc => :option_sets),
+
+      # this qualifier matces responses that have answers to questions with the given type
+      Search::Qualifier.new(:label => "question-type", :col => "question_types.long_name", :assoc => :question_types),
+
+      # this qualifier matces responses that have answers to the given question
+      Search::Qualifier.new(:label => "question", :col => "questions.code", :assoc => :questions)
     ]
   end
   
   def self.search_examples
-    ['submitter:"john smith"', 'formname:polling', 'reviewed:yes']
+    ['submitter:"john smith"', 'form:polling', 'reviewed:yes', 'date < 2010-03-15']
   end
 
-  def self.create_from_xml(xml, user)
+  def self.create_from_xml(xml, user, mission)
     # parse xml
     doc = XML::Parser.string(xml).parse
 
     # get form id
-    form_id = doc.root["id"] or raise ArgumentError.new("No form id.")
-    form_id = form_id.to_i
+    form_id = doc.root["id"] or raise ArgumentError.new("No form id was given.")
+    
+    # check if the form is associated with the mission
+    unless mission && form = Form.for_mission(mission).find_by_id(form_id)
+      raise ArgumentError.new("Could not find the specified form.")
+    end
     
     # create response object
-    resp = new(:form_id => form_id, :user_id => user ? user.id : nil, :source => "odk", :modifier => "odk")
-    qings = resp.form ? resp.form.visible_questionings : (raise ArgumentError.new("Invalid form id."))
+    resp = new(:form => form, :user => user, :mission => mission, :source => "odk", :modifier => "odk")
+    
+    # get the visible questionings
+    qings = resp.form.visible_questionings
     
     # loop over each child tag and create hash of question_code => value
     values = {}; doc.root.children.each{|c| values[c.name] = c.first? ? c.first.content : nil}
@@ -108,7 +108,7 @@ class Response < ActiveRecord::Base
         return "#{x} in the Past #{p.capitalize}"
       end
     end
-    "No recent reports"
+    "No recent responses"
   end
   
   # finds all responses with duplicate hashes
@@ -136,12 +136,12 @@ class Response < ActiveRecord::Base
   
   def all_answers
     # make sure there is an associated answer object for each questioning in the form
-    visible_questionings.collect{|qing| answer_for(qing) || answers.new(:questioning_id => qing.id)}
+    visible_questionings.collect{|qing| answer_for(qing) || answers.new(:questioning => qing)}
   end
   
   def all_answers=(params)
     # do a match on current and newer ids with the ID as the comparator
-    answers.match(params.values, Proc.new{|a| a[:questioning_id].to_i}) do |orig, subd|
+    answers.compare_by_element(params.values, Proc.new{|a| a[:questioning_id].to_i}) do |orig, subd|
       # if both exist, update the original
       if orig && subd
         orig.attributes = subd
